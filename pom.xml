@@ -152,6 +152,12 @@
             <version>${quartz.version}</version>
         </dependency>
         <!-- quartz定时器 end -->
+
+        <!--<dependency>-->
+            <!--<groupId>org.webjars.bower</groupId>-->
+            <!--<artifactId>vue</artifactId>-->
+            <!--<version>1.0.21</version>-->
+        <!--</dependency>-->
     </dependencies>
 
     <build>
@@ -159,6 +165,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <fork>true</fork>
+                </configuration>
             </plugin>
         </plugins>
     </build>

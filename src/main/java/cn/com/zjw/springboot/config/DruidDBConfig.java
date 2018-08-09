@@ -1,6 +1,8 @@
 package cn.com.zjw.springboot.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +15,7 @@ import java.sql.SQLException;
 @Configuration
 @PropertySource(value = { "classpath:database.properties" })
 public class DruidDBConfig {
-//    private Logger logger = Logger.getLogger(DruidDBConfig.class);
+    private Logger logger = LogManager.getLogger(DruidDBConfig.class);
 
     @Value("${spring.datasource.url}")
     private String dbUrl;
@@ -95,7 +97,7 @@ public class DruidDBConfig {
         try {
             datasource.setFilters(filters);
         } catch (SQLException e) {
-//            logger.log(Level.ERROR, "druid configuration initialization filter : {0}", e);
+            logger.error("druid configuration initialization filter : {0}", e);
         }
         datasource.setConnectionProperties(connectionProperties);
 

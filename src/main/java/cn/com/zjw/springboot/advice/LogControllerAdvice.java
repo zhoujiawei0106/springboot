@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 /**
  * 拦截所有controller中的异常，并打印到控制台和日志文件中
+ * @ControllerAdvice注解从spring 3.2后可以使用，作用于所有controller
  */
 @ControllerAdvice
 public class LogControllerAdvice {
@@ -20,7 +21,7 @@ public class LogControllerAdvice {
      * @param e
      */
     @ExceptionHandler
-    public void loging(Exception e) {
+    public void logging(Exception e) {
         logger.error(e.getMessage(), e);
     }
 }

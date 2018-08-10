@@ -3,9 +3,10 @@ package cn.com.zjw.springboot;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 
 @SpringBootApplication
+@ServletComponentScan
 @MapperScan("cn.com.zjw.springboot.mapper")//扫描数据访问接口
 public class SpringbootApplication {
 

@@ -122,7 +122,7 @@ public class LoginFilter implements Filter {
 
             // 既不是登陆请求，也没有登陆过
             if (StringUtils.isBlank(loginName)) {
-                request.getRequestDispatcher("/WEB-INF/views/static/login.html").forward(request, response);
+                request.getRequestDispatcher("/test.html").forward(request, response);
                 return;
             }
 

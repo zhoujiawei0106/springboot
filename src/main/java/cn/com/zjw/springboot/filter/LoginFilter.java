@@ -24,13 +24,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 登陆过滤器
+ * 登陆过滤器---暂时废弃
+ * // TODO 考虑添加登陆用户超时
  * @author zhoujiawei
  */
-@WebFilter(filterName = "loginFilter", urlPatterns = "/*",
-        initParams = {@WebInitParam(name = "excludeUrls",
-                value = ".js;.css;.ico;.jpg;.png;login.html;logon.html;/code;/languages;")})
-@Order(3)
+//@WebFilter(filterName = "loginFilter", urlPatterns = "/*",
+//        initParams = {@WebInitParam(name = "excludeUrls",
+//                value = ".js;.css;.ico;.jpg;.png;login.html;logon.html;/code;/languages;")})
+//@Order(3)
 public class LoginFilter implements Filter {
 
     private Logger logger = LogManager.getLogger(LoginFilter.class);

@@ -62,3 +62,30 @@ var app7 = new Vue({
         ]
     }
 })
+
+var app8 = new Vue({
+    el: '#app-8',
+    data: {
+        checked: false
+    }
+})
+
+var app9 = new Vue({
+    el: '#app-9',
+    data: {
+        checkedNames: []
+    }
+})
+
+var app10 = new Vue({
+    el: "#app-10",
+    data: {
+        selected: 1,
+        obj: [
+            {id: 1, name: 'jquery'},
+            {id: 2, name: 'vue'},
+            {id: 3, name: 'angular'},
+            {id: 4, name: 'react'}
+        ]
+    }
+})

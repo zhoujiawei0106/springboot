@@ -17,11 +17,11 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * 登陆页面验证码filter
+ * 登陆页面验证码filter---已废弃
  * @author zhoujiawei
  */
-@WebFilter(filterName = "authCodeFilter", urlPatterns = "/code")
-@Order(2)
+//@WebFilter(filterName = "authCodeFilter", urlPatterns = "/code")
+//@Order(2)
 public class AuthCodeFilter implements Filter {
 
     private static final String[] codeArr = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C","D", "E",

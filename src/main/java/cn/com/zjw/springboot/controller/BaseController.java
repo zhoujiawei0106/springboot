@@ -25,7 +25,7 @@ public abstract class BaseController {
      * @param data
      * @return
      */
-    public Map<String, Object> success(String data) {
+    public Map<String, Object> success(Object data) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("flag", true);
         map.put("data", data);
@@ -35,9 +35,10 @@ public abstract class BaseController {
     /**
      * 请求成功返回前台数据
      * @param data
+     * @param msg
      * @return
      */
-    public Map<String, Object> success(String data, String msg) {
+    public Map<String, Object> success(Object data, String msg) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("flag", true);
         map.put("data", data);

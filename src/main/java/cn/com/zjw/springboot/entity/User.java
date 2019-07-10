@@ -7,14 +7,29 @@ public class User implements Serializable {
 
     private String id;
 
+    /**
+     * 登陆用户名
+     */
     private String loginName;
 
+    /**
+     * 用户名
+     */
     private String userName;
 
+    /**
+     * 密码
+     */
     private String password;
 
+    /**
+     * 登陆失败次数
+     */
     private Integer loginFailTimes;
 
+    /**
+     * 登陆最后时间
+     */
     private Timestamp LastLoginDate;
 
     private String ip;

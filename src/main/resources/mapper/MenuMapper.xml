@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.zjw.springboot.mapper.MenuMapper">
+
+    <resultMap id="menuMap" type="cn.com.zjw.springboot.entity.Menu">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="MENU_NAME" property="menuName" jdbcType="VARCHAR"/>
+        <result column="MENU_ROUTE_PATH" property="menuRoutePath" jdbcType="VARCHAR"/>
+        <result column="PID" property="pid" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getUserMenu" resultMap="menuMap">
+        SELECT
+            t4.id,
+            t4.menu_name,
+            t4.menu_route_path,
+            t4.pid
+        FROM
+            t_permission t1
+        INNER JOIN
+            t_role_permission t2
+        ON
+            t1.id = t2.permission_id
+        INNER JOIN
+            t_role t3
+        ON
+            t2.role_id = t3.id
+        INNER JOIN
+            t_menu t4
+        ON
+            t3.menu_id = t4.id
+        where
+            t1.user_id = #{userId}
+        ORDER BY
+            pid
+    </select>
+</mapper>

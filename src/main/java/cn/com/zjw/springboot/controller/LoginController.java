@@ -1,6 +1,8 @@
 package cn.com.zjw.springboot.controller;
 
+import cn.com.zjw.springboot.entity.Menu;
 import cn.com.zjw.springboot.entity.User;
+import cn.com.zjw.springboot.service.MenuService;
 import cn.com.zjw.springboot.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,6 +26,9 @@ public class LoginController extends BaseController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MenuService menuService;
 
     /**
      * 用户登陆
@@ -57,8 +63,9 @@ public class LoginController extends BaseController {
                 return fail("用户名或密码错误");
             }
 
-            // TODO 返回菜单
-            return success("登陆成功");
+            // 返回用户菜单
+            List<Menu> menuList = menuService.getUserMenu(user.getId());
+            return success(menuList);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());

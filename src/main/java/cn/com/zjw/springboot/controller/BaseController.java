@@ -22,6 +22,18 @@ public abstract class BaseController {
 
     /**
      * 请求成功返回前台数据
+     * @param msg
+     * @return
+     */
+    public Map<String, Object> success(String msg) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("flag", true);
+        map.put("msg", msg);
+        return map;
+    }
+
+    /**
+     * 请求成功返回前台数据
      * @param data
      * @return
      */

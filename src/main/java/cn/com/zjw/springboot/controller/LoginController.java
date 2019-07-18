@@ -37,7 +37,7 @@ public class LoginController extends BaseController {
      * @return
      * @throws Exception
      */
-    @GetMapping(value = "/login/{loginName}/{password}")
+    @GetMapping("/login/{loginName}/{password}")
     public Map<String, Object> login(@PathVariable("loginName") String loginName, @PathVariable("password") String password) {
         try {
             if (StringUtils.isBlank(loginName)) {
@@ -81,14 +81,15 @@ public class LoginController extends BaseController {
                 }
             }
 
-            return success(addList);
+            return success(user);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());
         }
     }
 
-    public Map<String, Object> getUserMenu(String loginName) {
+    @GetMapping("/userMenu/{loginName}")
+    public Map<String, Object> getUserMenu(@PathVariable("loginName") String loginName) {
         try {
             if (StringUtils.isBlank(loginName)) {
                 return fail("系统异常，请联系管理员");

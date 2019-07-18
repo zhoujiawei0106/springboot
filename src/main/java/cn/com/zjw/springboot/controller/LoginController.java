@@ -9,11 +9,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 登陆
@@ -37,9 +37,8 @@ public class LoginController extends BaseController {
      * @return
      * @throws Exception
      */
-    @RequestMapping("/login")
-    @ResponseBody
-    public Map<String, Object> login(String loginName, String password) {
+    @GetMapping(value = "/login/{loginName}/{password}")
+    public Map<String, Object> login(@PathVariable("loginName") String loginName, @PathVariable("password") String password) {
         try {
             if (StringUtils.isBlank(loginName)) {
                 return fail("请输入用户名");
@@ -62,6 +61,40 @@ public class LoginController extends BaseController {
                 return fail("用户名或密码错误");
             }
 
+            // 返回用户的菜单
+            List<Menu> menuList = menuService.getUserMenu(user.getId());
+            // 复制返回用户的菜单
+            List<Menu> coypMenus = new ArrayList<>();
+            coypMenus.addAll(menuList);
+            // 所有一级菜单
+            List<MenuDto> addList = new ArrayList<>();
+            for (Menu menu : menuList) {
+                if (StringUtils.isBlank(menu.getPid())) {
+                    MenuDto menuDto = new MenuDto();
+                    menuDto.setId(menu.getId());
+                    menuDto.setName(menu.getMenuName());
+                    addList.add(menuDto);
+
+                    coypMenus.remove(menu);
+
+                    recursionMenu(coypMenus, addList, menuDto, menu.getId());
+                }
+            }
+
+            return success(addList);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
+
+    public Map<String, Object> getUserMenu(String loginName) {
+        try {
+            if (StringUtils.isBlank(loginName)) {
+                return fail("系统异常，请联系管理员");
+            }
+
+            User user = userService.getUser(loginName);
             // 返回用户的菜单
             List<Menu> menuList = menuService.getUserMenu(user.getId());
             // 复制返回用户的菜单

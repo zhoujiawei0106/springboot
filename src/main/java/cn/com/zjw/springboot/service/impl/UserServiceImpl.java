@@ -18,4 +18,10 @@ public class UserServiceImpl implements UserService {
     public User getUser(String loginName) {
         return userMapper.getUser(loginName);
     }
+
+    @Override
+    public void updateLoginTimes(User user) {
+        userMapper.updateLoginTimes(user);
+    }
+
 }

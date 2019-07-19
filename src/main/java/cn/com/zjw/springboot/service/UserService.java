@@ -11,4 +11,11 @@ public interface UserService {
      * @return
      */
     public User getUser(String loginName);
+
+    /**
+     * 根据登陆用户修改登陆次数
+     * @author zhoujiawei
+     * @param user
+     */
+    public void updateLoginTimes(User user);
 }

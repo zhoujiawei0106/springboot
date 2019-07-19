@@ -26,4 +26,15 @@
         WHERE
             login_name = #{loginName}
     </select>
+
+    <update id="updateLoginTimes">
+        UPDATE
+            t_user
+        SET
+            ip = #{user.ip, jdbcType=VARCHAR},
+            login_fail_times = #{user.loginFailTimes} + 1,
+            last_login_date = sysdate
+        WHERE
+            login_name = #{user.loginName}
+    </update>
 </mapper>

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,8 @@ public class LoginController extends BaseController {
      * @throws Exception
      */
     @GetMapping("/login/{loginName}/{password}")
-    public Map<String, Object> login(@PathVariable("loginName") String loginName, @PathVariable("password") String password) {
+    public Map<String, Object> login(HttpServletRequest request, @PathVariable("loginName") String loginName,
+                                     @PathVariable("password") String password) {
         try {
             if (StringUtils.isBlank(loginName)) {
                 return fail("请输入用户名");
@@ -54,12 +56,22 @@ public class LoginController extends BaseController {
                 return fail("用户名或密码错误!");
             }
             // TODO 考虑如何重置登陆次数，如何实现10分钟后重置登陆次数
-            if (user.getLoginFailTimes() >= 3) {
-                return fail("用户登陆次数超过3次，请联系管理员");
+            if (user.getLoginFailTimes() > 3) {
+                return fail("用户已连续登陆次数超过3次，请联系管理员");
             }
+
+            // 先跟新本次用户的ip
+            user.setIp(getUserIp(request));
+
             if (!password.equals(user.getPassword())) {
+                // 密码错误更新登陆次数
+                userService.updateLoginTimes(user);
                 return fail("用户名或密码错误");
             }
+
+            // 如果登陆成功，初始化登陆失败次数
+            user.setLoginFailTimes(0);
+            userService.updateLoginTimes(user);
 
             // 返回用户的菜单
             List<Menu> menuList = menuService.getUserMenu(user.getId());
@@ -88,6 +100,12 @@ public class LoginController extends BaseController {
         }
     }
 
+    /**
+     * 获取用户菜单
+     * @author zhoujiawei
+     * @param loginName
+     * @return
+     */
     @GetMapping("/userMenu/{loginName}")
     public Map<String, Object> getUserMenu(@PathVariable("loginName") String loginName) {
         try {
@@ -148,7 +166,6 @@ public class LoginController extends BaseController {
                 copyMenus.remove(menu);
 
                 recursionMenu(copyMenus, subMenus, subMenuDto, menu.getId());
-
             }
         }
         return addList;

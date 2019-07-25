@@ -4,8 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MenuDto implements Serializable {
-
+public class MenuDto implements Serializable  {
 
     private String id;
 

@@ -4,7 +4,6 @@ import cn.com.zjw.springboot.utils.DateUtlis;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -33,7 +32,7 @@ public class LogControllerAspect {
     public void before(JoinPoint joinPoint) throws Exception {
         String className = getClassName(joinPoint);
         String method = getMethodName(joinPoint);
-        logger.info(DateUtlis.systemTime() + "开始执行" + className + "的" + method + "方法");
+        logger.info(DateUtlis.systemTime() + "开始执行【" + className + "】的【" + method + "】方法");
     }
 
     /**
@@ -45,7 +44,7 @@ public class LogControllerAspect {
     public void after(JoinPoint joinPoint) throws Exception {
         String className = getClassName(joinPoint);
         String method = getMethodName(joinPoint);
-        logger.info(DateUtlis.systemTime() + "执行完成" + className + "的" + method + "方法");
+        logger.info(DateUtlis.systemTime() + "执行完成【" + className + "】的【" + method + "】方法");
     }
 
     /**

@@ -16,7 +16,7 @@ import org.slf4j.Logger;
  * 跨域过滤器
  * @author zhoujiawei
  */
-@WebFilter(filterName = "crosFilter", urlPatterns = "/**")
+@WebFilter(filterName = "crosFilter", urlPatterns = "/*")
 @Order(2)
 public class CrosFilter extends OncePerRequestFilter {
     private Logger logger = LoggerFactory.getLogger(CrosFilter.class);
@@ -34,9 +34,11 @@ public class CrosFilter extends OncePerRequestFilter {
         if (request.getHeader("Access-Control-Request-Method") != null && "OPTIONS".equals(request.getMethod())) {
             response.addHeader("Access-Control-Allow-Origin", "*");
             response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-            response.addHeader("Access-Control-Allow-Headers", "origin, content-type, accept, x-requested-with, sid, mycustom, smuser");
+            response.addHeader("Access-Control-Allow-Headers", "origin, content-type, accept, x-requested-with, sid, mycustom, smuser, token");
             response.addHeader("Access-Control-Max-Age", "1800");//30 min
+            return;
         }
+
         filterChain.doFilter(request, response);
     }
 }

@@ -1,17 +1,21 @@
 package cn.com.zjw.springboot.controller;
 
 import cn.com.zjw.springboot.dto.MenuDto;
+import cn.com.zjw.springboot.dto.UserDto;
 import cn.com.zjw.springboot.entity.Menu;
 import cn.com.zjw.springboot.entity.User;
 import cn.com.zjw.springboot.service.MenuService;
 import cn.com.zjw.springboot.service.UserService;
+import cn.com.zjw.springboot.utils.TokenUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +33,9 @@ public class LoginController extends BaseController {
 
     @Autowired
     private MenuService menuService;
+
+    // 毫秒，2个小时
+    private static final long invalidTime = 7200000;
 
     /**
      * 用户登陆
@@ -73,27 +80,11 @@ public class LoginController extends BaseController {
             user.setLoginFailTimes(0);
             userService.updateLoginTimes(user);
 
-            // 返回用户的菜单
-            List<Menu> menuList = menuService.getUserMenu(user.getId());
-            // 复制返回用户的菜单
-            List<Menu> coypMenus = new ArrayList<>();
-            coypMenus.addAll(menuList);
-            // 所有一级菜单
-            List<MenuDto> addList = new ArrayList<>();
-            for (Menu menu : menuList) {
-                if (StringUtils.isBlank(menu.getPid())) {
-                    MenuDto menuDto = new MenuDto();
-                    menuDto.setId(menu.getId());
-                    menuDto.setName(menu.getMenuName());
-                    addList.add(menuDto);
+            UserDto userDto = new UserDto();
+            BeanUtils.copyProperties(user, userDto);
+            userDto.setToken(TokenUtils.createJWT(invalidTime, user));
 
-                    coypMenus.remove(menu);
-
-                    recursionMenu(coypMenus, addList, menuDto, menu.getId());
-                }
-            }
-
-            return success(user);
+            return success(userDto);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());

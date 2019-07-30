@@ -39,56 +39,78 @@ public class UserCheckFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        String[] urls = url.split(";");
-
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
+        try {
+            String[] urls = url.split(";");
 
-        // 当前访问的路径
-        String url = request.getRequestURI();
-        logger.warn("=======================================当前执行的请求路径为:" + url);
+            // 当前访问的路径
+            String url = request.getRequestURI();
+            logger.warn("=======================================当前执行的请求路径为:" + url);
 
-        for (String str : urls) {
-            // 如果直接访问登陆页面，或访问配置文件中配置的不过滤url不做处理
-            if (url.indexOf(str) > 0) {
-                filterChain.doFilter(servletRequest, servletResponse);
+            for (String str : urls) {
+                // 如果直接访问登陆页面，或访问配置文件中配置的不过滤url不做处理
+                if (url.indexOf(str) > 0) {
+                    filterChain.doFilter(servletRequest, servletResponse);
+                    return;
+                }
+            }
+
+            logger.info("开始执行用户登陆过滤器");
+
+            // 获取头中的token
+            String token = request.getHeader("token");
+            logger.warn(token);
+
+            // 执行认证
+            if (StringUtils.isBlank(token)) {
+                response.setContentType("application/json; charset=utf-8");
+                response.setCharacterEncoding("UTF-8");
+                Map<String, Object> map = failMap("无token，请重新登录");
+                response.getWriter().write(JsonParseUtils.toJson(map));
+                response.addHeader("Access-Control-Allow-Origin", "*");
                 return;
             }
-        }
+            // 获取 token 中的 user id
+            String loginName;
+            try {
+                loginName = JWT.decode(token).getClaim("loginName").asString();
+                if (StringUtils.isBlank(loginName)) {
+                    Map<String, Object> map = failMap("无法获取token信息");
+                    response.getWriter().write(JsonParseUtils.toJson(map));
+                    response.addHeader("Access-Control-Allow-Origin", "*");
+                    return;
+                }
+            } catch (JWTDecodeException j) {
+                Map<String, Object> map = failMap("无法获取token信息");
+                response.getWriter().write(JsonParseUtils.toJson(map));
+                response.addHeader("Access-Control-Allow-Origin", "*");
+                return;
+            }
+            User user = SpringContextUtils.getBean(UserService.class).getUser(loginName);
+            if (user == null) {
+                Map<String, Object> map = failMap("用户不存在，请重新登录");
+                response.getWriter().write(JsonParseUtils.toJson(map));
+                response.addHeader("Access-Control-Allow-Origin", "*");
+                return;
+            }
+            Boolean verify = TokenUtils.isVerify(token, user);
+            if (!verify) {
+                Map<String, Object> map = failMap("非法访问");
+                response.getWriter().write(JsonParseUtils.toJson(map));
+                response.addHeader("Access-Control-Allow-Origin", "*");
+                return;
+            }
 
-        logger.info("开始执行用户登陆过滤器");
-
-        // 获取头中的token
-        String token = request.getHeader("token");
-        logger.warn(token + "========================");
-
-        // 执行认证
-        if (StringUtils.isBlank(token)) {
-            response.setContentType("application/json; charset=utf-8");
-            response.setCharacterEncoding("UTF-8");
-            Map<String, Object> map = failMap("无token，请重新登录");
+            filterChain.doFilter(servletRequest, servletResponse);
+        } catch (Exception e) {
+            Map<String, Object> map = failMap(e.getMessage());
             response.getWriter().write(JsonParseUtils.toJson(map));
             response.addHeader("Access-Control-Allow-Origin", "*");
+            logger.error(e.getMessage(), e);
             return;
         }
-//        // 获取 token 中的 user id
-//        String userId;
-//        try {
-//            userId = JWT.decode(token).getClaim("id").asString();
-//        } catch (JWTDecodeException j) {
-//            throw new RuntimeException("访问异常！");
-//        }
-//        User user = SpringContextUtils.getBean(UserService.class).getUser(userId);
-//        if (user == null) {
-//            throw new RuntimeException("用户不存在，请重新登录");
-//        }
-//        Boolean verify = TokenUtils.isVerify(token, user);
-//        if (!verify) {
-//            throw new RuntimeException("非法访问！");
-//        }
-
-        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override

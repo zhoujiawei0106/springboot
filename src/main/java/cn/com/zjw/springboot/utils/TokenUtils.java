@@ -20,7 +20,7 @@ public class TokenUtils {
      * @param user      登录成功的user对象
      * @return
      */
-    public static String createJWT(long ttlMillis, User user) {
+    public static String createToken(long ttlMillis, User user) {
 
         //指定签名的时候使用的签名算法，也就是header那部分，jjwt已经将这部分内容封装好了。
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
@@ -72,7 +72,7 @@ public class TokenUtils {
      * @param user  用户的对象
      * @return
      */
-    public static Claims parseJWT(String token, User user) {
+    public static Claims parseToken(String token, User user) {
         //签名秘钥，和生成的签名的秘钥一模一样
         String key = user.getPassword();
 
@@ -105,6 +105,12 @@ public class TokenUtils {
                 //设置需要解析的jwt
                 .parseClaimsJws(token).getBody();
 
+        if (claims.get("loginName").equals(user.getLoginName())) {
+            return true;
+        }
+        if (claims.get("id").equals(user.getId())) {
+            return true;
+        }
         if (claims.get("password").equals(user.getPassword())) {
             return true;
         }

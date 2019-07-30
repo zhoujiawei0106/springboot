@@ -35,7 +35,7 @@ public class LoginController extends BaseController {
     private MenuService menuService;
 
     // 毫秒，2个小时
-    private static final long invalidTime = 7200000;
+    private static final long invalidTime = 3600000;
 
     /**
      * 用户登陆
@@ -82,7 +82,7 @@ public class LoginController extends BaseController {
 
             UserDto userDto = new UserDto();
             BeanUtils.copyProperties(user, userDto);
-            userDto.setToken(TokenUtils.createJWT(invalidTime, user));
+            userDto.setToken(TokenUtils.createToken(invalidTime, user));
 
             return success(userDto);
         } catch (Exception e) {

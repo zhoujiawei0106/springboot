@@ -24,4 +24,17 @@ public class CodeConstants {
     public static final String LANGUAGE_CN_TYPE = "zh";
     // 英语
     public static final String LANGUAGE_EN_TYPE = "en";
+
+    /**
+     * token失效时间(1小时)
+     */
+    public static final long EXPIRE_TIME = 3600000;
+
+    /**
+     * 错误码
+     */
+    // 登陆失效
+    public static final int LOGIN_INVALID = 400001;
+    // 没有操作权限
+    public static final int PERMISSION_FAIL = 400002;
 }

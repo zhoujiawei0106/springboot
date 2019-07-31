@@ -1,6 +1,6 @@
 package cn.com.zjw.springboot.filter;
 
-import cn.com.zjw.springboot.controller.BaseController;
+import cn.com.zjw.springboot.constants.CodeConstants;
 import cn.com.zjw.springboot.entity.User;
 import cn.com.zjw.springboot.service.UserService;
 import cn.com.zjw.springboot.utils.JsonParseUtils;
@@ -67,7 +67,7 @@ public class UserCheckFilter implements Filter {
             if (StringUtils.isBlank(token)) {
                 response.setContentType("application/json; charset=utf-8");
                 response.setCharacterEncoding("UTF-8");
-                Map<String, Object> map = failMap("无token，请重新登录");
+                Map<String, Object> map = failMap("无token，请重新登录", CodeConstants.LOGIN_INVALID);
                 response.getWriter().write(JsonParseUtils.toJson(map));
                 response.addHeader("Access-Control-Allow-Origin", "*");
                 return;
@@ -77,35 +77,37 @@ public class UserCheckFilter implements Filter {
             try {
                 loginName = JWT.decode(token).getClaim("loginName").asString();
                 if (StringUtils.isBlank(loginName)) {
-                    Map<String, Object> map = failMap("无法获取token信息");
+                    Map<String, Object> map = failMap("无法获取token信息", CodeConstants.LOGIN_INVALID);
                     response.getWriter().write(JsonParseUtils.toJson(map));
                     response.addHeader("Access-Control-Allow-Origin", "*");
                     return;
                 }
             } catch (JWTDecodeException j) {
-                Map<String, Object> map = failMap("无法获取token信息");
+                Map<String, Object> map = failMap("无法获取token信息", CodeConstants.LOGIN_INVALID);
                 response.getWriter().write(JsonParseUtils.toJson(map));
                 response.addHeader("Access-Control-Allow-Origin", "*");
                 return;
             }
             User user = SpringContextUtils.getBean(UserService.class).getUser(loginName);
             if (user == null) {
-                Map<String, Object> map = failMap("用户不存在，请重新登录");
+                Map<String, Object> map = failMap("用户不存在，请重新登录", CodeConstants.LOGIN_INVALID);
                 response.getWriter().write(JsonParseUtils.toJson(map));
                 response.addHeader("Access-Control-Allow-Origin", "*");
                 return;
             }
             Boolean verify = TokenUtils.isVerify(token, user);
             if (!verify) {
-                Map<String, Object> map = failMap("非法访问");
+                Map<String, Object> map = failMap("非法访问", CodeConstants.LOGIN_INVALID);
                 response.getWriter().write(JsonParseUtils.toJson(map));
                 response.addHeader("Access-Control-Allow-Origin", "*");
                 return;
             }
 
+//            List<Menu> menus = SpringContextUtils.getBean(MenuService.class).getUserMenu(user.getId());
+
             filterChain.doFilter(servletRequest, servletResponse);
         } catch (Exception e) {
-            Map<String, Object> map = failMap(e.getMessage());
+            Map<String, Object> map = failMap(e.getMessage(), CodeConstants.LOGIN_INVALID);
             response.getWriter().write(JsonParseUtils.toJson(map));
             response.addHeader("Access-Control-Allow-Origin", "*");
             logger.error(e.getMessage(), e);
@@ -125,11 +127,11 @@ public class UserCheckFilter implements Filter {
      * @return
      * @author zhoujiawei
      */
-    private static final Map<String, Object> failMap(String msg) {
+    private static final Map<String, Object> failMap(String msg, Integer code) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("msg", msg);
         map.put("flag", false);
-        map.put("code", "412");
+        map.put("code", code);
         return map;
     }
 }

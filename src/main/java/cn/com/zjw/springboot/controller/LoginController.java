@@ -1,5 +1,6 @@
 package cn.com.zjw.springboot.controller;
 
+import cn.com.zjw.springboot.constants.CodeConstants;
 import cn.com.zjw.springboot.dto.MenuDto;
 import cn.com.zjw.springboot.dto.UserDto;
 import cn.com.zjw.springboot.entity.Menu;
@@ -12,10 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,9 +35,6 @@ public class LoginController extends BaseController {
 
     @Autowired
     private MenuService menuService;
-
-    // 毫秒，2个小时
-    private static final long invalidTime = 3600000;
 
     /**
      * 用户登陆
@@ -82,7 +81,7 @@ public class LoginController extends BaseController {
 
             UserDto userDto = new UserDto();
             BeanUtils.copyProperties(user, userDto);
-            userDto.setToken(TokenUtils.createToken(invalidTime, user));
+            userDto.setToken(TokenUtils.createToken(CodeConstants.EXPIRE_TIME, user));
 
             return success(userDto);
         } catch (Exception e) {

@@ -3,7 +3,7 @@ package cn.com.zjw.springboot.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class User implements Serializable {
+public class User extends BaseEntity implements Serializable {
 
     private String id;
 

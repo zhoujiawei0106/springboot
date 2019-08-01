@@ -1,6 +1,9 @@
 package cn.com.zjw.springboot.service;
 
 import cn.com.zjw.springboot.entity.User;
+import com.github.pagehelper.PageInfo;
+
+import java.util.List;
 
 public interface UserService {
 
@@ -18,4 +21,11 @@ public interface UserService {
      * @param user
      */
     public void updateLoginTimes(User user);
+
+    /**
+     * 获取所有用户
+     * @author zhoujiawei
+     * @return
+     */
+    public PageInfo getUsers(User user);
 }

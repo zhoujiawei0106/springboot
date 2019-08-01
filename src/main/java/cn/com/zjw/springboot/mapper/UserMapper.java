@@ -3,6 +3,8 @@ package cn.com.zjw.springboot.mapper;
 import cn.com.zjw.springboot.entity.User;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface UserMapper {
 
     /**
@@ -20,4 +22,11 @@ public interface UserMapper {
      * @param loginTimes
      */
     public void updateLoginTimes(@Param("user") User user);
+
+    /**
+     * 获取所有用户
+     * @author zhoujiawei
+     * @return
+     */
+    public List<User> getUsers();
 }

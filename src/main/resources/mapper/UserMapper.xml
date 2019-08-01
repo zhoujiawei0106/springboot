@@ -37,4 +37,17 @@
         WHERE
             login_name = #{user.loginName}
     </update>
+
+    <select id="getUsers" resultMap="userMap">
+        SELECT
+            id,
+            user_name,
+            login_name,
+            password,
+            ip,
+            last_login_date,
+            login_fail_times
+        FROM
+            t_user
+    </select>
 </mapper>

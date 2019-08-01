@@ -22,7 +22,7 @@
         <repository>
             <id>aliyun</id>
             <name>aliyun</name>
-            <url>http://maven.aliyun.com    /nexus/content/groups/public/</url>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
         </repository>
     </repositories>
 
@@ -33,7 +33,7 @@
         <oracle.version>11.2.0.3</oracle.version>
         <apache.common.version>3.7</apache.common.version>
         <druid.version>1.1.9</druid.version>
-        <pagehelper.version>5.0.0</pagehelper.version>
+        <pagehelper.version>5.1.10</pagehelper.version>
         <jwt.version>3.8.1</jwt.version>
     </properties>
 
@@ -119,6 +119,11 @@
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper</artifactId>
             <version>${pagehelper.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.2.9</version>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>

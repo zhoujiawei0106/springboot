@@ -49,5 +49,13 @@
             login_fail_times
         FROM
             t_user
+        WHERE
+            1 = 1
+        <if test="user.loginName != null and user.loginName != ''">
+            AND login_name like '%' || #{user.loginName} || '%'
+        </if>
+        <if test="user.userName != null and user.userName != ''">
+            AND user_name like '%' || #{user.userName} || '%'
+        </if>
     </select>
 </mapper>

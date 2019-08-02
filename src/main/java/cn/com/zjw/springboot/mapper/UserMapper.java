@@ -28,5 +28,5 @@ public interface UserMapper {
      * @author zhoujiawei
      * @return
      */
-    public List<User> getUsers();
+    public List<User> getUsers(@Param("user") User user);
 }

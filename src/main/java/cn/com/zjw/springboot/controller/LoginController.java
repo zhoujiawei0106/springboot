@@ -76,7 +76,7 @@ public class LoginController extends BaseController {
             }
 
             // 如果登陆成功，初始化登陆失败次数
-            user.setLoginFailTimes(0);
+            user.setLoginFailTimes(-1);
             userService.updateLoginTimes(user);
 
             UserDto userDto = new UserDto();

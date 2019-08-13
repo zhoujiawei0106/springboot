@@ -34,6 +34,19 @@ public class User extends BaseEntity implements Serializable {
 
     private String ip;
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", loginName='" + loginName + '\'' +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", loginFailTimes=" + loginFailTimes +
+                ", LastLoginDate=" + LastLoginDate +
+                ", ip='" + ip + '\'' +
+                '}';
+    }
+
     public String getId() {
         return id;
     }

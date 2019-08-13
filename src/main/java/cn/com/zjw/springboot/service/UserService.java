@@ -4,6 +4,7 @@ import cn.com.zjw.springboot.entity.User;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserService {
 
@@ -28,4 +29,12 @@ public interface UserService {
      * @return
      */
     public PageInfo getUsers(User user);
+
+    /**
+     * 保存用户信息
+     * @author zhoujiawei
+     * @param user
+     * @return
+     */
+    public void save(User user);
 }

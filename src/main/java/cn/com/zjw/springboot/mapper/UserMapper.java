@@ -29,4 +29,11 @@ public interface UserMapper {
      * @return
      */
     public List<User> getUsers(@Param("user") User user);
+
+    /**
+     * 新增用户
+     * @author zhoujiawei
+     * @param user
+     */
+    public void save(@Param("user") User user);
 }

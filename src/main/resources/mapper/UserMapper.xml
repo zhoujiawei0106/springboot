@@ -58,4 +58,22 @@
             AND user_name like '%' || #{user.userName} || '%'
         </if>
     </select>
+
+    <insert id="save">
+        INSERT INTO t_user(
+            id,
+            user_name,
+            login_name,
+            password,
+            ip,
+            login_fail_times
+        ) VALUES (
+            #{user.id},
+            #{user.userName},
+            #{user.loginName},
+            #{user.password},
+            #{user.ip},
+            0
+        )
+    </insert>
 </mapper>

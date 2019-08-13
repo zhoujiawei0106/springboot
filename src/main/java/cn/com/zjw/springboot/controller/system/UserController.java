@@ -7,11 +7,9 @@ import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -19,7 +17,7 @@ import java.util.Map;
  * @author zhoujiawei
  */
 @RestController
-@RequestMapping("/system")
+@RequestMapping("/system/user")
 public class UserController extends BaseController {
 
     private Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -32,11 +30,23 @@ public class UserController extends BaseController {
      * @author zhoujiawei
      * @return
      */
-    @GetMapping(value = "/getUsers")
+    @GetMapping("/getUsers")
     public Map<String, Object> getUsers(User user) {
         try {
             PageInfo pageInfo = userService.getUsers(user);
             return success(pageInfo);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
+
+    @PostMapping("save")
+    public Map<String, Object> save(User user, HttpServletRequest request) {
+        try {
+            user.setIp(getUserIp(request));
+            userService.save(user);
+            return success("用户新增成功");
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());

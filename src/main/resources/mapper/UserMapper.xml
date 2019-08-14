@@ -66,14 +66,16 @@
             login_name,
             password,
             ip,
-            login_fail_times
+            login_fail_times,
+            parent_id
         ) VALUES (
             #{user.id},
             #{user.userName},
             #{user.loginName},
             #{user.password},
             #{user.ip},
-            0
+            0,
+            #{user.parentId}
         )
     </insert>
 </mapper>

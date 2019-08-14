@@ -46,23 +46,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void save(User user) {
+    public void save(User user) throws Exception{
+        check(user);
         // TODO 密码加密
-        user.setId(UUID.randomUUID().toString());
 
         logger.info("新增用户信息-----" + user.toString());
         userMapper.save(user);
+        logger.info("用户信息新增成功");
     }
 
-    private static final void check(User user) throws Exception {
+    private final void check(User user) throws Exception {
         if (StringUtils.isBlank(user.getUserName())) {
-            throw new Exception("");
+            throw new Exception("请输入用户名");
         }
-        if (StringUtils.isBlank(user.getUserName())) {
-            throw new Exception("");
+        if (StringUtils.isBlank(user.getLoginName())) {
+            throw new Exception("请输入登录名");
         }
-        if (StringUtils.isBlank(user.getUserName())) {
-            throw new Exception("");
+        if (StringUtils.isBlank(user.getPassword())) {
+            throw new Exception("请出入密码");
+        }
+
+        if (userMapper.getUser(user.getLoginName()) != null) {
+            throw new Exception("登录名已存在,请重新输入");
         }
     }
 }

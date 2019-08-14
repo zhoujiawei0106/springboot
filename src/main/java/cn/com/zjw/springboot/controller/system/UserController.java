@@ -41,7 +41,7 @@ public class UserController extends BaseController {
         }
     }
 
-    @PostMapping("save")
+    @PostMapping("/save")
     public Map<String, Object> save(User user, HttpServletRequest request) {
         try {
             user.setIp(getUserIp(request));

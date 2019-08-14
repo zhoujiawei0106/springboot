@@ -36,5 +36,5 @@ public interface UserService {
      * @param user
      * @return
      */
-    public void save(User user);
+    public void save(User user) throws Exception;
 }

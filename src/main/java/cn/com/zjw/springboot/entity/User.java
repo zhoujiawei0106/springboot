@@ -34,6 +34,8 @@ public class User extends BaseEntity implements Serializable {
 
     private String ip;
 
+    private String parentId;
+
     @Override
     public String toString() {
         return "User{" +
@@ -44,6 +46,7 @@ public class User extends BaseEntity implements Serializable {
                 ", loginFailTimes=" + loginFailTimes +
                 ", LastLoginDate=" + LastLoginDate +
                 ", ip='" + ip + '\'' +
+                ", parentId='" + parentId + '\'' +
                 '}';
     }
 
@@ -101,5 +104,13 @@ public class User extends BaseEntity implements Serializable {
 
     public void setIp(String ip) {
         this.ip = ip;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 }

@@ -7,6 +7,7 @@ import cn.com.zjw.springboot.entity.Menu;
 import cn.com.zjw.springboot.entity.User;
 import cn.com.zjw.springboot.service.MenuService;
 import cn.com.zjw.springboot.service.UserService;
+import cn.com.zjw.springboot.utils.BlowfishCipher;
 import cn.com.zjw.springboot.utils.TokenUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -69,7 +70,7 @@ public class LoginController extends BaseController {
             // 先跟新本次用户的ip
             user.setIp(getUserIp(request));
 
-            if (!password.equals(user.getPassword())) {
+            if (!password.equals(BlowfishCipher.decode(user.getPassword()))) {
                 // 密码错误更新登陆次数
                 userService.updateLoginTimes(user);
                 return fail("用户名或密码错误");

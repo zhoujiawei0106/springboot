@@ -37,4 +37,19 @@ public interface UserService {
      * @return
      */
     public void save(User user) throws Exception;
+
+    /**
+     * 获取用户
+     * @author zhoujiawei
+     * @param user
+     * @return
+     */
+    public User getUser(User user) throws Exception;
+
+    /**
+     * 更新用户信息
+     * @author zhoujiawei
+     * @param user
+     */
+    public void update(User user) throws Exception;
 }

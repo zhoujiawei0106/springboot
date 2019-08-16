@@ -10,6 +10,7 @@
         <result column="IP" property="ip" jdbcType="VARCHAR"/>
         <result column="LAST_LOGIN_DATE" property="lastLoginDate" jdbcType="TIMESTAMP"/>
         <result column="LOGIN_FAIL_TIMES" property="loginFailTimes" jdbcType="INTEGER"/>
+        <result column="TEL" property="tel" jdbcType="NUMERIC"/>
     </resultMap>
 
     <select id="getUser" resultMap="userMap">
@@ -20,7 +21,8 @@
             password,
             ip,
             last_login_date,
-            login_fail_times
+            login_fail_times,
+            tel
         FROM
             t_user
         WHERE
@@ -46,7 +48,8 @@
             password,
             ip,
             last_login_date,
-            login_fail_times
+            login_fail_times,
+            tel
         FROM
             t_user
         WHERE
@@ -57,6 +60,11 @@
         <if test="user.userName != null and user.userName != ''">
             AND user_name like '%' || #{user.userName} || '%'
         </if>
+        <if test="user.id != null and user.id != ''">
+            AND id = #{user.id}
+        </if>
+        ORDER BY
+            login_name
     </select>
 
     <insert id="save">
@@ -67,7 +75,8 @@
             password,
             ip,
             login_fail_times,
-            parent_id
+            parent_id,
+            tel
         ) VALUES (
             #{user.id},
             #{user.userName},
@@ -75,7 +84,19 @@
             #{user.password},
             #{user.ip},
             0,
-            #{user.parentId}
+            #{user.parentId},
+            #{user.tel}
         )
     </insert>
+
+    <update id="update">
+        UPDATE
+            t_user
+        SET
+            user_name = #{user.userName},
+            password = #{user.password},
+            tel = #{user.tel}
+        WHERE
+            id = #{user.id}
+    </update>
 </mapper>

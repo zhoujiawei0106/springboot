@@ -26,7 +26,7 @@ public class UserController extends BaseController {
     private UserService userService;
 
     /**
-     * 回去用户
+     * 获取用户
      * @author zhoujiawei
      * @return
      */
@@ -41,6 +41,13 @@ public class UserController extends BaseController {
         }
     }
 
+    /**
+     * 新增用户
+     * @author zhoujiawei
+     * @param user
+     * @param request
+     * @return
+     */
     @PostMapping("/save")
     public Map<String, Object> save(User user, HttpServletRequest request) {
         try {
@@ -52,4 +59,33 @@ public class UserController extends BaseController {
             return fail(e.getMessage());
         }
     }
+
+    /**
+     * 获取用户信息
+     * @author zhoujiawei
+     * @param user
+     * @return
+     */
+    @GetMapping("/getUser")
+    public Map<String, Object> getUser(User user) {
+        try {
+            user = userService.getUser(user);
+            return success(user);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
+
+    @PutMapping("/update")
+    public Map<String, Object> update(User user) {
+        try {
+            userService.update(user);
+            return success("用户修改成功");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
+
 }

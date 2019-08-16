@@ -36,4 +36,11 @@ public interface UserMapper {
      * @param user
      */
     public void save(@Param("user") User user);
+
+    /**
+     * 修改用户信息
+     * @author zhoujiawei
+     * @param user
+     */
+    public void update(@Param("user") User user);
 }

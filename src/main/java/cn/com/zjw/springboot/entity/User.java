@@ -36,6 +36,11 @@ public class User extends BaseEntity implements Serializable {
 
     private String parentId;
 
+    /**
+     * 手机
+     */
+    private Long tel;
+
     @Override
     public String toString() {
         return "User{" +
@@ -47,6 +52,7 @@ public class User extends BaseEntity implements Serializable {
                 ", LastLoginDate=" + LastLoginDate +
                 ", ip='" + ip + '\'' +
                 ", parentId='" + parentId + '\'' +
+                ", tel='" + tel + '\'' +
                 '}';
     }
 
@@ -112,5 +118,13 @@ public class User extends BaseEntity implements Serializable {
 
     public void setParentId(String parentId) {
         this.parentId = parentId;
+    }
+
+    public Long getTel() {
+        return tel;
+    }
+
+    public void setTel(Long tel) {
+        this.tel = tel;
     }
 }

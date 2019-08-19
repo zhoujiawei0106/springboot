@@ -77,11 +77,51 @@ public class UserController extends BaseController {
         }
     }
 
+    /**
+     * 更新用户信息
+     * @author zhoujiawei
+     * @param user
+     * @return
+     */
     @PutMapping("/update")
     public Map<String, Object> update(User user) {
         try {
             userService.update(user);
             return success("用户修改成功");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
+
+    /**
+     * 删除用户
+     * @author zhoujiawei
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/delete")
+    public Map<String, Object> delete(String id) {
+        try {
+            userService.delete(id);
+            return success("用户删除成功");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
+
+    /**
+     * 重置用户登陆次数
+     * @author zhoujiawei
+     * @param id
+     * @return
+     */
+    @PutMapping("/reset")
+    public Map<String, Object> reset(String id) {
+        try {
+            userService.reset(id);
+            return success("重置用户登陆次数成功");
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());

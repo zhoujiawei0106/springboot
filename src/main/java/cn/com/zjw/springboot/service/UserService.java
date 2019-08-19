@@ -52,4 +52,18 @@ public interface UserService {
      * @param user
      */
     public void update(User user) throws Exception;
+
+    /**
+     * 删除用户
+     * @author zhoujiawei
+     * @param id
+     */
+    public void delete(String id) throws Exception;
+
+    /**
+     * 重置用户登陆次数
+     * @author zhoujiawei
+     * @param id
+     */
+    public void reset(String id) throws Exception;
 }

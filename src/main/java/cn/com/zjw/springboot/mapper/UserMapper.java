@@ -43,4 +43,18 @@ public interface UserMapper {
      * @param user
      */
     public void update(@Param("user") User user);
+
+    /**
+     * 删除用户
+     * @author zhoujiawei
+     * @param id
+     */
+    public void delete(@Param("id") String id);
+
+    /**
+     * 重置用户登录次数
+     * @author zhoujiawei
+     * @param id
+     */
+    public void reset(String id);
 }

@@ -93,6 +93,30 @@ public class UserServiceImpl implements UserService {
         logger.info("用户信息修改成功");
     }
 
+    @Override
+    public void delete(String id) throws Exception {
+        checkUserById(id);
+
+        logger.info("删除用户的id为-----" + id);
+        userMapper.delete(id);
+        logger.info("用户信息删除成功");
+    }
+
+    @Override
+    public void reset(String id) throws Exception {
+        checkUserById(id);
+
+        logger.info("重置登陆次数用户的id为-----" + id);
+        userMapper.reset(id);
+        logger.info("重置用户登陆次数成功");
+    }
+
+    /**
+     * 用户校验
+     * @author zhoujiawei
+     * @param user
+     * @throws Exception
+     */
     private final void check(User user) throws Exception {
         if (StringUtils.isBlank(user.getUserName())) {
             throw new Exception("请输入用户名");
@@ -105,6 +129,21 @@ public class UserServiceImpl implements UserService {
         }
         if (user.getTel() == null || user.getTel().toString().length() != 11) {
             throw new Exception("请输入正确的手机号码");
+        }
+    }
+
+    private final void checkUserById(String id) throws Exception {
+        if (StringUtils.isBlank(id)) {
+            throw new Exception("用户代码不能为空");
+        }
+
+        User user = new User();
+        user.setId(id);
+        List<User> list = userMapper.getUsers(user);
+        if (list.size() == 0) {
+            throw new Exception("删除的用户信息不存在");
+        } else if (list.size() > 1) {
+            throw new Exception("请检查用户信息是否重复");
         }
     }
 }

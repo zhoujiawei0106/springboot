@@ -99,4 +99,20 @@
         WHERE
             id = #{user.id}
     </update>
+
+    <delete id="delete">
+        DELETE FROM
+            t_user
+        WHERE
+            id = #{id}
+    </delete>
+
+    <update id="reset">
+        UPDATE
+            t_user
+        SET
+            LOGIN_FAIL_TIMES = 0
+        WHERE
+            id = #{id}
+    </update>
 </mapper>

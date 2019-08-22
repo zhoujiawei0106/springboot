@@ -1,10 +1,7 @@
-package cn.com.zjw.springboot.service;
+package cn.com.zjw.springboot.service.system;
 
-import cn.com.zjw.springboot.entity.User;
+import cn.com.zjw.springboot.entity.system.User;
 import com.github.pagehelper.PageInfo;
-
-import java.util.List;
-import java.util.Map;
 
 public interface UserService {
 

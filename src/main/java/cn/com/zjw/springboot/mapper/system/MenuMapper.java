@@ -1,6 +1,6 @@
-package cn.com.zjw.springboot.mapper;
+package cn.com.zjw.springboot.mapper.system;
 
-import cn.com.zjw.springboot.entity.Menu;
+import cn.com.zjw.springboot.entity.system.Menu;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

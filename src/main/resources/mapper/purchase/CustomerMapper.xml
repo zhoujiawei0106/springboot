@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.zjw.springboot.mapper.purchase.CustomerMapper">
+
+    <resultMap id="menuMap" type="cn.com.zjw.springboot.entity.system.Menu">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="MENU_NAME" property="menuName" jdbcType="VARCHAR"/>
+        <result column="MENU_ROUTE_PATH" property="menuRoutePath" jdbcType="VARCHAR"/>
+        <result column="PID" property="pid" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+</mapper>

@@ -1,6 +1,6 @@
-package cn.com.zjw.springboot.service;
+package cn.com.zjw.springboot.service.system;
 
-import cn.com.zjw.springboot.entity.Menu;
+import cn.com.zjw.springboot.entity.system.Menu;
 
 import java.util.List;
 

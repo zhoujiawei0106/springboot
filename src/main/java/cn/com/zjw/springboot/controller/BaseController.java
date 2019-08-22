@@ -1,7 +1,7 @@
 package cn.com.zjw.springboot.controller;
 
 import cn.com.zjw.springboot.constants.CodeConstants;
-import cn.com.zjw.springboot.entity.User;
+import cn.com.zjw.springboot.entity.system.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

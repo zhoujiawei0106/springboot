@@ -1,4 +1,6 @@
-package cn.com.zjw.springboot.entity;
+package cn.com.zjw.springboot.entity.system;
+
+import cn.com.zjw.springboot.entity.BaseEntity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;

@@ -1,4 +1,4 @@
-package cn.com.zjw.springboot.dto;
+package cn.com.zjw.springboot.dto.system;
 
 import java.io.Serializable;
 import java.util.ArrayList;

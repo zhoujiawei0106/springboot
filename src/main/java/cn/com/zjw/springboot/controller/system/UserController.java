@@ -1,8 +1,8 @@
 package cn.com.zjw.springboot.controller.system;
 
 import cn.com.zjw.springboot.controller.BaseController;
-import cn.com.zjw.springboot.entity.User;
-import cn.com.zjw.springboot.service.UserService;
+import cn.com.zjw.springboot.entity.system.User;
+import cn.com.zjw.springboot.service.system.UserService;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

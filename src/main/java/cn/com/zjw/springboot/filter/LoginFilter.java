@@ -2,19 +2,16 @@ package cn.com.zjw.springboot.filter;
 
 
 import cn.com.zjw.springboot.constants.CodeConstants;
-import cn.com.zjw.springboot.entity.User;
+import cn.com.zjw.springboot.entity.system.User;
 import cn.com.zjw.springboot.listener.SingleLoginListener;
-import cn.com.zjw.springboot.service.UserService;
+import cn.com.zjw.springboot.service.system.UserService;
 import cn.com.zjw.springboot.utils.JsonParseUtils;
 import cn.com.zjw.springboot.utils.SpringContextUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.core.annotation.Order;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;

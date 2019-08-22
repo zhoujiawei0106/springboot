@@ -1,6 +1,6 @@
 package cn.com.zjw.springboot.utils;
 
-import cn.com.zjw.springboot.entity.User;
+import cn.com.zjw.springboot.entity.system.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;

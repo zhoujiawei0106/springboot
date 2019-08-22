@@ -1,4 +1,4 @@
-package cn.com.zjw.springboot.entity;
+package cn.com.zjw.springboot.entity.system;
 
 public class Role {
 

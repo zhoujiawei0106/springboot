@@ -1,6 +1,6 @@
-package cn.com.zjw.springboot.dto;
+package cn.com.zjw.springboot.dto.system;
 
-import cn.com.zjw.springboot.entity.User;
+import cn.com.zjw.springboot.entity.system.User;
 
 import java.io.Serializable;
 

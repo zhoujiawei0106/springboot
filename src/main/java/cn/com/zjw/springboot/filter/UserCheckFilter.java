@@ -1,8 +1,8 @@
 package cn.com.zjw.springboot.filter;
 
 import cn.com.zjw.springboot.constants.CodeConstants;
-import cn.com.zjw.springboot.entity.User;
-import cn.com.zjw.springboot.service.UserService;
+import cn.com.zjw.springboot.entity.system.User;
+import cn.com.zjw.springboot.service.system.UserService;
 import cn.com.zjw.springboot.utils.JsonParseUtils;
 import cn.com.zjw.springboot.utils.SpringContextUtils;
 import cn.com.zjw.springboot.utils.TokenUtils;

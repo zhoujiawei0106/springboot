@@ -1,8 +1,8 @@
-package cn.com.zjw.springboot.service.impl;
+package cn.com.zjw.springboot.service.system.impl;
 
-import cn.com.zjw.springboot.entity.Menu;
-import cn.com.zjw.springboot.mapper.MenuMapper;
-import cn.com.zjw.springboot.service.MenuService;
+import cn.com.zjw.springboot.entity.system.Menu;
+import cn.com.zjw.springboot.mapper.system.MenuMapper;
+import cn.com.zjw.springboot.service.system.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

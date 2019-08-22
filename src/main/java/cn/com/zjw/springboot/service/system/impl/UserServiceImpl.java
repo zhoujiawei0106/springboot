@@ -1,8 +1,8 @@
-package cn.com.zjw.springboot.service.impl;
+package cn.com.zjw.springboot.service.system.impl;
 
-import cn.com.zjw.springboot.entity.User;
-import cn.com.zjw.springboot.mapper.UserMapper;
-import cn.com.zjw.springboot.service.UserService;
+import cn.com.zjw.springboot.entity.system.User;
+import cn.com.zjw.springboot.mapper.system.UserMapper;
+import cn.com.zjw.springboot.service.system.UserService;
 import cn.com.zjw.springboot.utils.BlowfishCipher;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;

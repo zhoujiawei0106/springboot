@@ -1,12 +1,12 @@
 package cn.com.zjw.springboot.controller;
 
 import cn.com.zjw.springboot.constants.CodeConstants;
-import cn.com.zjw.springboot.dto.MenuDto;
-import cn.com.zjw.springboot.dto.UserDto;
-import cn.com.zjw.springboot.entity.Menu;
-import cn.com.zjw.springboot.entity.User;
-import cn.com.zjw.springboot.service.MenuService;
-import cn.com.zjw.springboot.service.UserService;
+import cn.com.zjw.springboot.dto.system.MenuDto;
+import cn.com.zjw.springboot.dto.system.UserDto;
+import cn.com.zjw.springboot.entity.system.Menu;
+import cn.com.zjw.springboot.entity.system.User;
+import cn.com.zjw.springboot.service.system.MenuService;
+import cn.com.zjw.springboot.service.system.UserService;
 import cn.com.zjw.springboot.utils.BlowfishCipher;
 import cn.com.zjw.springboot.utils.TokenUtils;
 import org.apache.commons.lang3.StringUtils;

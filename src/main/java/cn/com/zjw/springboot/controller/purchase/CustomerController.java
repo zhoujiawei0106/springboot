@@ -1,5 +1,6 @@
 package cn.com.zjw.springboot.controller.purchase;
 
+import cn.com.zjw.springboot.constants.purchase.CustomerStatus;
 import cn.com.zjw.springboot.constants.purchase.CustomerType;
 import cn.com.zjw.springboot.controller.BaseController;
 import cn.com.zjw.springboot.entity.purchase.Customer;
@@ -52,6 +53,21 @@ public class CustomerController extends BaseController {
     public Map<String, Object> customerType() {
         try {
             return success(CustomerType.getCustomerType());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
+
+    /**
+     * 获取客户状态常量
+     * @author zhoujiawei
+     * @return
+     */
+    @GetMapping("/customerStatus")
+    public Map<String, Object> customerStatus() {
+        try {
+            return success(CustomerStatus.getCustomerStatus());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());

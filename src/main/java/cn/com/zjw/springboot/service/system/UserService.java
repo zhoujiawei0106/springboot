@@ -2,6 +2,7 @@ package cn.com.zjw.springboot.service.system;
 
 import cn.com.zjw.springboot.entity.system.User;
 import com.github.pagehelper.PageInfo;
+import org.apache.ibatis.annotations.Param;
 
 public interface UserService {
 
@@ -11,7 +12,7 @@ public interface UserService {
      * @param loginName
      * @return
      */
-    public User getUser(String loginName);
+    public User getUser(@Param("loginName") String loginName);
 
     /**
      * 根据登陆用户修改登陆次数

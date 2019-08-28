@@ -2,12 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.com.zjw.springboot.mapper.purchase.CustomerMapper">
 
-    <resultMap id="menuMap" type="cn.com.zjw.springboot.entity.system.Menu">
-        <id column="ID" property="id" jdbcType="VARCHAR"/>
-        <result column="MENU_NAME" property="menuName" jdbcType="VARCHAR"/>
-        <result column="MENU_ROUTE_PATH" property="menuRoutePath" jdbcType="VARCHAR"/>
-        <result column="PID" property="pid" jdbcType="VARCHAR"/>
+    <resultMap id="customers" type="cn.com.zjw.springboot.entity.purchase.Customer">
+        <id column="f_id" property="id" jdbcType="VARCHAR"/>
+        <result column="F_NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="F_PARENT_ID" property="parentId" jdbcType="VARCHAR"/>
+        <result column="F_TEL" property="tel" jdbcType="NUMERIC"/>
+        <result column="F_ADDRESS" property="address" jdbcType="VARCHAR"/>
+        <result column="F_IDCARD" property="idcard" jdbcType="VARCHAR"/>
+        <result column="F_POINT" property="point" jdbcType="NUMERIC"/>
+        <result column="F_NICKNAME" property="nickname" jdbcType="VARCHAR"/>
+        <result column="F_TYPE" property="type" jdbcType="NUMERIC"/>
+        <result column="F_STATUS" property="status" jdbcType="NUMERIC"/>
+        <result column="F_CREATE_TIMESTAMP" property="createTimestamp" jdbcType="TIMESTAMP"/>
+        <result column="F_UPDATE_TIMESTAMP" property="updateTimestamp" jdbcType="TIMESTAMP"/>
     </resultMap>
 
+    <select id="getCustomers" resultMap="customers">
+        SELECT
+            f_id,
+            f_name,
+            f_parent_id,
+            f_tel,
+            f_address,
+            f_idcard,
+            f_point,
+            f_nickname,
+            f_type,
+            f_status
+        FROM
+            t_customer
+        WHERE
+            1 = 1
+    </select>
 
 </mapper>

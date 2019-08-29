@@ -14,4 +14,11 @@ public interface CustomerMapper {
      * @return
      */
     public List<Customer> getCustomers(@Param("customer") Customer customer);
+
+    /**
+     * 保存客户信息
+     * @author zhoujiawei
+     * @param customer
+     */
+    public void save(@Param("customer") Customer customer);
 }

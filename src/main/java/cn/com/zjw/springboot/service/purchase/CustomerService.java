@@ -16,4 +16,12 @@ public interface CustomerService {
      * @return
      */
     public PageInfo getCustomers(Customer customer);
+
+    /**
+     * 保存客户信息
+     * @author zhoujiawei
+     * @param customer
+     * @throws Exception
+     */
+    public void save(Customer customer) throws Exception;
 }

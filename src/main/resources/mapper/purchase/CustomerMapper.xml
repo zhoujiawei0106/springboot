@@ -10,9 +10,9 @@
         <result column="F_ADDRESS" property="address" jdbcType="VARCHAR"/>
         <result column="F_IDCARD" property="idcard" jdbcType="VARCHAR"/>
         <result column="F_POINT" property="point" jdbcType="NUMERIC"/>
-        <result column="F_NICKNAME" property="nickname" jdbcType="VARCHAR"/>
-        <result column="F_TYPE" property="type" jdbcType="NUMERIC"/>
-        <result column="F_STATUS" property="status" jdbcType="NUMERIC"/>
+        <result column="F_NICKNAME" property="nickName" jdbcType="VARCHAR"/>
+        <result column="F_TYPE" property="type" jdbcType="VARCHAR"/>
+        <result column="F_STATUS" property="status" jdbcType="VARCHAR"/>
         <result column="F_CREATE_TIMESTAMP" property="createTimestamp" jdbcType="TIMESTAMP"/>
         <result column="F_UPDATE_TIMESTAMP" property="updateTimestamp" jdbcType="TIMESTAMP"/>
     </resultMap>
@@ -34,5 +34,35 @@
         WHERE
             1 = 1
     </select>
+
+    <insert id="save">
+        INSERT INTO t_customer (
+            F_ID,
+            F_NAME,
+            F_PARENT_ID,
+            F_TEL,
+            F_ADDRESS,
+            F_IDCARD,
+            F_POINT,
+            F_NICKNAME,
+            F_TYPE,
+            F_STATUS,
+            F_CREATE_TIMESTAMP,
+            F_UPDATE_TIMESTAMP
+        ) VALUES (
+            #{customer.id},
+            #{customer.name},
+            #{customer.parentId},
+            #{customer.tel, jdbcType=NUMERIC},
+            #{customer.address, jdbcType=VARCHAR},
+            #{customer.idcard, jdbcType=VARCHAR},
+            #{customer.point, jdbcType=NUMERIC},
+            #{customer.nickName, jdbcType=VARCHAR},
+            #{customer.type, jdbcType=NUMERIC},
+            #{customer.status, jdbcType=NUMERIC},
+            sysdate,
+            sysdate
+        )
+    </insert>
 
 </mapper>

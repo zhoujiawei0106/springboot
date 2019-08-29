@@ -42,17 +42,17 @@ public class Customer extends BaseEntity implements Serializable {
     /**
      * 客户昵称
      */
-    private String nickname;
+    private String nickName;
 
     /**
      * 客户类型(customer_type)
      */
-    private Integer type;
+    private String type;
 
     /**
      * 客户状态(customer_status)
      */
-    private Integer status;
+    private String status;
 
     /**
      * 创建时间
@@ -74,7 +74,7 @@ public class Customer extends BaseEntity implements Serializable {
                 ", address='" + address + '\'' +
                 ", idcard='" + idcard + '\'' +
                 ", point='" + point + '\'' +
-                ", nickname='" + nickname + '\'' +
+                ", nickname='" + nickName + '\'' +
                 ", type='" + type + '\'' +
                 ", status='" + status + '\'' +
                 ", createTimestamp='" + createTimestamp + '\'' +
@@ -138,27 +138,27 @@ public class Customer extends BaseEntity implements Serializable {
         this.point = point;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
-    public Integer getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(String type) {
         this.type = type;
     }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

@@ -13,9 +13,10 @@ public interface CustomerService {
      * 获取客户列表
      * @author zhoujiawei
      * @param customer
+     * @param userId
      * @return
      */
-    public PageInfo getCustomers(Customer customer);
+    public PageInfo getCustomers(Customer customer, String userId);
 
     /**
      * 保存客户信息

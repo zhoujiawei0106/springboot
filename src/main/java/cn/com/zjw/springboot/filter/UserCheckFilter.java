@@ -103,8 +103,6 @@ public class UserCheckFilter implements Filter {
                 return;
             }
 
-//            List<Menu> menus = SpringContextUtils.getBean(MenuService.class).getUserMenu(user.getId());
-
             filterChain.doFilter(servletRequest, servletResponse);
         } catch (Exception e) {
             Map<String, Object> map = failMap(e.getMessage(), CodeConstants.LOGIN_INVALID);

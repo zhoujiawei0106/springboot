@@ -11,9 +11,10 @@ public interface CustomerMapper {
      * 获取客户列表
      * @author zhoujiawei
      * @param customer
+     * @param userId
      * @return
      */
-    public List<Customer> getCustomers(@Param("customer") Customer customer);
+    public List<Customer> getCustomers(@Param("customer") Customer customer, @Param("userId") String userId);
 
     /**
      * 保存客户信息

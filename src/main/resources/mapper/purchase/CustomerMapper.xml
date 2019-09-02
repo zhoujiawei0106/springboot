@@ -19,18 +19,30 @@
 
     <select id="getCustomers" resultMap="customers">
         SELECT
-            f_id,
-            f_name,
-            f_parent_id,
-            f_tel,
-            f_address,
-            f_idcard,
-            f_point,
-            f_nickname,
-            f_type,
-            f_status
+            t1.f_id,
+            t1.f_name,
+            t2.user_name as f_parent_id,
+            t1.f_tel,
+            t1.f_address,
+            t1.f_idcard,
+            t1.f_point,
+            t1.f_nickname,
+            t1.f_type,
+            t1.f_status
         FROM
-            t_customer
+            t_customer t1
+        INNER JOIN
+            (SELECT
+                id,
+                user_name
+             FROM
+                t_user
+             START WITH
+                id = #{userId}
+             CONNECT BY PRIOR
+                id = parent_id) t2
+        ON
+            t1.f_parent_id = t2.id
         WHERE
             1 = 1
     </select>

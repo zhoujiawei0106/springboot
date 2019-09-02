@@ -1,7 +1,8 @@
 package cn.com.zjw.springboot.controller;
 
-import cn.com.zjw.springboot.constants.CodeConstants;
 import cn.com.zjw.springboot.entity.system.User;
+import com.auth0.jwt.JWT;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -12,14 +13,32 @@ public abstract class BaseController {
 
     /**
      * 获取session中的用户对象
+     * @author zhoujiawei
+     * @param token
+     * @return
+     */
+    protected String getUserId(String token) throws Exception {
+        String id = JWT.decode(token).getClaim("id").asString();
+        if (StringUtils.isBlank(id)) {
+            throw new Exception("系统异常，未能获取用户信息");
+        }
+        return id;
+    }
+
+    protected String getToken(HttpServletRequest request) throws Exception {
+        String token = request.getHeader("token");
+        if (StringUtils.isBlank(token)) {
+            throw new Exception("系统异常，无法正常获取token");
+        }
+        return token;
+    }
+
+    /**
+     * 获取请求ip
+     * @author zhoujiawei
      * @param request
      * @return
      */
-    protected User getSessionUser(HttpServletRequest request) {
-        HttpSession session = request.getSession(true);
-        return (User) session.getAttribute(CodeConstants.SESSION_LOGIN_USER);
-    }
-
     protected String getUserIp(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {

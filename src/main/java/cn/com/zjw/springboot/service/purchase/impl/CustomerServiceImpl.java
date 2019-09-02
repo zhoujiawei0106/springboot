@@ -30,10 +30,10 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerMapper customerMapper;
 
     @Override
-    public PageInfo getCustomers(Customer customer) {
+    public PageInfo getCustomers(Customer customer, String userId) {
         PageHelper.startPage(customer.getPage(), customer.getRows());
         logger.info("根据条件查询所有用户----" + customer.toString());
-        List<Customer> list = customerMapper.getCustomers(customer);
+        List<Customer> list = customerMapper.getCustomers(customer, userId);
         transfer(list);
         PageInfo pageInfo = new PageInfo(list);
         return pageInfo;

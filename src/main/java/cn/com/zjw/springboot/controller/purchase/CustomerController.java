@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -32,12 +33,15 @@ public class CustomerController extends BaseController {
     /**
      * 获取客户列表
      * @author zhoujiawei
+     * @param customer
+     * @param request
      * @return
      */
     @GetMapping("/list")
-    public Map<String, Object> list(Customer customer) {
+    public Map<String, Object> list(Customer customer, HttpServletRequest request) {
         try {
-            PageInfo pageInfo = customerService.getCustomers(customer);
+            PageInfo pageInfo = customerService.getCustomers(customer, getUserId(getToken(request)));
+//            PageInfo pageInfo = customerService.getCustomers(customer, "");
             return success(pageInfo);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

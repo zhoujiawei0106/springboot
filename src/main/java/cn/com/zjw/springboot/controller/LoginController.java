@@ -62,7 +62,6 @@ public class LoginController extends BaseController {
             if (user == null) {
                 return fail("用户名或密码错误!");
             }
-            // TODO 考虑如何重置登陆次数，如何实现10分钟后重置登陆次数
             if (user.getLoginFailTimes() > 3) {
                 return fail("用户已连续登陆次数超过3次，请联系管理员");
             }

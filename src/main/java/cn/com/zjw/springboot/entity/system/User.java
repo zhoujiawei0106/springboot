@@ -43,6 +43,11 @@ public class User extends BaseEntity implements Serializable {
      */
     private Long tel;
 
+    /**
+     * 注销状态
+     */
+    private String status;
+
     @Override
     public String toString() {
         return "User{" +
@@ -55,6 +60,7 @@ public class User extends BaseEntity implements Serializable {
                 ", ip='" + ip + '\'' +
                 ", parentId='" + parentId + '\'' +
                 ", tel='" + tel + '\'' +
+                ", status='" + status + '\'' +
                 '}';
     }
 
@@ -128,5 +134,13 @@ public class User extends BaseEntity implements Serializable {
 
     public void setTel(Long tel) {
         this.tel = tel;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

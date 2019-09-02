@@ -41,7 +41,6 @@ public class CustomerController extends BaseController {
     public Map<String, Object> list(Customer customer, HttpServletRequest request) {
         try {
             PageInfo pageInfo = customerService.getCustomers(customer, getUserId(getToken(request)));
-//            PageInfo pageInfo = customerService.getCustomers(customer, "");
             return success(pageInfo);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -49,11 +48,28 @@ public class CustomerController extends BaseController {
         }
     }
 
+    /**
+     * 保存客户
+     * @author zhoujiawei
+     * @param customer
+     * @return
+     */
     @PostMapping("/save")
     public Map<String, Object> save(Customer customer) {
         try {
             customerService.save(customer);
             return success("客户新增成功");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
+
+    @GetMapping("/getCustomer")
+    public Map<String, Object> getCustomer(String id, HttpServletRequest request) {
+        try {
+            Customer customer = customerService.getCustomer(id, getUserId(getToken(request)));
+            return success(customer);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());

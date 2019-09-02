@@ -11,6 +11,7 @@
         <result column="LAST_LOGIN_DATE" property="lastLoginDate" jdbcType="TIMESTAMP"/>
         <result column="LOGIN_FAIL_TIMES" property="loginFailTimes" jdbcType="INTEGER"/>
         <result column="TEL" property="tel" jdbcType="NUMERIC"/>
+        <result column="STATUS" property="status" jdbcType="NUMERIC"/>
     </resultMap>
 
     <select id="getUser" resultMap="userMap">
@@ -22,7 +23,8 @@
             ip,
             last_login_date,
             login_fail_times,
-            tel
+            tel,
+            status
         FROM
             t_user
         WHERE
@@ -49,7 +51,8 @@
             ip,
             last_login_date,
             login_fail_times,
-            tel
+            tel,
+            status
         FROM
             t_user
         WHERE
@@ -76,16 +79,18 @@
             ip,
             login_fail_times,
             parent_id,
-            tel
+            tel,
+            status
         ) VALUES (
             #{user.id},
             #{user.userName},
             #{user.loginName},
             #{user.password},
-            #{user.ip},
+            #{user.ip, jdbcType=VARCHAR},
             0,
             #{user.parentId},
-            #{user.tel}
+            #{user.tel},
+            #{user.status, jdbcType=NUMERIC}
         )
     </insert>
 

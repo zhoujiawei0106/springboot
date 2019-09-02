@@ -95,6 +95,12 @@ public class UserCheckFilter implements Filter {
                 response.addHeader("Access-Control-Allow-Origin", "*");
                 return;
             }
+            if (CodeConstants.CANCEL.equals(user.getStatus())) {
+                Map<String, Object> map = failMap("无效用户，请重新登录", CodeConstants.LOGIN_INVALID);
+                response.getWriter().write(JsonParseUtils.toJson(map));
+                response.addHeader("Access-Control-Allow-Origin", "*");
+                return;
+            }
             Boolean verify = TokenUtils.isVerify(token, user);
             if (!verify) {
                 Map<String, Object> map = failMap("非法访问", CodeConstants.LOGIN_INVALID);

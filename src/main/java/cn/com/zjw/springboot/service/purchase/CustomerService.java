@@ -25,4 +25,13 @@ public interface CustomerService {
      * @throws Exception
      */
     public void save(Customer customer) throws Exception;
+
+    /**
+     * 获取客户信息
+     * @author zhoujiawe
+     * @param id
+     * @param userId
+     * @return
+     */
+    public Customer getCustomer(String id, String userId) throws Exception;
 }

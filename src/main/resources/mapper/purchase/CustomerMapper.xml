@@ -20,7 +20,14 @@
     <select id="getCustomers" resultMap="customers">
         SELECT
             t1.f_id,
-            t1.f_name,
+            CASE WHEN
+                t1.f_nickname
+            IS NOT NULL THEN
+                f_name || '(' || t1.f_nickname || ')'
+            ELSE
+                t1.f_name
+            END AS f_name,
+            t1.f_name as name ,
             t2.user_name as f_parent_id,
             t1.f_tel,
             t1.f_address,
@@ -45,6 +52,18 @@
             t1.f_parent_id = t2.id
         WHERE
             1 = 1
+        <if test="customer.name != null and customer.name != ''">
+            AND t1.f_name like '%' || #{customer.name} || '%'
+        </if>
+        <if test="customer.nickName != null and customer.nickName != ''">
+            AND t1.f_nickname like '%' || #{customer.nickName} || '%'
+        </if>
+        <if test="customer.type != null and customer.type != ''">
+            AND t1.f_type = #{customer.type}
+        </if>
+        <if test="customer.status != null and customer.status != ''">
+            AND t1.f_status = #{customer.status}
+        </if>
     </select>
 
     <insert id="save">
@@ -77,4 +96,34 @@
         )
     </insert>
 
+    <select id="getCustomer" resultMap="customers">
+        SELECT
+            t1.f_id,
+            t1.f_name,
+            t1.f_tel,
+            t1.f_address,
+            t1.f_idcard,
+            t1.f_point,
+            t1.f_nickname,
+            t1.f_type,
+            t1.f_status
+        FROM
+            t_customer t1
+        INNER JOIN
+            (SELECT
+                id,
+                user_name
+             FROM
+                t_user
+             START WITH
+                id = #{userId}
+             CONNECT BY PRIOR
+                id = parent_id) t2
+        ON
+            t1.f_parent_id = t2.id
+        WHERE
+            t1.f_id = #{id}
+        AND
+            t1.f_parent_id = #{userId}
+    </select>
 </mapper>

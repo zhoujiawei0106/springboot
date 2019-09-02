@@ -39,4 +39,12 @@ public class CodeConstants {
     public static final int LOGIN_INVALID = 400001;
     // 没有操作权限
     public static final int PERMISSION_FAIL = 400002;
+
+    /**
+     * 注销状态
+     */
+    // 有效
+    public static final String VAILD = "1";
+    // 注销
+    public static final String CANCEL = "2";
 }

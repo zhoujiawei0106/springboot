@@ -22,4 +22,13 @@ public interface CustomerMapper {
      * @param customer
      */
     public void save(@Param("customer") Customer customer);
+
+    /**
+     * 获取客户信息
+     * @author zhoujiawei
+     * @param id
+     * @param userId
+     * @return
+     */
+    public Customer getCustomer(@Param("id") String id, @Param("userId") String userId);
 }

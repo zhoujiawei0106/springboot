@@ -3,8 +3,11 @@ package cn.com.zjw.springboot.service.purchase.impl;
 import cn.com.zjw.springboot.constants.purchase.CustomerStatus;
 import cn.com.zjw.springboot.constants.purchase.CustomerType;
 import cn.com.zjw.springboot.entity.purchase.Customer;
+import cn.com.zjw.springboot.entity.system.User;
 import cn.com.zjw.springboot.mapper.purchase.CustomerMapper;
 import cn.com.zjw.springboot.service.purchase.CustomerService;
+import cn.com.zjw.springboot.service.system.UserService;
+import cn.com.zjw.springboot.utils.BlowfishCipher;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +32,9 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private CustomerMapper customerMapper;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     public PageInfo getCustomers(Customer customer, String userId) {
         PageHelper.startPage(customer.getPage(), customer.getRows());
@@ -43,9 +49,29 @@ public class CustomerServiceImpl implements CustomerService {
     public void save(Customer customer) throws Exception {
         checkData(customer);
 
-        logger.info("根据条件查询所有用户----" + customer.toString());
+        logger.info("新增客户----" + customer.toString());
         customerMapper.save(customer);
         logger.info("客户信息新增成功");
+
+        User user = new User();
+        user.setId(customer.getId());
+        user.setParentId(customer.getParentId());
+        user.setUserName(customer.getName());
+        user.setLoginName(customer.getNickName());
+        user.setTel(customer.getTel());
+        user.setStatus(customer.getStatus());
+        user.setPassword(BlowfishCipher.encode("test123"));
+        logger.info("新增用户----" + customer.toString());
+        userService.save(user);
+        logger.info("用户信息新增成功");
+    }
+
+    @Override
+    public Customer getCustomer(String id, String userId) throws Exception{
+        if (StringUtils.isBlank(id)) {
+            throw new Exception("客户代码不能为空");
+        }
+        return customerMapper.getCustomer(id, userId);
     }
 
     private final void checkData(Customer customer) throws Exception{

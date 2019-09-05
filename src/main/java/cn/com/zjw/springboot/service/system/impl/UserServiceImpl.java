@@ -1,5 +1,6 @@
 package cn.com.zjw.springboot.service.system.impl;
 
+import cn.com.zjw.springboot.entity.purchase.Customer;
 import cn.com.zjw.springboot.entity.system.User;
 import cn.com.zjw.springboot.mapper.system.UserMapper;
 import cn.com.zjw.springboot.service.system.UserService;
@@ -68,9 +69,13 @@ public class UserServiceImpl implements UserService {
         logger.info("获取修改的用户信息-----" + user.toString());
         List<User> list= userMapper.getUsers(user);
 
+        if (list == null || list.size() == 0 || list.get(0) == null) {
+            logger.error("用户信息不存在");
+            throw new Exception("用户信息不存在");
+        }
         if (list.size() != 1) {
             logger.error("获取的用户数据不唯一:" + list.size());
-            throw new Exception("");
+            throw new Exception("获取的用户数据不唯一");
         }
 
         user = list.get(0);
@@ -86,8 +91,12 @@ public class UserServiceImpl implements UserService {
             throw new Exception("用户代码不能为空");
         }
 
-        user.setPassword(BlowfishCipher.encode(user.getPassword()));
+        // 校验修改的用户是否存在
+        User userData = new User();
+        userData.setId(user.getId());
+        getUser(userData);
 
+        user.setPassword(BlowfishCipher.encode(user.getPassword()));
         logger.info("修改用户信息-----" + user.toString());
         userMapper.update(user);
         logger.info("用户信息修改成功");
@@ -111,6 +120,33 @@ public class UserServiceImpl implements UserService {
         logger.info("重置用户登陆次数成功");
     }
 
+    @Override
+    public void updateByCustomer(Customer customer) throws Exception {
+        if (StringUtils.isBlank(customer.getId())) {
+            throw new Exception("用户代码不能为空");
+        }
+        if (StringUtils.isBlank(customer.getParentId())) {
+            throw new Exception("上级用户代码不能为空");
+        }
+        if (StringUtils.isBlank(customer.getName())) {
+            throw new Exception("用户名称不能为空");
+        }
+        if (StringUtils.isBlank(customer.getStatus())) {
+            throw new Exception("用户状态不能为空");
+        }
+        if (customer.getTel() == null) {
+            throw new Exception("用户手机不能为空");
+        }
+
+        // 校验用户是否存在
+        User user = new User();
+        user.setId(customer.getId());
+        getUser(user);
+
+        logger.info("根据客户更新的用户信息为-----" + customer.toString());
+        userMapper.updateByCustomer(customer);
+    }
+
     /**
      * 用户校验
      * @author zhoujiawei
@@ -126,6 +162,9 @@ public class UserServiceImpl implements UserService {
         }
         if (StringUtils.isBlank(user.getPassword())) {
             throw new Exception("请输入密码");
+        }
+        if (StringUtils.isBlank(user.getStatus())) {
+            throw new Exception("请选择用户状态");
         }
         if (user.getTel() == null || user.getTel().toString().length() != 11) {
             throw new Exception("请输入正确的手机号码");

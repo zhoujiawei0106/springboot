@@ -9,10 +9,7 @@ import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -49,7 +46,7 @@ public class CustomerController extends BaseController {
     }
 
     /**
-     * 保存客户
+     * 保存客户信息
      * @author zhoujiawei
      * @param customer
      * @return
@@ -65,6 +62,49 @@ public class CustomerController extends BaseController {
         }
     }
 
+    /**
+     * 更新客户信息
+     * @author zhoujiawei
+     * @param customer
+     * @param request
+     * @return
+     */
+    @PutMapping("/update")
+    public Map<String, Object> update(Customer customer, HttpServletRequest request) {
+        try {
+            customerService.update(customer, getUserId(getToken(request)));
+            return success("客户修改成功");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
+
+    /**
+     * 删除客户信息
+     * @author zhoujiawei
+     * @param id
+     * @param request
+     * @return
+     */
+    @DeleteMapping("/delete")
+    public Map<String, Object> delete(String id, HttpServletRequest request) {
+        try {
+            customerService.delete(id, getUserId(getToken(request)));
+            return success("客户删除成功");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
+
+    /**
+     * 加载客户信息
+     * @author zhoujiawei
+     * @param id
+     * @param request
+     * @return
+     */
     @GetMapping("/getCustomer")
     public Map<String, Object> getCustomer(String id, HttpServletRequest request) {
         try {

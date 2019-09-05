@@ -61,9 +61,9 @@ public class CustomerServiceImpl implements CustomerService {
         user.setTel(customer.getTel());
         user.setStatus(customer.getStatus());
         user.setPassword(BlowfishCipher.encode("test123"));
-        logger.info("新增用户----" + customer.toString());
+        logger.info("新增客户-----" + customer.toString());
         userService.save(user);
-        logger.info("用户信息新增成功");
+        logger.info("客户信息新增成功");
     }
 
     @Override
@@ -71,12 +71,76 @@ public class CustomerServiceImpl implements CustomerService {
         if (StringUtils.isBlank(id)) {
             throw new Exception("客户代码不能为空");
         }
-        return customerMapper.getCustomer(id, userId);
+        if (StringUtils.isBlank(userId)) {
+            logger.error("系统异常，上级用户代码为空");
+            throw new Exception("系统异常，上级用户代码为空");
+        }
+
+        Customer customer = customerMapper.getCustomer(id, userId);
+        if (customer == null) {
+            throw new Exception("无法获取客户信息");
+        }
+
+        logger.info(customer.toString());
+
+        return customer;
     }
 
+    @Override
+    public void update(Customer customer, String userId) throws Exception {
+        if (StringUtils.isBlank(customer.getId())) {
+            throw new Exception("请选择一条记录");
+        }
+
+        // 校验客户信息是否存在
+        getCustomer(customer.getId(), userId);
+
+        checkData(customer);
+
+        logger.info("修改客户信息-----" + customer.toString());
+        customerMapper.update(customer);
+        logger.info("客户信息修改成功");
+
+        userService.updateByCustomer(customer);
+        logger.info("用户信息修改成功");
+    }
+
+    @Override
+    public void delete(String id, String userId) throws Exception{
+        if (StringUtils.isBlank(id)) {
+            throw new Exception("客户代码不能为空");
+        }
+        if (StringUtils.isBlank(userId)) {
+            throw new Exception("上级客户代码不能为空");
+        }
+
+        // 校验客户信息是否存在
+        Customer customer = getCustomer(id, userId);
+
+        logger.info("删除的客户信息-----" + customer);
+        customerMapper.delete(id);
+        logger.info("删除客户成功");
+
+        logger.info("删除用户信息的id-----" + id);
+        userService.delete(id);
+        logger.info("删除用户成功");
+    }
+
+    /**
+     * 数据校验
+     * @author zhoujiawei
+     * @param customer
+     * @throws Exception
+     */
     private final void checkData(Customer customer) throws Exception{
         if (StringUtils.isBlank(customer.getName())) {
             throw new Exception("请输入客户名称");
+        }
+        if (StringUtils.isBlank(customer.getNickName())) {
+            throw new Exception("请输入客户昵称");
+        }
+        if (customer.getTel() == null) {
+            throw new Exception("请输入客户电话");
         }
         if (StringUtils.isBlank(customer.getType())) {
             throw new Exception("请选择客户类型");
@@ -92,6 +156,11 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
+    /**
+     * 翻译
+     * @author zhoujiawei
+     * @param list
+     */
     private final void transfer(List<Customer> list) {
         for (Customer customer : list) {
             customer.setType(CustomerType.getLabel(customer.getType()));

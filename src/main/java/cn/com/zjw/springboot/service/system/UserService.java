@@ -1,5 +1,6 @@
 package cn.com.zjw.springboot.service.system;
 
+import cn.com.zjw.springboot.entity.purchase.Customer;
 import cn.com.zjw.springboot.entity.system.User;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
@@ -64,4 +65,12 @@ public interface UserService {
      * @param id
      */
     public void reset(String id) throws Exception;
+
+    /**
+     * 根据客户修改信息同步用户信息
+     * @author zhoujiawei
+     * @param customer
+     * @throws Exception
+     */
+    public void updateByCustomer(Customer customer) throws Exception;
 }

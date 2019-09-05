@@ -106,7 +106,8 @@
             t1.f_point,
             t1.f_nickname,
             t1.f_type,
-            t1.f_status
+            t1.f_status,
+            t1.f_parent_id
         FROM
             t_customer t1
         INNER JOIN
@@ -126,4 +127,27 @@
         AND
             t1.f_parent_id = #{userId}
     </select>
+
+    <update id="update">
+        UPDATE
+            t_customer
+        SET
+            f_name = #{customer.name},
+            f_tel = #{customer.tel},
+            f_address = #{customer.address, jdbcType=VARCHAR},
+            f_idcard = #{customer.idcard, jdbcType=VARCHAR},
+            f_point = #{customer.point, jdbcType=NUMERIC},
+            f_type = #{customer.type, jdbcType=VARCHAR},
+            f_status = #{customer.status, jdbcType=VARCHAR},
+            f_update_timestamp = sysdate
+        WHERE
+            f_id = #{customer.id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM
+           t_customer
+        WHERE
+            f_id = #{id}
+    </delete>
 </mapper>

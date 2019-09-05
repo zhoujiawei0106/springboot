@@ -100,7 +100,8 @@
         SET
             user_name = #{user.userName},
             password = #{user.password},
-            tel = #{user.tel}
+            tel = #{user.tel},
+            status = #{user.status}
         WHERE
             id = #{user.id}
     </update>
@@ -119,5 +120,18 @@
             LOGIN_FAIL_TIMES = 0
         WHERE
             id = #{id}
+    </update>
+
+    <update id="updateByCustomer">
+        UPDATE
+            t_user
+        SET
+            user_name = #{customer.name},
+            tel = #{customer.tel},
+            status = #{customer.status}
+        WHERE
+            id = #{customer.id}
+        AND
+            parent_id = #{customer.parentId}
     </update>
 </mapper>

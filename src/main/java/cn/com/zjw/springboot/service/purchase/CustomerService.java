@@ -34,4 +34,22 @@ public interface CustomerService {
      * @return
      */
     public Customer getCustomer(String id, String userId) throws Exception;
+
+    /**
+     * 修改客户信息
+     * @author zhoujiawei
+     * @param customer
+     * @param userId
+     * @throws Exception
+     */
+    public void update(Customer customer, String userId) throws Exception;
+
+    /**
+     * 删除客户信息
+     * @author zhoujiawei
+     * @param id
+     * @param userId
+     * @throws Exception
+     */
+    public void delete(String id, String userId) throws Exception;
 }

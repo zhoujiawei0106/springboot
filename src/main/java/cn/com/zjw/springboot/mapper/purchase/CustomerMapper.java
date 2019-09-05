@@ -31,4 +31,18 @@ public interface CustomerMapper {
      * @return
      */
     public Customer getCustomer(@Param("id") String id, @Param("userId") String userId);
+
+    /**
+     * 更新客户信息
+     * @author zhoujiawei
+     * @param customer
+     */
+    public void update(@Param("customer") Customer customer);
+
+    /**
+     * 删除客户信息
+     * @author zhoujiawei
+     * @param id
+     */
+    public void delete(@Param("id") String id);
 }

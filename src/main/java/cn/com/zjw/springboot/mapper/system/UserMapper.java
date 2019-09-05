@@ -1,5 +1,6 @@
 package cn.com.zjw.springboot.mapper.system;
 
+import cn.com.zjw.springboot.entity.purchase.Customer;
 import cn.com.zjw.springboot.entity.system.User;
 import org.apache.ibatis.annotations.Param;
 
@@ -56,5 +57,12 @@ public interface UserMapper {
      * @author zhoujiawei
      * @param id
      */
-    public void reset(String id);
+    public void reset(@Param("id") String id);
+
+    /**
+     * 根据客户信息修改用户信息
+     * @author zhoujiawei
+     * @param customer
+     */
+    public void updateByCustomer(@Param("customer") Customer customer);
 }

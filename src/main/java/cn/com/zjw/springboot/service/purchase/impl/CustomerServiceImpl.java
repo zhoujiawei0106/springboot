@@ -126,6 +126,15 @@ public class CustomerServiceImpl implements CustomerService {
         logger.info("删除用户成功");
     }
 
+    @Override
+    public List<Customer> export(Customer customer, String userId) {
+        logger.info("根据条件查询所有用户----" + customer.toString());
+        List<Customer> list = customerMapper.getCustomers(customer, userId);
+        transfer(list);
+        logger.info("导出的客户数据共 " + list.size() + "条");
+        return list;
+    }
+
     /**
      * 数据校验
      * @author zhoujiawei

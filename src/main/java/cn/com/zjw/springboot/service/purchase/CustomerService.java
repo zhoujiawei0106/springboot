@@ -3,6 +3,8 @@ package cn.com.zjw.springboot.service.purchase;
 import cn.com.zjw.springboot.entity.purchase.Customer;
 import com.github.pagehelper.PageInfo;
 
+import java.util.List;
+
 /**
  * 客户管理
  * @author zhoujiawei
@@ -52,4 +54,13 @@ public interface CustomerService {
      * @throws Exception
      */
     public void delete(String id, String userId) throws Exception;
+
+    /**
+     * 获取导出的数据
+     * @author zhoujiawei
+     * @param customer
+     * @param userId
+     * @return
+     */
+    public List<Customer> export(Customer customer, String userId);
 }

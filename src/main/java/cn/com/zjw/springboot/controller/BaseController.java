@@ -1,11 +1,10 @@
 package cn.com.zjw.springboot.controller;
 
-import cn.com.zjw.springboot.entity.system.User;
 import com.auth0.jwt.JWT;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +24,13 @@ public abstract class BaseController {
         return id;
     }
 
+    /**
+     * 获取用户token
+     * @author zhoujiawei
+     * @param request
+     * @return
+     * @throws Exception
+     */
     protected String getToken(HttpServletRequest request) throws Exception {
         String token = request.getHeader("token");
         if (StringUtils.isBlank(token)) {
@@ -57,6 +63,11 @@ public abstract class BaseController {
             ip = request.getRemoteAddr();
         }
         return ip;
+    }
+
+    protected InputStream getExcelTemplate(String filePath) {
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("/template" + filePath + ".xls");
+        return is;
     }
 
     /**

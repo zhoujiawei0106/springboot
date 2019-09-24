@@ -60,7 +60,7 @@ public class CustomerServiceImpl implements CustomerService {
         user.setLoginName(customer.getNickName());
         user.setTel(customer.getTel());
         user.setStatus(customer.getStatus());
-        user.setPassword(BlowfishCipher.encode("test123"));
+        user.setPassword("test123");
         logger.info("新增客户-----" + customer.toString());
         userService.save(user);
         logger.info("客户信息新增成功");

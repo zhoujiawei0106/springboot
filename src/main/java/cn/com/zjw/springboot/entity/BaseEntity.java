@@ -4,7 +4,7 @@ public class BaseEntity {
 
     private Integer page = 1;
 
-    private Integer rows = 10;
+    private Integer rows = 5;
 
     public Integer getPage() {
         return page;

@@ -29,6 +29,11 @@ public class Commodity extends BaseEntity implements Serializable {
      */
     private BigDecimal price;
 
+    /**
+     * 商品价格范围（至多）
+     */
+    private BigDecimal priceOf;
+
     @Override
     public String toString() {
         return "Commodity{" +
@@ -37,6 +42,7 @@ public class Commodity extends BaseEntity implements Serializable {
                 ", description='" + description + '\'' +
                 ", pictureUrl='" + pictureUrl + '\'' +
                 ", price='" + price + '\''  +
+                ", price='" + priceOf + '\''  +
                 '}';
     }
 
@@ -78,5 +84,13 @@ public class Commodity extends BaseEntity implements Serializable {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public BigDecimal getPriceOf() {
+        return priceOf;
+    }
+
+    public void setPriceOf(BigDecimal priceOf) {
+        this.priceOf = priceOf;
     }
 }

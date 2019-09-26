@@ -19,6 +19,64 @@
             F_PRICE
         FROM
             T_COMMODITY
+        WHERE
+        1 = 1
+        <if test="commodity.name != null and commodity.name != ''">
+            AND F_NAME like '%' || #{commodity.name, jdbcType=VARCHAR} || '%'
+        </if>
+        <if test="commodity.price != null and commodity.price != ''">
+            AND F_PRICE <![CDATA[>=]]> #{commodity.price, jdbcType=NUMERIC}
+        </if>
+        <if test="commodity.priceOf != null and commodity.priceOf != ''">
+            AND F_PRICE <![CDATA[<=]]> #{commodity.priceOf, jdbcType=NUMERIC}
+        </if>
     </select>
 
+    <select id="getCustomer" resultMap="commoditys">
+        SELECT
+        F_ID,
+        F_NAME,
+        F_DESCRIPTION,
+        F_PICTURE_URL,
+        F_PRICE
+        FROM
+        T_COMMODITY
+        WHERE
+        F_ID = #{id, jdbcType=VARCHAR}
+    </select>
+
+    <insert id="save">
+        INSERT INTO T_COMMODITY (
+            F_ID,
+            F_NAME,
+            F_DESCRIPTION,
+            F_PICTURE_URL,
+            F_PRICE
+        ) VALUES (
+            #{commodity.id, jdbcType=VARCHAR},
+            #{commodity.name, jdbcType=VARCHAR},
+            #{commodity.description,jdbcType=VARCHAR},
+            #{commodity.pictureUrl, jdbcType=VARCHAR},
+            #{commodity.price, jdbcType=NUMERIC}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE
+            T_COMMODITY
+        SET
+            F_NAME = #{commodity.name, jdbcType=VARCHAR},
+            F_DESCRIPTION = #{commodity.description, jdbcType=VARCHAR},
+            F_PICTURE_URL = #{commodity.pictureUrl, jdbcType=VARCHAR},
+            F_PRICE = #{commodity.price, jdbcType=NUMERIC}
+        WHERE
+            F_ID = #{commodity.id, jdbcType=VARCHAR}
+    </update>
+
+    <delete id="delete">
+         DELETE FROM
+           T_COMMODITY
+        WHERE
+            f_id = #{id, jdbcType=VARCHAR}
+    </delete>
 </mapper>

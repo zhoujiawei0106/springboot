@@ -14,6 +14,32 @@ public interface CommodityMapper {
      * @param userId
      * @return
      */
-    public List<Commodity> getCommoditys(@Param("Commodity") Commodity commodity, @Param("userId") String userId);
+    public List<Commodity> getCommoditys(@Param("commodity") Commodity commodity, @Param("userId") String userId);
 
+    /**
+     * 保存客户信息
+     * @author zhoujiawei
+     * @param commodity
+     */
+    public void save(@Param("commodity") Commodity commodity);
+
+    /**
+     * 查询商品信息
+     * @param id
+     * @param userId
+     * @return
+     */
+    public Commodity getCustomer(@Param("id") String id, String userId);
+
+    /**
+     * 修改商品信息
+     * @param commodity
+     */
+    public void update(@Param("commodity") Commodity commodity);
+
+    /**
+     * 删除商品
+     * @param id
+     */
+    public void delete(String id);
 }

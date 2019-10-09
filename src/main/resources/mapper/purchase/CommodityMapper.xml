@@ -8,6 +8,9 @@
         <result column="F_DESCRIPTION" property="description" jdbcType="VARCHAR"/>
         <result column="F_PICTURE_URL" property="pictureUrl" jdbcType="VARCHAR"/>
         <result column="F_PRICE" property="price" jdbcType="NUMERIC"/>
+        <result column="F_BASEPRICE" property="baseprice" jdbcType="NUMERIC"/>
+        <result column="F_TYPE" property="type" jdbcType="VARCHAR"/>
+        <result column="F_BRAND" property="brand" jdbcType="VARCHAR"/>
     </resultMap>
 
     <select id="getCommoditys" resultMap="commoditys">
@@ -16,7 +19,10 @@
             F_NAME,
             F_DESCRIPTION,
             F_PICTURE_URL,
-            F_PRICE
+            F_PRICE,
+            F_BASEPRICE,
+            F_TYPE,
+            F_BRAND
         FROM
             T_COMMODITY
         WHERE
@@ -34,11 +40,13 @@
 
     <select id="getCustomer" resultMap="commoditys">
         SELECT
-        F_ID,
-        F_NAME,
-        F_DESCRIPTION,
-        F_PICTURE_URL,
-        F_PRICE
+            F_ID,
+            F_NAME,
+            F_DESCRIPTION,
+            F_PRICE,
+            F_BASEPRICE,
+            F_TYPE,
+            F_BRAND
         FROM
         T_COMMODITY
         WHERE
@@ -50,14 +58,18 @@
             F_ID,
             F_NAME,
             F_DESCRIPTION,
-            F_PICTURE_URL,
-            F_PRICE
+            F_PRICE,
+            F_BASEPRICE,
+            F_TYPE,
+            F_BRAND
         ) VALUES (
             #{commodity.id, jdbcType=VARCHAR},
             #{commodity.name, jdbcType=VARCHAR},
             #{commodity.description,jdbcType=VARCHAR},
-            #{commodity.pictureUrl, jdbcType=VARCHAR},
-            #{commodity.price, jdbcType=NUMERIC}
+            #{commodity.price, jdbcType=NUMERIC},
+            #{commodity.baseprice, jdbcType=NUMERIC},
+            #{commodity.type, jdbcType=VARCHAR},
+            #{commodity.brand, jdbcType=VARCHAR}
         )
     </insert>
 
@@ -67,8 +79,10 @@
         SET
             F_NAME = #{commodity.name, jdbcType=VARCHAR},
             F_DESCRIPTION = #{commodity.description, jdbcType=VARCHAR},
-            F_PICTURE_URL = #{commodity.pictureUrl, jdbcType=VARCHAR},
-            F_PRICE = #{commodity.price, jdbcType=NUMERIC}
+            F_PRICE = #{commodity.price, jdbcType=NUMERIC},
+            F_BASEPRICE = #{commodity.baseprice, jdbcType=NUMERIC},
+            F_TYPE = #{commodity.type, jdbcType=VARCHAR},
+            F_BRAND = #{commodity.brand, jdbcType=VARCHAR}
         WHERE
             F_ID = #{commodity.id, jdbcType=VARCHAR}
     </update>

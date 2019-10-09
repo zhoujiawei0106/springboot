@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.zjw.springboot.mapper.purchase.OrderMapper">
+
+    <resultMap id="Orders" type="cn.com.zjw.springboot.entity.purchase.Order">
+        <id column="F_ID" property="id" jdbcType="VARCHAR"/>
+        <result column="F_ORDERSTATUS" property="orderStatus" jdbcType="VARCHAR"/>
+        <result column="F_TOTALPRICE" property="totalPrice" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <update id="update">
+        UPDATE
+            T_ORDER
+        SET
+            F_ORDERSTATUS = #{order.orderStatus, jdbcType=VARCHAR},
+            F_TOTALPRICE = #{order.totalPrice, jdbcType=VARCHAR}
+        WHERE
+            F_ID = #{order.id, jdbcType=VARCHAR}
+    </update>
+
+    <select id="getOrders" resultMap="Orders">
+        SELECT
+            F_ID,
+            F_ORDERSTATUS,
+            F_TOTALPRICE
+        FROM T_ORDER
+        WHERE
+        1 = 1
+    </select>
+
+    <select id="getOrder" resultMap="Orders">
+        SELECT
+            F_ID,
+            F_ORDERSTATUS,
+            F_TOTALPRICE
+        FROM T_ORDER
+        WHERE
+        F_ID = #{id, jdbcType=VARCHAR}
+    </select>
+
+
+</mapper>

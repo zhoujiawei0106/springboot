@@ -34,6 +34,21 @@ public class Commodity extends BaseEntity implements Serializable {
      */
     private BigDecimal priceOf;
 
+    /**
+     * 商品成本
+     */
+    private BigDecimal baseprice;
+
+    /**
+     * 商品类型
+     */
+    private String type;
+
+    /**
+     * 商品品牌
+     */
+    private String brand;
+
     @Override
     public String toString() {
         return "Commodity{" +
@@ -42,7 +57,10 @@ public class Commodity extends BaseEntity implements Serializable {
                 ", description='" + description + '\'' +
                 ", pictureUrl='" + pictureUrl + '\'' +
                 ", price='" + price + '\''  +
-                ", price='" + priceOf + '\''  +
+                ", priceOf='" + priceOf + '\''  +
+                ", baseprice='" + baseprice + '\''  +
+                ", type='" + type + '\''  +
+                ", brand='" + brand + '\''  +
                 '}';
     }
 
@@ -92,5 +110,29 @@ public class Commodity extends BaseEntity implements Serializable {
 
     public void setPriceOf(BigDecimal priceOf) {
         this.priceOf = priceOf;
+    }
+
+    public BigDecimal getBaseprice() {
+        return baseprice;
+    }
+
+    public void setBaseprice(BigDecimal baseprice) {
+        this.baseprice = baseprice;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 }

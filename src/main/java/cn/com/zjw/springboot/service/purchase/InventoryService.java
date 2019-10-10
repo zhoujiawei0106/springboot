@@ -21,19 +21,6 @@ public interface InventoryService {
     public PageInfo getInventorys(Inventory inventory, String userId);
 
     /**
-     * 添加库存商品
-     * @param inventory
-     */
-    public void save(Inventory inventory, String userId);
-
-    /**
-     * 删除库存商品
-     * @param id
-     * @param userId
-     */
-    public void delete(String id, String userId) throws Exception;
-
-    /**
      * 修改库存商品
      * @param inventory
      * @param userId
@@ -47,4 +34,10 @@ public interface InventoryService {
      * @return
      */
     public Inventory getInventory(String id, String userId) throws Exception;
+
+    /**
+     * 库存销毁
+     * @param id
+     */
+    public void reset(String id) throws Exception;
 }

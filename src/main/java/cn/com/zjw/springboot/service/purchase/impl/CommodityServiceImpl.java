@@ -1,7 +1,9 @@
 package cn.com.zjw.springboot.service.purchase.impl;
 
 import cn.com.zjw.springboot.entity.purchase.Commodity;
+import cn.com.zjw.springboot.entity.purchase.Inventory;
 import cn.com.zjw.springboot.mapper.purchase.CommodityMapper;
+import cn.com.zjw.springboot.mapper.purchase.InventoryMapper;
 import cn.com.zjw.springboot.service.purchase.CommodityService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -12,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 客户管理
@@ -26,6 +30,9 @@ public class CommodityServiceImpl implements CommodityService {
 
     @Autowired
     private CommodityMapper commodityMapper;
+
+    @Autowired
+    private InventoryMapper inventoryMapper;
 
     @Override
     public PageInfo getCommoditys(Commodity commodity, String userId) {
@@ -42,6 +49,14 @@ public class CommodityServiceImpl implements CommodityService {
         logger.info("新增商品----" + commodity.toString());
         commodityMapper.save(commodity);
         logger.info("商品信息新增成功");
+        logger.info("新增库存----   商品名称：" + commodity.getName() +
+                "、英文名称：" + commodity.geteName() + "、商品数量:" + commodity.getShopNum());
+        Inventory inventory = new Inventory();
+        inventory.setId(UUID.randomUUID().toString());
+        inventory.setShopNum(commodity.getShopNum());
+        inventory.setCommodityId(commodity.getId());
+        inventoryMapper.save(inventory);
+        logger.info("库存信息新增成功");
     }
 
     @Override
@@ -50,7 +65,7 @@ public class CommodityServiceImpl implements CommodityService {
             throw new Exception("请选择一条记录");
         }
         logger.info("修改客户信息-----" + commodity.toString());
-            commodityMapper.update(commodity);
+        commodityMapper.update(commodity);
         logger.info("客户信息修改成功");
     }
 
@@ -64,7 +79,7 @@ public class CommodityServiceImpl implements CommodityService {
             throw new Exception("系统异常，上级用户代码为空");
         }
 
-        Commodity commodity = commodityMapper.getCustomer(id, userId);
+        Commodity commodity = commodityMapper.getCommodity(id, userId);
         if (commodity == null) {
             throw new Exception("无法获取商品信息");
         }
@@ -84,10 +99,14 @@ public class CommodityServiceImpl implements CommodityService {
 
         // 校验商品信息是否存在
         Commodity commodity = getCommodity(id, userId);
-
+        if(commodity.getShopNum().compareTo(BigDecimal.ZERO) > 0) {
+            throw new Exception("请先销毁库存");
+        }
         logger.info("删除的商品信息-----" + commodity);
         commodityMapper.delete(id);
         logger.info("删除商品成功");
+        inventoryMapper.delete(commodity.getId());
+        logger.info("删除库存成功");
     }
 
     @Override

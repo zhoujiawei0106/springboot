@@ -37,35 +37,12 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public void save(Inventory inventory, String userId) {
-        logger.info("新增库存商品----" + inventory.toString());
-        inventoryMapper.save(inventory, userId);
-        logger.info("库存商品信息新增成功");
-    }
-
-    @Override
-    public void delete(String id, String userId) throws Exception {
-        if (StringUtils.isBlank(id)) {
-            throw new Exception("商品id不能为空");
-        }
-        if (StringUtils.isBlank(userId)) {
-            throw new Exception("上级客户代码不能为空");
-        }
-
-        // 校验商品信息是否存在
-        /*Inventory inventory = getInventory(id, userId);*/
-
-        //logger.info("删除的库存商品信息-----" + inventory);
-        inventoryMapper.delete(id);
-        logger.info("删除库存商品成功");
-    }
-
-    @Override
     public void update(Inventory inventory, String userId) throws Exception {
         if (StringUtils.isBlank(inventory.getId())) {
             throw new Exception("请选择一条记录");
         }
         logger.info("修改客户信息-----" + inventory.toString());
+        inventory.setShopNum(inventory.getShopNum().add(getInventory(inventory.getId(),userId).getShopNum()));
         inventoryMapper.update(inventory);
         logger.info("客户信息修改成功");
     }
@@ -87,6 +64,16 @@ public class InventoryServiceImpl implements InventoryService {
         logger.info(inventory.toString());
 
         return inventory;
+    }
+
+    @Override
+    public void reset(String id) throws Exception {
+        if (StringUtils.isBlank(id)) {
+            throw new Exception("库存销毁商品id不能为空");
+        }
+        logger.info("库存销毁的商品id为-----" + id);
+        inventoryMapper.reset(id);
+        logger.info("库存销毁成功");
     }
 
 }

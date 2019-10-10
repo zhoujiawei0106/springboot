@@ -1,9 +1,7 @@
 package cn.com.zjw.springboot.controller.purchase;
 
 import cn.com.zjw.springboot.controller.BaseController;
-import cn.com.zjw.springboot.entity.purchase.Commodity;
 import cn.com.zjw.springboot.entity.purchase.Inventory;
-import cn.com.zjw.springboot.service.purchase.CommodityService;
 import cn.com.zjw.springboot.service.purchase.InventoryService;
 import com.github.pagehelper.PageInfo;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -11,8 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 /**
@@ -81,35 +77,16 @@ public class InventoryController extends BaseController {
     }
 
     /**
-     * 保存库存商品信息
-     * @author zhoujiawei
-     * @param inventory
-     * @return
-     */
-    @PostMapping("/save")
-    public Map<String, Object> save(Inventory inventory, HttpServletRequest request) {
-        try {
-            String userId = getUserId(getToken(request));
-            inventoryService.save(inventory,userId);
-            return success("库存商品新增成功");
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            return fail(e.getMessage());
-        }
-    }
-
-    /**
-     * 删除库存商品信息
+     * 库存销毁
      * @author zhoujiawei
      * @param id
-     * @param request
      * @return
      */
-    @DeleteMapping("/delete")
-    public Map<String, Object> delete(String id, HttpServletRequest request) {
+    @PutMapping("/reset")
+    public Map<String, Object> reset(String id) {
         try {
-            inventoryService.delete(id, getUserId(getToken(request)));
-            return success("库存商品删除成功");
+            inventoryService.reset(id);
+            return success("库存销毁成功");
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());

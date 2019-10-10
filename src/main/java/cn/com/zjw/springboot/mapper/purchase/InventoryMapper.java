@@ -22,7 +22,7 @@ public interface InventoryMapper {
      * 添加库存商品
      * @param inventory
      */
-    public void save(@Param("inventory") Inventory inventory,@Param("userId") String userId);
+    public void save(@Param("inventory") Inventory inventory);
 
     /**
      * 删除库存商品
@@ -43,4 +43,11 @@ public interface InventoryMapper {
      * @return
      */
     public Inventory getInventory(@Param("id") String id, String userId);
+
+    /**
+     * 库存销毁
+     * @param id
+     */
+    public void reset(String id);
+
 }

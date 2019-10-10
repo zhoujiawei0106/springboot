@@ -29,7 +29,7 @@ public interface CommodityMapper {
      * @param userId
      * @return
      */
-    public Commodity getCustomer(@Param("id") String id, String userId);
+    public Commodity getCommodity(@Param("id") String id, String userId);
 
     /**
      * 修改商品信息

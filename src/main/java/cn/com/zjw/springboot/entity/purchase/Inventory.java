@@ -15,9 +15,9 @@ public class Inventory extends BaseEntity implements Serializable {
     private String name;
 
     /**
-     * 库存商品描述
+     * 库存商品英文名称
      */
-    private String description;
+    private String eName;
 
     /**
      * 入库时间
@@ -30,24 +30,14 @@ public class Inventory extends BaseEntity implements Serializable {
     private String updateTime;
 
     /**
-     * 入库人
-     */
-    private String createMan;
-
-    /**
-     * 商品来源
-     */
-    private String shopAddress;
-
-    /**
-     * 是否上架
-     */
-    private String whetherShelf;
-
-    /**
      * 库存数量
      */
     private BigDecimal shopNum;
+
+    /**
+     * 商品id
+     */
+    private String commodityId;
 
 
     @Override
@@ -56,13 +46,16 @@ public class Inventory extends BaseEntity implements Serializable {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", shopNum='" + shopNum + '\''  +
-                ", description='" + description + '\'' +
-                ", createTime='" + createTime + '\'' +
-                ", updateTime='" + updateTime + '\''  +
-                ", createMan='" + createMan + '\''  +
-                ", shopAddress='" + shopAddress + '\''  +
-                ", whetherShelf='" + whetherShelf + '\''  +
+                ", eName='" + eName + '\'' +
                 '}';
+    }
+
+    public String getCommodityId() {
+        return commodityId;
+    }
+
+    public void setCommodityId(String commodityId) {
+        this.commodityId = commodityId;
     }
 
     public String getId() {
@@ -97,28 +90,12 @@ public class Inventory extends BaseEntity implements Serializable {
         this.updateTime = updateTime;
     }
 
-    public String getCreateMan() {
-        return createMan;
+    public String geteName() {
+        return eName;
     }
 
-    public void setCreateMan(String createMan) {
-        this.createMan = createMan;
-    }
-
-    public String getShopAddress() {
-        return shopAddress;
-    }
-
-    public void setShopAddress(String shopAddress) {
-        this.shopAddress = shopAddress;
-    }
-
-    public String getWhetherShelf() {
-        return whetherShelf;
-    }
-
-    public void setWhetherShelf(String whetherShelf) {
-        this.whetherShelf = whetherShelf;
+    public void seteName(String eName) {
+        this.eName = eName;
     }
 
     public BigDecimal getShopNum() {
@@ -127,13 +104,5 @@ public class Inventory extends BaseEntity implements Serializable {
 
     public void setShopNum(BigDecimal shopNum) {
         this.shopNum = shopNum;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }

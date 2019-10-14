@@ -31,4 +31,10 @@ public interface OrderMapper {
      * @param order
      */
     public void update(@Param("order") Order order);
+
+    /**
+     * 新增订单信息
+     * @param orderList
+     */
+    public void save(@Param("order") Order order,@Param("orderList") List<Order> orderList);
 }

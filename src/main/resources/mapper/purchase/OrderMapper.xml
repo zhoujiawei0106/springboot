@@ -5,8 +5,33 @@
     <resultMap id="Orders" type="cn.com.zjw.springboot.entity.purchase.Order">
         <id column="F_ID" property="id" jdbcType="VARCHAR"/>
         <result column="F_ORDERSTATUS" property="orderStatus" jdbcType="VARCHAR"/>
-        <result column="F_TOTALPRICE" property="totalPrice" jdbcType="VARCHAR"/>
+        <result column="F_TOTALPRICE" property="totalPrice" jdbcType="NUMERIC"/>
+        <result column="F_PRICE" property="price" jdbcType="NUMERIC"/>
+        <result column="F_SHOPNUM" property="shopNum" jdbcType="NUMERIC"/>
+        <result column="F_CREATETIME" property="createTime" jdbcType="VARCHAR"/>
+        <result column="F_UPDATETIME" property="updateTime" jdbcType="VARCHAR"/>
     </resultMap>
+
+    <insert id="save">
+        INSERT INTO T_ORDER(
+        F_ID,
+        F_ORDERSTATUS,
+        F_PRICE,
+        F_SHOPNUM,
+        F_CREATETIME,
+        F_UPDATETIME
+        )
+        <foreach collection="orderList" item="list" index="index" separator="UNION ALL">
+            SELECT
+            #{order.id,jdbcType=VARCHAR},
+            #{order.orderStatus,jdbcType=VARCHAR},
+            #{list.price,jdbcType=NUMERIC},
+            #{list.shopNum,jdbcType=NUMERIC},
+            to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),
+            to_char(sysdate,'yyyy-mm-dd hh24:mi:ss')
+            FROM dual
+        </foreach>
+    </insert>
 
     <update id="update">
         UPDATE
@@ -19,13 +44,25 @@
     </update>
 
     <select id="getOrders" resultMap="Orders">
+        WITH tmp AS (
+          SELECT
+            (F_PRICE*F_SHOPNUM) AS F_TOTALPRICE,
+            F_ID,
+            F_ORDERSTATUS,
+             F_CREATETIME,
+            F_UPDATETIME
+          FROM T_ORDER
+        )
         SELECT
             F_ID,
             F_ORDERSTATUS,
-            F_TOTALPRICE
-        FROM T_ORDER
+            sum(F_TOTALPRICE) AS F_TOTALPRICE,
+            F_CREATETIME,
+            F_UPDATETIME
+        FROM tmp
         WHERE
         1 = 1
+        GROUP BY F_ID,F_ORDERSTATUS,F_CREATETIME,F_UPDATETIME
     </select>
 
     <select id="getOrder" resultMap="Orders">

@@ -3,6 +3,8 @@ package cn.com.zjw.springboot.service.purchase;
 import cn.com.zjw.springboot.entity.purchase.Order;
 import com.github.pagehelper.PageInfo;
 
+import java.util.List;
+
 /**
  * 订单管理
  * @author zhoujiawei
@@ -32,4 +34,11 @@ public interface OrderService {
      * @param userId
      */
     public void update(Order order, String userId) throws Exception;
+
+    /**
+     * 新增订单信息
+     * @param orderList
+     * @param userId
+     */
+    public void save(List<Order> orderList, String userId);
 }

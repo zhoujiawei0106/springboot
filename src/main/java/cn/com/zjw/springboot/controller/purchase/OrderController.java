@@ -8,11 +8,15 @@ import cn.com.zjw.springboot.service.purchase.InventoryService;
 import cn.com.zjw.springboot.service.purchase.OrderService;
 import com.github.pagehelper.PageInfo;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,6 +60,34 @@ public class OrderController extends BaseController {
         try {
             Order order = orderService.getOrder(id, getUserId(getToken(request)));
             return success(order);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
+
+    /**
+     * 新增订单信息
+     * @author zhoujiawei
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "/save")
+    public Map<String, Object> save(Order order, HttpServletRequest request) {
+        try {
+            List<Order> orderList = new ArrayList();
+            String[] PriceAll = order.getPriceAll().split(",");
+            String[] getNameAll = order.getNameAll().split(",");
+            String[] getShopNumAll = order.getShopNumAll().split(",");
+            for(int i = 0; i <order.getPriceAll().split(",").length; i++) {
+                Order entity = new Order();
+                entity.setShopNum(new BigDecimal(getShopNumAll[i]));
+                entity.setPrice(new BigDecimal(PriceAll[i]));
+                entity.setName(getNameAll[i]);
+                orderList.add(entity);
+            }
+            orderService.save(orderList, getUserId(getToken(request)));
+            return success("订单新增成功");
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());

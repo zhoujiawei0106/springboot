@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 客户管理
@@ -67,6 +68,17 @@ public class OrderServiceImpl implements OrderService {
         logger.info("修改订单信息-----" + order.toString());
         orderMapper.update(order);
         logger.info("订单信息修改成功");
+    }
+
+    @Override
+    public void save(List<Order> orderList, String userId) {
+        logger.info("新增订单信息-----" + orderList.toString());
+        String orderId = UUID.randomUUID().toString();
+        Order order = new Order();
+        order.setId(orderId);
+        order.setOrderStatus("2");
+        orderMapper.save(order,orderList);
+        logger.info("订单信息新增成功");
     }
 
 

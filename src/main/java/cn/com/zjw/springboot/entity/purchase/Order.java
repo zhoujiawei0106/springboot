@@ -51,6 +51,12 @@ public class Order extends BaseEntity implements Serializable {
 
     private String name;
 
+    private String inventoryId;
+
+    private String eName;
+
+    private String brand;
+
     /**
      * 订单
      */
@@ -61,6 +67,40 @@ public class Order extends BaseEntity implements Serializable {
     private String shopNumAll;
 
     private String nameAll;
+
+    private String idAll;
+
+    public String geteName() {
+        return eName;
+    }
+
+    public void seteName(String eName) {
+        this.eName = eName;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getInventoryId() {
+        return inventoryId;
+    }
+
+    public void setInventoryId(String inventoryId) {
+        this.inventoryId = inventoryId;
+    }
+
+    public String getIdAll() {
+        return idAll;
+    }
+
+    public void setIdAll(String idAll) {
+        this.idAll = idAll;
+    }
 
     public String getName() {
         return name;

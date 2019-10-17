@@ -24,17 +24,23 @@ public interface OrderMapper {
      * @param userId
      * @return
      */
-    public Order getOrder(@Param("id")String id, String userId);
+    public List<Order> getOrder(@Param("id")String id, String userId);
 
     /**
      * 修改订单信息
      * @param order
      */
-    public void update(@Param("order") Order order);
+    public void update(@Param("order") Order order,@Param("id") String id,@Param("orderList") List<Order> orderList);
 
     /**
      * 新增订单信息
      * @param orderList
      */
     public void save(@Param("order") Order order,@Param("orderList") List<Order> orderList);
+
+    /**
+     * 删除订单信息
+     * @param id
+     */
+    public void delete(String id);
 }

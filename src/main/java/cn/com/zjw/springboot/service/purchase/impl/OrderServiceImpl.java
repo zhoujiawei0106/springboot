@@ -42,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order getOrder(String id, String userId) throws Exception {
+    public List<Order> getOrder(String id, String userId) throws Exception {
         if (StringUtils.isBlank(id)) {
             throw new Exception("订单编号不能为空");
         }
@@ -51,23 +51,23 @@ public class OrderServiceImpl implements OrderService {
             throw new Exception("系统异常，上级用户代码为空");
         }
 
-        Order order = orderMapper.getOrder(id, userId);
-        if (order == null) {
+        List<Order> orderList = orderMapper.getOrder(id, userId);
+        if (orderList == null) {
             throw new Exception("无法获取订单信息");
         }
-        logger.info(order.toString());
+        logger.info(orderList.toString());
 
-        return order;
+        return orderList;
     }
 
     @Override
-    public void update(Order order, String userId) throws Exception {
-        if (StringUtils.isBlank(order.getId())) {
-            throw new Exception("请选择一条记录");
-        }
-        logger.info("修改订单信息-----" + order.toString());
-        orderMapper.update(order);
-        logger.info("订单信息修改成功");
+    public void update(List<Order> orderList,String id, String userId) throws Exception {
+        logger.info("修改订单信息-----" + orderList.toString());
+        Order order = new Order();
+        order.setOrderStatus("2");
+        orderMapper.delete(id);
+        orderMapper.update(order, id, orderList);
+        logger.info("订单信息新增成功");
     }
 
     @Override
@@ -80,6 +80,5 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.save(order,orderList);
         logger.info("订单信息新增成功");
     }
-
 
 }

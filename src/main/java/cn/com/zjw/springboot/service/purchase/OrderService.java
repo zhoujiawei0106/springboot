@@ -26,14 +26,14 @@ public interface OrderService {
      * @param userId
      * @return
      */
-    public Order getOrder(String id, String userId) throws Exception;
+    public List<Order> getOrder(String id, String userId) throws Exception;
 
     /**
      * 修改订单信息
-     * @param order
+     * @param orderList
      * @param userId
      */
-    public void update(Order order, String userId) throws Exception;
+    public void update(List<Order> orderList, String id, String userId) throws Exception;
 
     /**
      * 新增订单信息
@@ -41,4 +41,5 @@ public interface OrderService {
      * @param userId
      */
     public void save(List<Order> orderList, String userId);
+
 }

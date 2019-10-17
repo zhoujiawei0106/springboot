@@ -56,10 +56,10 @@ public class OrderController extends BaseController {
      * @return
      */
     @GetMapping("/getOrder")
-    public Map<String, Object> getInventory(String id, HttpServletRequest request) {
+    public Map<String, Object> getOrder(String id, HttpServletRequest request) {
         try {
-            Order order = orderService.getOrder(id, getUserId(getToken(request)));
-            return success(order);
+            List<Order> orderList = orderService.getOrder(id, getUserId(getToken(request)));
+            return success(orderList);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());
@@ -76,14 +76,16 @@ public class OrderController extends BaseController {
     public Map<String, Object> save(Order order, HttpServletRequest request) {
         try {
             List<Order> orderList = new ArrayList();
-            String[] PriceAll = order.getPriceAll().split(",");
-            String[] getNameAll = order.getNameAll().split(",");
-            String[] getShopNumAll = order.getShopNumAll().split(",");
+            String[] priceAll = order.getPriceAll().split(",");
+            String[] nameAll = order.getNameAll().split(",");
+            String[] shopNumAll = order.getShopNumAll().split(",");
+            String[] idAll = order.getIdAll().split(",");
             for(int i = 0; i <order.getPriceAll().split(",").length; i++) {
                 Order entity = new Order();
-                entity.setShopNum(new BigDecimal(getShopNumAll[i]));
-                entity.setPrice(new BigDecimal(PriceAll[i]));
-                entity.setName(getNameAll[i]);
+                entity.setShopNum(new BigDecimal(shopNumAll[i]));
+                entity.setPrice(new BigDecimal(priceAll[i]));
+                entity.setName(nameAll[i]);
+                entity.setInventoryId(idAll[i]);
                 orderList.add(entity);
             }
             orderService.save(orderList, getUserId(getToken(request)));
@@ -101,10 +103,23 @@ public class OrderController extends BaseController {
      * @param request
      * @return
      */
-    @PutMapping("/update")
-    public Map<String, Object> update(Order order, HttpServletRequest request) {
+    @PostMapping("/update")
+    public Map<String, Object> update(Order order,String id, HttpServletRequest request) {
         try {
-            orderService.update(order, getUserId(getToken(request)));
+            List<Order> orderList = new ArrayList();
+            String[] priceAll = order.getPriceAll().split(",");
+            String[] nameAll = order.getNameAll().split(",");
+            String[] shopNumAll = order.getShopNumAll().split(",");
+            String[] idAll = order.getIdAll().split(",");
+            for(int i = 0; i <order.getPriceAll().split(",").length; i++) {
+                Order entity = new Order();
+                entity.setShopNum(new BigDecimal(shopNumAll[i]));
+                entity.setPrice(new BigDecimal(priceAll[i]));
+                entity.setName(nameAll[i]);
+                entity.setInventoryId(idAll[i]);
+                orderList.add(entity);
+            }
+            orderService.update(orderList, id, getUserId(getToken(request)));
             return success("订单修改成功");
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

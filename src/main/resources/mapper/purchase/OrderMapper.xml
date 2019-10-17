@@ -8,6 +8,10 @@
         <result column="F_TOTALPRICE" property="totalPrice" jdbcType="NUMERIC"/>
         <result column="F_PRICE" property="price" jdbcType="NUMERIC"/>
         <result column="F_SHOPNUM" property="shopNum" jdbcType="NUMERIC"/>
+        <result column="F_INVENTORYID" property="inventoryId" jdbcType="NUMERIC"/>
+        <result column="F_NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="F_ENAME" property="eName" jdbcType="VARCHAR"/>
+        <result column="F_BRAND" property="brand" jdbcType="VARCHAR"/>
         <result column="F_CREATETIME" property="createTime" jdbcType="VARCHAR"/>
         <result column="F_UPDATETIME" property="updateTime" jdbcType="VARCHAR"/>
     </resultMap>
@@ -15,6 +19,7 @@
     <insert id="save">
         INSERT INTO T_ORDER(
         F_ID,
+        F_INVENTORYID,
         F_ORDERSTATUS,
         F_PRICE,
         F_SHOPNUM,
@@ -24,6 +29,7 @@
         <foreach collection="orderList" item="list" index="index" separator="UNION ALL">
             SELECT
             #{order.id,jdbcType=VARCHAR},
+            #{list.inventoryId,jdbcType=VARCHAR},
             #{order.orderStatus,jdbcType=VARCHAR},
             #{list.price,jdbcType=NUMERIC},
             #{list.shopNum,jdbcType=NUMERIC},
@@ -34,14 +40,34 @@
     </insert>
 
     <update id="update">
-        UPDATE
-            T_ORDER
-        SET
-            F_ORDERSTATUS = #{order.orderStatus, jdbcType=VARCHAR},
-            F_TOTALPRICE = #{order.totalPrice, jdbcType=VARCHAR}
-        WHERE
-            F_ID = #{order.id, jdbcType=VARCHAR}
+        INSERT INTO T_ORDER(
+        F_ID,
+        F_INVENTORYID,
+        F_ORDERSTATUS,
+        F_PRICE,
+        F_SHOPNUM,
+        F_CREATETIME,
+        F_UPDATETIME
+        )
+        <foreach collection="orderList" item="list" index="index" separator="UNION ALL">
+            SELECT
+            #{id,jdbcType=VARCHAR},
+            #{list.inventoryId,jdbcType=VARCHAR},
+            #{order.orderStatus,jdbcType=VARCHAR},
+            #{list.price,jdbcType=NUMERIC},
+            #{list.shopNum,jdbcType=NUMERIC},
+            to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),
+            to_char(sysdate,'yyyy-mm-dd hh24:mi:ss')
+            FROM dual
+        </foreach>
     </update>
+
+    <delete id="delete">
+        DELETE FROM
+            T_ORDER
+            WHERE
+            F_ID = #{id, jdbcType=VARCHAR}
+    </delete>
 
     <select id="getOrders" resultMap="Orders">
         WITH tmp AS (
@@ -67,13 +93,17 @@
 
     <select id="getOrder" resultMap="Orders">
         SELECT
-            F_ID,
-            F_ORDERSTATUS,
-            F_TOTALPRICE
-        FROM T_ORDER
+            t1.F_ID,
+            t2.F_NAME,
+            t2.F_ENAME,
+            t2.F_BRAND,
+            t1.F_SHOPNUM,
+            t1.F_PRICE
+        FROM T_ORDER t1
+        LEFT JOIN T_COMMODITY T2
+        ON t1.F_INVENTORYID = t2.F_ID
         WHERE
-        F_ID = #{id, jdbcType=VARCHAR}
+        t1.F_ID = #{id, jdbcType=VARCHAR}
     </select>
-
 
 </mapper>

@@ -7,7 +7,6 @@ import cn.com.zjw.springboot.entity.system.User;
 import cn.com.zjw.springboot.mapper.purchase.CustomerMapper;
 import cn.com.zjw.springboot.service.purchase.CustomerService;
 import cn.com.zjw.springboot.service.system.UserService;
-import cn.com.zjw.springboot.utils.BlowfishCipher;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;

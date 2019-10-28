@@ -62,6 +62,7 @@
         <if test="schedule.scheduleNum != null and schedule.scheduleNum != ''">
             AND F_ID = #{schedule.scheduleNum, jdbcType=VARCHAR}
         </if>
+        ORDER BY F_ID DESC
     </select>
 
     <select id="getSchedule" resultMap="schedules">

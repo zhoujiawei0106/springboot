@@ -1,6 +1,6 @@
 package cn.com.zjw.springboot.service.purchase.impl;
 
-import cn.com.zjw.springboot.entity.purchase.Commodity;
+import cn.com.zjw.springboot.constants.purchase.ScheduleStatus;
 import cn.com.zjw.springboot.entity.purchase.Schedule;
 import cn.com.zjw.springboot.mapper.purchase.ScheduleMapper;
 import cn.com.zjw.springboot.service.purchase.ScheduleService;
@@ -12,8 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.SQLOutput;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * 客户管理
@@ -33,7 +36,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         PageHelper.startPage(schedule.getPage(), schedule.getRows());
         logger.info("根据条件查询所有商品----" + schedule.toString());
         List<Schedule> list = scheduleMapper.getSchedules(schedule, userId);
-        /*transfer(list);*/
+        transfer(list);
         PageInfo pageInfo = new PageInfo(list);
         return pageInfo;
     }
@@ -41,8 +44,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public void save(Schedule schedule) {
         logger.info("新增行程----" + schedule.toString());
-        /*schedule.setId(UUID.randomUUID().toString());*/
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("YYMMddHHmmss");
+        String orderId = "SD" + sdf.format(date);
         schedule.setStatus("0");
+        schedule.setId(orderId);
         scheduleMapper.save(schedule);
         logger.info("行程信息新增成功");
     }
@@ -86,5 +92,14 @@ public class ScheduleServiceImpl implements ScheduleService {
         logger.info("行程结束成功");
     }
 
-
+    /**
+     * 翻译
+     * @author zhoujiawei
+     * @param list
+     */
+    private final void transfer(List<Schedule> list) {
+        for (Schedule schedule : list) {
+            schedule.setStatus(ScheduleStatus.getLabel(schedule.getStatus()));
+        }
+    }
 }

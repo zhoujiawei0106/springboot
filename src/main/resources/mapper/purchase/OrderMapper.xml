@@ -89,6 +89,7 @@
         WHERE
         1 = 1
         GROUP BY F_ID,F_ORDERSTATUS,F_CREATETIME,F_UPDATETIME
+        ORDER BY F_ID DESC
     </select>
 
     <select id="getOrder" resultMap="Orders">

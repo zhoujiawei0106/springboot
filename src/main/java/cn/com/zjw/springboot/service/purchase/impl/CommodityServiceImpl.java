@@ -1,5 +1,6 @@
 package cn.com.zjw.springboot.service.purchase.impl;
 
+import cn.com.zjw.springboot.constants.purchase.CommodityCategory;
 import cn.com.zjw.springboot.entity.purchase.Commodity;
 import cn.com.zjw.springboot.entity.purchase.Inventory;
 import cn.com.zjw.springboot.mapper.purchase.CommodityMapper;
@@ -39,7 +40,7 @@ public class CommodityServiceImpl implements CommodityService {
         PageHelper.startPage(commodity.getPage(), commodity.getRows());
         logger.info("根据条件查询所有商品----" + commodity.toString());
         List<Commodity> list = commodityMapper.getCommoditys(commodity, userId);
-        /*transfer(list);*/
+        transfer(list);
         PageInfo pageInfo = new PageInfo(list);
         return pageInfo;
     }
@@ -116,6 +117,17 @@ public class CommodityServiceImpl implements CommodityService {
         /*transfer(list);*/
         logger.info("导出的商品数据共 " + list.size() + "条");
         return list;
+    }
+
+    /**
+     * 翻译
+     * @author zhoujiawei
+     * @param list
+     */
+    private final void transfer(List<Commodity> list) {
+        for (Commodity commodity : list) {
+            commodity.setCategory(CommodityCategory.getLabel(commodity.getCategory()));
+        }
     }
 
 }

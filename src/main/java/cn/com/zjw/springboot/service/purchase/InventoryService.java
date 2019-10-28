@@ -3,8 +3,6 @@ package cn.com.zjw.springboot.service.purchase;
 import cn.com.zjw.springboot.entity.purchase.Inventory;
 import com.github.pagehelper.PageInfo;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * 库存管理
  * @author zhoujiawei

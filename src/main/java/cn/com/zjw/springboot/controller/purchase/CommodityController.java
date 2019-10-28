@@ -1,7 +1,11 @@
 package cn.com.zjw.springboot.controller.purchase;
 
+import cn.com.zjw.springboot.constants.purchase.CommodityCategory;
+import cn.com.zjw.springboot.constants.purchase.CustomerStatus;
+import cn.com.zjw.springboot.constants.purchase.CustomerType;
 import cn.com.zjw.springboot.controller.BaseController;
 import cn.com.zjw.springboot.entity.purchase.Commodity;
+import cn.com.zjw.springboot.entity.purchase.Customer;
 import cn.com.zjw.springboot.service.purchase.CommodityService;
 import com.github.pagehelper.PageInfo;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -9,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -110,4 +116,20 @@ public class CommodityController extends BaseController {
             return fail(e.getMessage());
         }
     }
+
+    /**
+     * 获取商品类型常量
+     * @author zhoujiawei
+     * @return
+     */
+    @GetMapping("/commodityCategory")
+    public Map<String, Object> commodityCategory() {
+        try {
+            return success(CommodityCategory.getCommodityCategory());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
+
 }

@@ -1,7 +1,6 @@
 package cn.com.zjw.springboot.service.purchase;
 
 import cn.com.zjw.springboot.entity.purchase.Commodity;
-import cn.com.zjw.springboot.entity.purchase.Customer;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;

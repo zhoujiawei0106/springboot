@@ -1,14 +1,11 @@
 package cn.com.zjw.springboot.controller.purchase;
 
+import cn.com.zjw.springboot.constants.purchase.OrderStatus;
 import cn.com.zjw.springboot.controller.BaseController;
-import cn.com.zjw.springboot.entity.purchase.Commodity;
-import cn.com.zjw.springboot.entity.purchase.Inventory;
 import cn.com.zjw.springboot.entity.purchase.Order;
-import cn.com.zjw.springboot.service.purchase.InventoryService;
 import cn.com.zjw.springboot.service.purchase.OrderService;
 import com.github.pagehelper.PageInfo;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
-import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,6 +118,21 @@ public class OrderController extends BaseController {
             }
             orderService.update(orderList, id, getUserId(getToken(request)));
             return success("订单修改成功");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
+
+    /**
+     * 获取订单状态常量
+     * @author zhoujiawei
+     * @return
+     */
+    @GetMapping("/orderStatus")
+    public Map<String, Object> orderStatus() {
+        try {
+            return success(OrderStatus.getOrderStatus());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());

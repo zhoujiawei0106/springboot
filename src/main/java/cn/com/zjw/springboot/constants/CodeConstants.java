@@ -1,7 +1,5 @@
 package cn.com.zjw.springboot.constants;
 
-import java.util.Map;
-
 public class CodeConstants {
 
     public static final String SESSION_LOGIN_USER = "LOGIN_USER";

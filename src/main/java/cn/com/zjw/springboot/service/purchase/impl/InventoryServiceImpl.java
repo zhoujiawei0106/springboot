@@ -1,6 +1,5 @@
 package cn.com.zjw.springboot.service.purchase.impl;
 
-import cn.com.zjw.springboot.entity.purchase.Commodity;
 import cn.com.zjw.springboot.entity.purchase.Inventory;
 import cn.com.zjw.springboot.mapper.purchase.InventoryMapper;
 import cn.com.zjw.springboot.service.purchase.InventoryService;

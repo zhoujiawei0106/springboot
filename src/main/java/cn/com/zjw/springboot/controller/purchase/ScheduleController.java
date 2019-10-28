@@ -1,9 +1,8 @@
 package cn.com.zjw.springboot.controller.purchase;
 
+import cn.com.zjw.springboot.constants.purchase.ScheduleStatus;
 import cn.com.zjw.springboot.controller.BaseController;
-import cn.com.zjw.springboot.entity.purchase.Commodity;
 import cn.com.zjw.springboot.entity.purchase.Schedule;
-import cn.com.zjw.springboot.service.purchase.CommodityService;
 import cn.com.zjw.springboot.service.purchase.ScheduleService;
 import com.github.pagehelper.PageInfo;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -109,6 +108,21 @@ public class ScheduleController extends BaseController {
         try {
             scheduleService.scheduleEnd(id, getUserId(getToken(request)));
             return success("商品删除成功");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
+
+    /**
+     * 获取行程状态常量
+     * @author zhoujiawei
+     * @return
+     */
+    @GetMapping("/scheduleStatus")
+    public Map<String, Object> commodityCategory() {
+        try {
+            return success(ScheduleStatus.getScheduleStatus());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());

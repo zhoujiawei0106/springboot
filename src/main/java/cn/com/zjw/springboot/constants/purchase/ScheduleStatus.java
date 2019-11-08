@@ -6,8 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 public enum ScheduleStatus {
-    ing("0", "进行中"),
-    gone("1", "已完成");
+    noDone("0","未开始"),
+    ing("1", "进行中"),
+    gone("2", "已完成");
 
     private String value;
 

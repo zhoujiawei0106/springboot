@@ -1,8 +1,8 @@
 package cn.com.zjw.springboot.entity.purchase;
 
 import cn.com.zjw.springboot.entity.BaseEntity;
-
 import java.io.Serializable;
+import java.util.Date;
 
 public class Schedule extends BaseEntity implements Serializable {
 
@@ -30,7 +30,7 @@ public class Schedule extends BaseEntity implements Serializable {
     private String startTime;
 
     /**
-     * 更新时间
+     * 结束时间
      * @return
      */
     private String endTime;
@@ -45,6 +45,22 @@ public class Schedule extends BaseEntity implements Serializable {
                 ", startTime='" + startTime + '\''  +
                 ", endTime='" + endTime + '\''  +
                 '}';
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     public String getId() {
@@ -79,19 +95,4 @@ public class Schedule extends BaseEntity implements Serializable {
         this.place = place;
     }
 
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
 }

@@ -3,6 +3,8 @@ package cn.com.zjw.springboot.service.purchase;
 import cn.com.zjw.springboot.entity.purchase.Schedule;
 import com.github.pagehelper.PageInfo;
 
+import java.text.ParseException;
+
 /**
  * 行程管理
  * @author zhoujiawei
@@ -16,13 +18,13 @@ public interface ScheduleService {
      * @param userId
      * @return
      */
-    public PageInfo getSchedules(Schedule schedule, String userId);
+    public PageInfo getSchedules(Schedule schedule, String userId) throws ParseException;
 
     /**
      * 保存行程信息
      * @param schedule
      */
-    public void save(Schedule schedule);
+    public void save(Schedule schedule) throws Exception;
 
     /**
      * 加载行程信息

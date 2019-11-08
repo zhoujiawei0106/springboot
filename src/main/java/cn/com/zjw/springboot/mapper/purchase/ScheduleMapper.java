@@ -3,6 +3,7 @@ package cn.com.zjw.springboot.mapper.purchase;
 import cn.com.zjw.springboot.entity.purchase.Schedule;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ScheduleMapper {
@@ -14,13 +15,16 @@ public interface ScheduleMapper {
      * @param userId
      * @return
      */
-    public List<Schedule> getSchedules(@Param("schedule") Schedule schedule, @Param("userId") String userId);
+    public List<Schedule> getSchedules(@Param("schedule") Schedule schedule,
+                                       @Param("startTime") Date startTime,
+                                       @Param("endTime") Date endTime,
+                                       @Param("userId") String userId);
 
     /**
      * 新增行程
      * @param schedule
      */
-    public void save(@Param("schedule") Schedule schedule);
+    public void save(@Param("schedule") Schedule schedule,@Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
     /**
      * 获取行程信息
@@ -34,7 +38,7 @@ public interface ScheduleMapper {
      * 修改行程信息
      * @param schedule
      */
-    public void update(@Param("schedule") Schedule schedule);
+    public void update(@Param("schedule") Schedule schedule, @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
     /**
      * 结束行程

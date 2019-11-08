@@ -4,11 +4,11 @@
 
     <resultMap id="schedules" type="cn.com.zjw.springboot.entity.purchase.Schedule">
         <id column="F_ID" property="id" jdbcType="VARCHAR"/>
-        <result column="F_SCHEDULENUM" property="scheduleNum" jdbcType="VARCHAR"/>
+        <result column="F_SCHEDULE_NUM" property="scheduleNum" jdbcType="VARCHAR"/>
         <result column="F_STATUS" property="status" jdbcType="VARCHAR"/>
         <result column="F_PLACE" property="place" jdbcType="VARCHAR"/>
-        <result column="F_STARTTIME" property="startTime" jdbcType="VARCHAR"/>
-        <result column="F_ENDTIME" property="endTime" jdbcType="VARCHAR"/>
+        <result column="F_START_TIMESTAMP" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="F_END_TIMESTAMP" property="endTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <insert id="save">
@@ -16,12 +16,14 @@
             F_ID,
             F_STATUS,
             F_PLACE,
-            F_STARTTIME
+            F_START_TIMESTAMP,
+            F_END_TIMESTAMP
         ) VALUES (
             #{schedule.id, jdbcType=VARCHAR},
             #{schedule.status, jdbcType=VARCHAR},
             #{schedule.place, jdbcType=VARCHAR},
-            to_char(sysdate,'yyyy-mm-dd hh24:mi:ss')
+            #{startTime,jdbcType=TIMESTAMP},
+            #{endTime,jdbcType=TIMESTAMP}
         )
     </insert>
 
@@ -29,20 +31,19 @@
         UPDATE
             T_SCHEDULE
         SET
+            F_STATUS = #{schedule.status, jdbcType=VARCHAR},
             F_PLACE = #{schedule.place, jdbcType=VARCHAR},
-            F_STARTTIME = to_char(sysdate,'yyyy-mm-dd hh24:mi:ss')
+            F_START_TIMESTAMP = #{startTime, jdbcType=TIMESTAMP},
+            F_END_TIMESTAMP = #{endTime, jdbcType=TIMESTAMP}
         WHERE
             F_ID = #{schedule.id, jdbcType=VARCHAR}
     </update>
 
     <update id="scheduleEnd">
-        UPDATE
-            T_SCHEDULE
-        SET
-            F_STATUS = '1',
-            F_ENDTIME = to_char(sysdate,'yyyy-mm-dd hh24:mi:ss')
+        DELETE FROM
+        T_SCHEDULE
         WHERE
-            F_ID = #{id, jdbcType=VARCHAR}
+        F_ID = #{id, jdbcType=VARCHAR}
     </update>
 
     <select id="getSchedules" resultMap="schedules">
@@ -50,8 +51,8 @@
             F_ID,
             F_STATUS,
             F_PLACE,
-            F_STARTTIME,
-            F_ENDTIME
+            F_START_TIMESTAMP,
+            F_END_TIMESTAMP
         FROM
             T_SCHEDULE
         WHERE
@@ -59,15 +60,21 @@
         <if test="schedule.status != null and schedule.status != ''">
             AND F_STATUS = #{schedule.status, jdbcType=VARCHAR}
         </if>
-        <if test="schedule.scheduleNum != null and schedule.scheduleNum != ''">
-            AND F_ID = #{schedule.scheduleNum, jdbcType=VARCHAR}
+        <if test="startTime != null and startTime != ''">
+            AND F_START_TIMESTAMP <![CDATA[>=]]> #{startTime, jdbcType=TIMESTAMP}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND F_END_TIMESTAMP <![CDATA[<=]]> #{endTime, jdbcType=TIMESTAMP}
         </if>
         ORDER BY F_ID DESC
     </select>
 
     <select id="getSchedule" resultMap="schedules">
         SELECT
-            F_PLACE
+            F_STATUS,
+            F_PLACE,
+            F_START_TIMESTAMP,
+            F_END_TIMESTAMP
         FROM
             T_SCHEDULE
         WHERE

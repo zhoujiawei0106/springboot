@@ -4,6 +4,7 @@ import cn.com.zjw.springboot.constants.purchase.ScheduleStatus;
 import cn.com.zjw.springboot.entity.purchase.Schedule;
 import cn.com.zjw.springboot.mapper.purchase.ScheduleMapper;
 import cn.com.zjw.springboot.service.purchase.ScheduleService;
+import cn.com.zjw.springboot.utils.DateUtlis;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -13,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLOutput;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -32,25 +33,111 @@ public class ScheduleServiceImpl implements ScheduleService {
     ScheduleMapper scheduleMapper;
 
     @Override
-    public PageInfo getSchedules(Schedule schedule, String userId) {
+    public PageInfo getSchedules(Schedule schedule, String userId) throws ParseException {
         PageHelper.startPage(schedule.getPage(), schedule.getRows());
         logger.info("根据条件查询所有商品----" + schedule.toString());
-        List<Schedule> list = scheduleMapper.getSchedules(schedule, userId);
-        transfer(list);
+        //时间戳
+        SimpleDateFormat df= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date startTime = null;
+        Date endTime = null;
+        if(StringUtils.isNotBlank(schedule.getStartTime())) {
+             startTime = df.parse(schedule.getStartTime());
+        }
+        if(StringUtils.isNotBlank(schedule.getEndTime())) {
+             endTime = df.parse(schedule.getEndTime());
+        }
+            List<Schedule> firstList = scheduleMapper.getSchedules(schedule, startTime, endTime, userId);
+            try {
+                String systemTime = DateUtlis.systemTime();
+                for(Schedule sc : firstList) {
+                    if(sc.getStartTime().compareTo(systemTime) <= 0 &&
+                            sc.getEndTime().compareTo(systemTime) > 0) {
+                        sc.setStatus("1");
+                        updateStatus(df, sc);
+                    } else if (sc.getEndTime().compareTo(systemTime) <= 0) {
+                        sc.setStatus("2");
+                        updateStatus(df, sc);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            List<Schedule> list = scheduleMapper.getSchedules(schedule, startTime, endTime,  userId);
+            transfer(list);
         PageInfo pageInfo = new PageInfo(list);
         return pageInfo;
     }
 
     @Override
-    public void save(Schedule schedule) {
+    public void save(Schedule schedule) throws Exception {
         logger.info("新增行程----" + schedule.toString());
+        if(schedule.getStartTime().compareTo(DateUtlis.systemTime()) < 0) {
+            throw new Exception("行程开始时间不能小于现在的北京时间");
+        }
+        if(schedule.getStartTime().compareTo(schedule.getEndTime()) >= 0) {
+            throw new Exception("行程开始时间不能小于行程结束时间");
+        }
+        ScheduleCheck(schedule);
+        //设置后台行程编号
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("YYMMddHHmmss");
         String orderId = "SD" + sdf.format(date);
-        schedule.setStatus("0");
         schedule.setId(orderId);
-        scheduleMapper.save(schedule);
-        logger.info("行程信息新增成功");
+        //设置状态
+        schedule.setStatus("0");
+        changeStatus(schedule);
+        //时间戳
+        SimpleDateFormat df= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Date startTime = df.parse(schedule.getStartTime());
+            Date endTime = df.parse(schedule.getEndTime());
+            scheduleMapper.save(schedule, startTime, endTime);
+            logger.info("行程信息新增成功");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void update(Schedule schedule, String userId) throws Exception {
+        if (StringUtils.isBlank(schedule.getId())) {
+            throw new Exception("请选择一条记录");
+        }
+        ScheduleCheck(schedule);
+        if(schedule.getStartTime().compareTo(schedule.getEndTime()) >= 0) {
+            throw new Exception("行程开始时间不能小于行程结束时间");
+        }
+
+        //时间戳
+        SimpleDateFormat df= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Date startTime = df.parse(schedule.getStartTime());
+            Date endTime = df.parse(schedule.getEndTime());
+            logger.info("修改行程信息-----" + schedule.toString());
+            changeStatus(schedule);
+            scheduleMapper.update(schedule, startTime, endTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        logger.info("行程信息修改成功");
+    }
+
+    @Override
+    public void scheduleEnd(String id, String userId) throws Exception {
+        if (StringUtils.isBlank(id)) {
+            throw new Exception("请选择一条记录");
+        }
+        Schedule schedule = getSchedule(id, userId);
+        ScheduleCheck(schedule);
+        if (schedule.getStartTime().compareTo(DateUtlis.systemTime()) <= 0) {
+            throw new Exception("行程进行中, 无法删除");
+        }
+        logger.info("结束行程-----" + id);
+        if(schedule.getStatus().equals('0')) {
+            throw new Exception("行程已开始, 无法删除");
+        }
+        scheduleMapper.scheduleEnd(id);
+        logger.info("行程结束成功");
     }
 
     @Override
@@ -72,24 +159,51 @@ public class ScheduleServiceImpl implements ScheduleService {
         return schedule;
     }
 
-    @Override
-    public void update(Schedule schedule, String userId) throws Exception {
-        if (StringUtils.isBlank(schedule.getId())) {
-            throw new Exception("请选择一条记录");
+    /**
+     * 非空校验
+     * @param schedule
+     * @throws Exception
+     */
+    private void ScheduleCheck(Schedule schedule) throws Exception {
+        if (StringUtils.isBlank(schedule.getStartTime())) {
+            throw new Exception("行程开始时间不能为空");
         }
-        logger.info("修改行程信息-----" + schedule.toString());
-        scheduleMapper.update(schedule);
-        logger.info("行程信息修改成功");
+        if (StringUtils.isBlank(schedule.getEndTime())) {
+            throw new Exception("行程结束时间不能为空");
+        }
+        if (StringUtils.isBlank(schedule.getPlace())) {
+            throw new Exception("行程目的地不能为空");
+        }
     }
 
-    @Override
-    public void scheduleEnd(String id, String userId) throws Exception {
-        if (StringUtils.isBlank(id)) {
-            throw new Exception("请选择一条记录");
+    /**
+     * 行程状态变化
+     * @param schedule
+     */
+    private void changeStatus(Schedule schedule) {
+        try {
+            String systemTime = DateUtlis.systemTime();
+            if(schedule.getStartTime().compareTo(systemTime) <= 0 &&
+                    schedule.getEndTime().compareTo(systemTime) > 0) {
+                schedule.setStatus("1");
+            } else if (schedule.getEndTime().compareTo(systemTime) <= 0) {
+                schedule.setStatus("2");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        logger.info("结束行程-----" + id);
-        scheduleMapper.scheduleEnd(id);
-        logger.info("行程结束成功");
+    }
+
+    /**
+     * 更新行程状态
+     * @param df
+     * @param sc
+     * @throws ParseException
+     */
+    private void updateStatus(SimpleDateFormat df, Schedule sc) throws ParseException {
+        Date startTime = df.parse(sc.getStartTime());
+        Date endTime = df.parse(sc.getEndTime());
+        scheduleMapper.update(sc, startTime, endTime);
     }
 
     /**

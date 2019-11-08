@@ -18,7 +18,7 @@ public interface ScheduleService {
      * @param userId
      * @return
      */
-    public PageInfo getSchedules(Schedule schedule, String userId) throws ParseException;
+    public PageInfo getSchedules(Schedule schedule, String userId) throws Exception;
 
     /**
      * 保存行程信息

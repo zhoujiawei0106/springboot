@@ -33,11 +33,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     ScheduleMapper scheduleMapper;
 
     @Override
-    public PageInfo getSchedules(Schedule schedule, String userId) throws ParseException {
+    public PageInfo getSchedules(Schedule schedule, String userId) throws Exception {
         PageHelper.startPage(schedule.getPage(), schedule.getRows());
         logger.info("根据条件查询所有商品----" + schedule.toString());
         //时间戳
-        SimpleDateFormat df= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat df= new SimpleDateFormat("yyyy-MM-dd");
         Date startTime = null;
         Date endTime = null;
         if(StringUtils.isNotBlank(schedule.getStartTime())) {
@@ -48,19 +48,19 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
             List<Schedule> firstList = scheduleMapper.getSchedules(schedule, startTime, endTime, userId);
             try {
-                String systemTime = DateUtlis.systemTime();
+                String systemTime = DateUtlis.systemTimeLocal(null);
                 for(Schedule sc : firstList) {
                     if(sc.getStartTime().compareTo(systemTime) <= 0 &&
-                            sc.getEndTime().compareTo(systemTime) > 0) {
+                            sc.getEndTime().compareTo(systemTime) >= 0) {
                         sc.setStatus("1");
                         updateStatus(df, sc);
-                    } else if (sc.getEndTime().compareTo(systemTime) <= 0) {
+                    } else if (sc.getEndTime().compareTo(systemTime) < 0) {
                         sc.setStatus("2");
                         updateStatus(df, sc);
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(),e);
             }
             List<Schedule> list = scheduleMapper.getSchedules(schedule, startTime, endTime,  userId);
             transfer(list);
@@ -71,10 +71,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public void save(Schedule schedule) throws Exception {
         logger.info("新增行程----" + schedule.toString());
-        if(schedule.getStartTime().compareTo(DateUtlis.systemTime()) < 0) {
+        if(schedule.getStartTime().compareTo(DateUtlis.systemTimeLocal(null)) < 0) {
             throw new Exception("行程开始时间不能小于现在的北京时间");
         }
-        if(schedule.getStartTime().compareTo(schedule.getEndTime()) >= 0) {
+        if(schedule.getStartTime().compareTo(schedule.getEndTime()) > 0) {
             throw new Exception("行程开始时间不能小于行程结束时间");
         }
         ScheduleCheck(schedule);
@@ -87,14 +87,14 @@ public class ScheduleServiceImpl implements ScheduleService {
         schedule.setStatus("0");
         changeStatus(schedule);
         //时间戳
-        SimpleDateFormat df= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat df= new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date startTime = df.parse(schedule.getStartTime());
             Date endTime = df.parse(schedule.getEndTime());
             scheduleMapper.save(schedule, startTime, endTime);
             logger.info("行程信息新增成功");
         } catch (ParseException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(),e);
         }
     }
 
@@ -104,12 +104,12 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new Exception("请选择一条记录");
         }
         ScheduleCheck(schedule);
-        if(schedule.getStartTime().compareTo(schedule.getEndTime()) >= 0) {
+        if(schedule.getStartTime().compareTo(schedule.getEndTime()) > 0) {
             throw new Exception("行程开始时间不能小于行程结束时间");
         }
 
         //时间戳
-        SimpleDateFormat df= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat df= new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date startTime = df.parse(schedule.getStartTime());
             Date endTime = df.parse(schedule.getEndTime());
@@ -117,7 +117,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             changeStatus(schedule);
             scheduleMapper.update(schedule, startTime, endTime);
         } catch (ParseException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(),e);
         }
         logger.info("行程信息修改成功");
     }
@@ -129,7 +129,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
         Schedule schedule = getSchedule(id, userId);
         ScheduleCheck(schedule);
-        if (schedule.getStartTime().compareTo(DateUtlis.systemTime()) <= 0) {
+        if (schedule.getStartTime().compareTo(DateUtlis.systemTimeLocal(null)) <= 0) {
             throw new Exception("行程进行中, 无法删除");
         }
         logger.info("结束行程-----" + id);
@@ -182,15 +182,15 @@ public class ScheduleServiceImpl implements ScheduleService {
      */
     private void changeStatus(Schedule schedule) {
         try {
-            String systemTime = DateUtlis.systemTime();
+            String systemTime = DateUtlis.systemTimeLocal(null);
             if(schedule.getStartTime().compareTo(systemTime) <= 0 &&
-                    schedule.getEndTime().compareTo(systemTime) > 0) {
+                    schedule.getEndTime().compareTo(systemTime) >= 0) {
                 schedule.setStatus("1");
-            } else if (schedule.getEndTime().compareTo(systemTime) <= 0) {
+            } else if (schedule.getEndTime().compareTo(systemTime) < 0) {
                 schedule.setStatus("2");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(),e);
         }
     }
 
@@ -200,7 +200,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @param sc
      * @throws ParseException
      */
-    private void updateStatus(SimpleDateFormat df, Schedule sc) throws ParseException {
+    private void updateStatus(SimpleDateFormat df, Schedule sc) throws Exception {
         Date startTime = df.parse(sc.getStartTime());
         Date endTime = df.parse(sc.getEndTime());
         scheduleMapper.update(sc, startTime, endTime);

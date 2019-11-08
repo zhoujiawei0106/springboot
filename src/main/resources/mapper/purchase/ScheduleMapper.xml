@@ -51,8 +51,8 @@
             F_ID,
             F_STATUS,
             F_PLACE,
-            F_START_TIMESTAMP,
-            F_END_TIMESTAMP
+            to_char(F_START_TIMESTAMP,'yyyy-MM-dd') F_START_TIMESTAMP,
+            to_char(F_END_TIMESTAMP,'yyyy-MM-dd') F_END_TIMESTAMP
         FROM
             T_SCHEDULE
         WHERE
@@ -60,10 +60,10 @@
         <if test="schedule.status != null and schedule.status != ''">
             AND F_STATUS = #{schedule.status, jdbcType=VARCHAR}
         </if>
-        <if test="startTime != null and startTime != ''">
+        <if test="startTime != null ">
             AND F_START_TIMESTAMP <![CDATA[>=]]> #{startTime, jdbcType=TIMESTAMP}
         </if>
-        <if test="endTime != null and endTime != ''">
+        <if test="endTime != null ">
             AND F_END_TIMESTAMP <![CDATA[<=]]> #{endTime, jdbcType=TIMESTAMP}
         </if>
         ORDER BY F_ID DESC

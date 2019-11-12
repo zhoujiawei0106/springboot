@@ -9,21 +9,25 @@
         <result column="F_PLACE" property="place" jdbcType="VARCHAR"/>
         <result column="F_START_TIMESTAMP" property="startTime" jdbcType="TIMESTAMP"/>
         <result column="F_END_TIMESTAMP" property="endTime" jdbcType="TIMESTAMP"/>
+        <result column="F_CREATE_TIMESTAMP" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="F_UPDATE_TIMESTAMP" property="endTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <insert id="save">
         INSERT INTO T_SCHEDULE (
             F_ID,
-            F_STATUS,
             F_PLACE,
             F_START_TIMESTAMP,
-            F_END_TIMESTAMP
+            F_END_TIMESTAMP,
+            F_CREATE_TIMESTAMP,
+            F_UPDATE_TIMESTAMP
         ) VALUES (
             #{schedule.id, jdbcType=VARCHAR},
-            #{schedule.status, jdbcType=VARCHAR},
             #{schedule.place, jdbcType=VARCHAR},
             #{startTime,jdbcType=TIMESTAMP},
-            #{endTime,jdbcType=TIMESTAMP}
+            #{endTime,jdbcType=TIMESTAMP},
+            sysdate,
+            sysdate
         )
     </insert>
 
@@ -31,10 +35,10 @@
         UPDATE
             T_SCHEDULE
         SET
-            F_STATUS = #{schedule.status, jdbcType=VARCHAR},
             F_PLACE = #{schedule.place, jdbcType=VARCHAR},
             F_START_TIMESTAMP = #{startTime, jdbcType=TIMESTAMP},
-            F_END_TIMESTAMP = #{endTime, jdbcType=TIMESTAMP}
+            F_END_TIMESTAMP = #{endTime, jdbcType=TIMESTAMP},
+            F_UPDATE_TIMESTAMP = sysdate
         WHERE
             F_ID = #{schedule.id, jdbcType=VARCHAR}
     </update>
@@ -48,31 +52,49 @@
 
     <select id="getSchedules" resultMap="schedules">
         SELECT
-            F_ID,
-            F_STATUS,
-            F_PLACE,
-            to_char(F_START_TIMESTAMP,'yyyy-MM-dd') F_START_TIMESTAMP,
-            to_char(F_END_TIMESTAMP,'yyyy-MM-dd') F_END_TIMESTAMP
+        t1.F_ID,
+        t1.F_PLACE,
+        t1.F_STATUS,
+        t1.F_START_TIMESTAMP,
+        t1.F_END_TIMESTAMP
         FROM
-            T_SCHEDULE
+        (
+        SELECT
+        F_ID,
+        F_PLACE,
+        CASE
+        WHEN to_char(F_START_TIMESTAMP,'yyyy-MM-dd') <![CDATA[>]]> to_char(sysdate,'yyyy-MM-dd') THEN '0'
+        WHEN to_char(F_START_TIMESTAMP,'yyyy-MM-dd') <![CDATA[<=]]> to_char(sysdate,'yyyy-MM-dd') AND
+        to_char(F_END_TIMESTAMP,'yyyy-MM-dd') <![CDATA[>=]]> to_char(sysdate,'yyyy-MM-dd') THEN '1'
+        ELSE '2' END AS F_STATUS,
+        to_char(F_START_TIMESTAMP,'yyyy-MM-dd') F_START_TIMESTAMP,
+        to_char(F_END_TIMESTAMP,'yyyy-MM-dd') F_END_TIMESTAMP
+        FROM
+        T_SCHEDULE
         WHERE
         1 = 1
-        <if test="schedule.status != null and schedule.status != ''">
-            AND F_STATUS = #{schedule.status, jdbcType=VARCHAR}
-        </if>
         <if test="startTime != null ">
             AND F_START_TIMESTAMP <![CDATA[>=]]> #{startTime, jdbcType=TIMESTAMP}
         </if>
         <if test="endTime != null ">
             AND F_END_TIMESTAMP <![CDATA[<=]]> #{endTime, jdbcType=TIMESTAMP}
         </if>
-        ORDER BY F_ID DESC
+        ) t1
+        WHERE 1=1
+        <if test="schedule.status != null and schedule.status != ''">
+            AND t1.F_STATUS = #{schedule.status, jdbcType=VARCHAR}
+        </if>
+        ORDER BY t1.F_ID DESC
     </select>
 
     <select id="getSchedule" resultMap="schedules">
         SELECT
-            F_STATUS,
             F_PLACE,
+            CASE
+            WHEN to_char(F_START_TIMESTAMP,'yyyy-MM-dd') <![CDATA[>]]> to_char(sysdate,'yyyy-MM-dd') THEN '0'
+            WHEN to_char(F_START_TIMESTAMP,'yyyy-MM-dd') <![CDATA[<=]]> to_char(sysdate,'yyyy-MM-dd') AND
+            to_char(F_END_TIMESTAMP,'yyyy-MM-dd') <![CDATA[>=]]> to_char(sysdate,'yyyy-MM-dd') THEN '1'
+            ELSE '2' END AS F_STATUS,
             F_START_TIMESTAMP,
             F_END_TIMESTAMP
         FROM

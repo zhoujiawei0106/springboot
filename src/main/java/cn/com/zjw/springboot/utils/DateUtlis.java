@@ -41,7 +41,7 @@ public class DateUtlis {
             DateTimeFormatter dfr = DateTimeFormatter.ofPattern(pattern);
             return time.format(dfr);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage());
             throw new Exception("时间格式错误");
         }
     }

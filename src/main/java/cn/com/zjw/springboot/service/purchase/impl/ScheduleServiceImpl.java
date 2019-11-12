@@ -16,8 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 客户管理
@@ -38,32 +40,19 @@ public class ScheduleServiceImpl implements ScheduleService {
         logger.info("根据条件查询所有商品----" + schedule.toString());
         //时间戳
         SimpleDateFormat df= new SimpleDateFormat("yyyy-MM-dd");
+        //判断日期是否为非空
         Date startTime = null;
         Date endTime = null;
         if(StringUtils.isNotBlank(schedule.getStartTime())) {
-             startTime = df.parse(schedule.getStartTime());
+            startTime = df.parse(schedule.getStartTime());
         }
         if(StringUtils.isNotBlank(schedule.getEndTime())) {
-             endTime = df.parse(schedule.getEndTime());
+            endTime = df.parse(schedule.getEndTime());
         }
-            List<Schedule> firstList = scheduleMapper.getSchedules(schedule, startTime, endTime, userId);
-            try {
-                String systemTime = DateUtlis.systemTimeLocal(null);
-                for(Schedule sc : firstList) {
-                    if(sc.getStartTime().compareTo(systemTime) <= 0 &&
-                            sc.getEndTime().compareTo(systemTime) >= 0) {
-                        sc.setStatus("1");
-                        updateStatus(df, sc);
-                    } else if (sc.getEndTime().compareTo(systemTime) < 0) {
-                        sc.setStatus("2");
-                        updateStatus(df, sc);
-                    }
-                }
-            } catch (Exception e) {
-                logger.error(e.getMessage(),e);
-            }
-            List<Schedule> list = scheduleMapper.getSchedules(schedule, startTime, endTime,  userId);
-            transfer(list);
+        //行程列表查询
+        List<Schedule> list = scheduleMapper.getSchedules(schedule, startTime, endTime, userId);
+        //翻译（状态）
+        transfer(list);
         PageInfo pageInfo = new PageInfo(list);
         return pageInfo;
     }
@@ -77,16 +66,14 @@ public class ScheduleServiceImpl implements ScheduleService {
         if(schedule.getStartTime().compareTo(schedule.getEndTime()) > 0) {
             throw new Exception("行程开始时间不能小于行程结束时间");
         }
+        //非空校验
         ScheduleCheck(schedule);
-        //设置后台行程编号
+        //设置后台行程编号SD+YYMMddHHmmss
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("YYMMddHHmmss");
         String orderId = "SD" + sdf.format(date);
         schedule.setId(orderId);
-        //设置状态
-        schedule.setStatus("0");
-        changeStatus(schedule);
-        //时间戳
+        //时间戳转换格式
         SimpleDateFormat df= new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date startTime = df.parse(schedule.getStartTime());
@@ -114,7 +101,6 @@ public class ScheduleServiceImpl implements ScheduleService {
             Date startTime = df.parse(schedule.getStartTime());
             Date endTime = df.parse(schedule.getEndTime());
             logger.info("修改行程信息-----" + schedule.toString());
-            changeStatus(schedule);
             scheduleMapper.update(schedule, startTime, endTime);
         } catch (ParseException e) {
             logger.error(e.getMessage(),e);
@@ -129,7 +115,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
         Schedule schedule = getSchedule(id, userId);
         ScheduleCheck(schedule);
-        if (schedule.getStartTime().compareTo(DateUtlis.systemTimeLocal(null)) <= 0) {
+        if (!schedule.getStatus().equals("0")) {
             throw new Exception("行程进行中, 无法删除");
         }
         logger.info("结束行程-----" + id);
@@ -149,7 +135,6 @@ public class ScheduleServiceImpl implements ScheduleService {
             logger.error("系统异常，上级用户代码为空");
             throw new Exception("系统异常，上级用户代码为空");
         }
-
         Schedule schedule = scheduleMapper.getSchedule(id, userId);
         if (schedule == null) {
             throw new Exception("无法获取行程信息");
@@ -174,36 +159,6 @@ public class ScheduleServiceImpl implements ScheduleService {
         if (StringUtils.isBlank(schedule.getPlace())) {
             throw new Exception("行程目的地不能为空");
         }
-    }
-
-    /**
-     * 行程状态变化
-     * @param schedule
-     */
-    private void changeStatus(Schedule schedule) {
-        try {
-            String systemTime = DateUtlis.systemTimeLocal(null);
-            if(schedule.getStartTime().compareTo(systemTime) <= 0 &&
-                    schedule.getEndTime().compareTo(systemTime) >= 0) {
-                schedule.setStatus("1");
-            } else if (schedule.getEndTime().compareTo(systemTime) < 0) {
-                schedule.setStatus("2");
-            }
-        } catch (Exception e) {
-            logger.error(e.getMessage(),e);
-        }
-    }
-
-    /**
-     * 更新行程状态
-     * @param df
-     * @param sc
-     * @throws ParseException
-     */
-    private void updateStatus(SimpleDateFormat df, Schedule sc) throws Exception {
-        Date startTime = df.parse(sc.getStartTime());
-        Date endTime = df.parse(sc.getEndTime());
-        scheduleMapper.update(sc, startTime, endTime);
     }
 
     /**

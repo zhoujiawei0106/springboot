@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,9 +53,13 @@ public class CommodityServiceImpl implements CommodityService {
         commodityMapper.save(commodity);
         logger.info("商品信息新增成功");
         logger.info("新增库存----   商品名称：" + commodity.getName() +
-                "、英文名称：" + commodity.geteName() + "、商品数量:" + commodity.getShopNum());
+                "、英文名称：" + commodity.getEnName() + "、商品数量:" + commodity.getShopNum());
+        //设置后台行程编号IN+YYMMddHHmmss
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("YYMMddHHmmss");
+        String inventoryId = "IN" + sdf.format(date);
         Inventory inventory = new Inventory();
-        inventory.setId(UUID.randomUUID().toString());
+        inventory.setId(inventoryId);
         inventory.setShopNum(commodity.getShopNum());
         inventory.setCommodityId(commodity.getId());
         inventoryMapper.save(inventory);

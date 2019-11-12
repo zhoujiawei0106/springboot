@@ -5,9 +5,9 @@
     <resultMap id="Inventorys" type="cn.com.zjw.springboot.entity.purchase.Inventory">
         <id column="F_ID" property="id" jdbcType="VARCHAR"/>
         <result column="F_NAME" property="name" jdbcType="VARCHAR"/>
-        <result column="F_ENAME" property="eName" jdbcType="VARCHAR"/>
-        <result column="F_CREATETIME" property="createTime" jdbcType="VARCHAR"/>
-        <result column="F_UPDATETIME" property="updateTime" jdbcType="VARCHAR"/>
+        <result column="F_EN_NAME" property="enName" jdbcType="VARCHAR"/>
+        <result column="F_CREATE_TIMESTAMP" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="F_UPDATE_TIMESTAMP" property="updateTime" jdbcType="TIMESTAMP"/>
         <result column="F_SHOPNUM" property="shopNum" jdbcType="NUMERIC"/>
     </resultMap>
 
@@ -15,14 +15,14 @@
         INSERT INTO T_INVENTORY (
             F_ID,
             F_SHOPNUM,
-            F_CREATETIME,
-            F_UPDATETIME,
+            F_CREATE_TIMESTAMP,
+            F_UPDATE_TIMESTAMP,
             F_COMMODITYID
         ) VALUES (
             #{inventory.id, jdbcType=VARCHAR},
             #{inventory.shopNum,jdbcType=NUMERIC},
-            to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),
-            to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),
+            sysdate,
+            sysdate,
             #{inventory.commodityId, jdbcType=VARCHAR}
         )
     </insert>
@@ -32,7 +32,7 @@
             T_INVENTORY
         SET
             F_SHOPNUM = #{inventory.shopNum, jdbcType=NUMERIC},
-            F_UPDATETIME = to_char(sysdate,'yyyy-mm-dd hh24:mi:ss')
+            F_UPDATE_TIMESTAMP = sysdate
         WHERE
             F_ID = #{inventory.id, jdbcType=VARCHAR}
     </update>
@@ -42,7 +42,7 @@
             T_INVENTORY
         SET
             F_SHOPNUM = 0,
-            F_UPDATETIME = to_char(sysdate,'yyyy-mm-dd hh24:mi:ss')
+            F_UPDATE_TIMESTAMP = sysdate
         WHERE
             F_ID = #{inventory.id, jdbcType=VARCHAR}
     </update>
@@ -58,9 +58,9 @@
         SELECT
             t1.F_ID,
             t2.F_NAME,
-            t2.F_ENAME,
-            t1.F_CREATETIME,
-            t1.F_UPDATETIME,
+            t2.F_EN_NAME,
+            t1.F_CREATE_TIMESTAMP,
+            t1.F_UPDATE_TIMESTAMP,
             t1.F_SHOPNUM
         FROM T_INVENTORY t1
         LEFT JOIN T_COMMODITY t2
@@ -70,12 +70,13 @@
         <if test="inventory.name != null and inventory.name != ''">
             AND t2.F_NAME like '%' || #{inventory.name, jdbcType=VARCHAR} || '%'
         </if>
+        ORDER BY  t1.F_SHOPNUM
     </select>
 
     <select id="getInventory" resultMap="Inventorys">
         SELECT
             t2.F_NAME,
-            t2.F_ENAME,
+            t2.F_EN_NAME,
             t1.F_SHOPNUM
         FROM T_INVENTORY t1
         LEFT JOIN T_COMMODITY t2

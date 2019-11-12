@@ -17,12 +17,7 @@ public class Commodity extends BaseEntity implements Serializable {
     /**
      * 英文名称
      */
-    private String eName;
-
-    /**
-     *商品描述/详细
-     */
-    private String description;
+    private String enName;
 
     /**
      * 商品价格
@@ -59,14 +54,21 @@ public class Commodity extends BaseEntity implements Serializable {
         return "Commodity{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", eName='" + eName + '\'' +
-                ", description='" + description + '\'' +
+                ", enName='" + enName + '\'' +
                 ", price='" + price + '\''  +
                 ", priceMax='" + priceMax + '\''  +
                 ", basePrice='" + basePrice + '\''  +
                 ", category='" + category + '\''  +
                 ", brand='" + brand + '\''  +
                 '}';
+    }
+
+    public String getEnName() {
+        return enName;
+    }
+
+    public void setEnName(String enName) {
+        this.enName = enName;
     }
 
     public BigDecimal getShopNum() {
@@ -91,22 +93,6 @@ public class Commodity extends BaseEntity implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String geteName() {
-        return eName;
-    }
-
-    public void seteName(String eName) {
-        this.eName = eName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public BigDecimal getPrice() {

@@ -94,6 +94,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         if(schedule.getStartTime().compareTo(schedule.getEndTime()) > 0) {
             throw new Exception("行程开始时间不能小于行程结束时间");
         }
+        if(schedule.getEndTime().compareTo(DateUtlis.systemTimeLocal(null)) < 0) {
+            throw new Exception("行程结束时间不能小于现在北京时间");
+        }
 
         //时间戳
         SimpleDateFormat df= new SimpleDateFormat("yyyy-MM-dd");

@@ -1,9 +1,12 @@
 package cn.com.zjw.springboot.entity.purchase;
 
 import cn.com.zjw.springboot.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class Inventory extends BaseEntity implements Serializable {
 
@@ -17,7 +20,7 @@ public class Inventory extends BaseEntity implements Serializable {
     /**
      * 库存商品英文名称
      */
-    private String eName;
+    private String enName;
 
     /**
      * 入库时间
@@ -46,7 +49,7 @@ public class Inventory extends BaseEntity implements Serializable {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", shopNum='" + shopNum + '\''  +
-                ", eName='" + eName + '\'' +
+                ", eName='" + enName + '\'' +
                 '}';
     }
 
@@ -90,19 +93,19 @@ public class Inventory extends BaseEntity implements Serializable {
         this.updateTime = updateTime;
     }
 
-    public String geteName() {
-        return eName;
-    }
-
-    public void seteName(String eName) {
-        this.eName = eName;
-    }
-
     public BigDecimal getShopNum() {
         return shopNum;
     }
 
     public void setShopNum(BigDecimal shopNum) {
         this.shopNum = shopNum;
+    }
+
+    public String getEnName() {
+        return enName;
+    }
+
+    public void setEnName(String enName) {
+        this.enName = enName;
     }
 }

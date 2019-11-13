@@ -10,7 +10,7 @@
         <result column="F_SHOPNUM" property="shopNum" jdbcType="NUMERIC"/>
         <result column="F_INVENTORYID" property="inventoryId" jdbcType="NUMERIC"/>
         <result column="F_NAME" property="name" jdbcType="VARCHAR"/>
-        <result column="F_ENAME" property="eName" jdbcType="VARCHAR"/>
+        <result column="F_EN_EAME" property="eName" jdbcType="VARCHAR"/>
         <result column="F_BRAND" property="brand" jdbcType="VARCHAR"/>
         <result column="F_CREATETIME" property="createTime" jdbcType="VARCHAR"/>
         <result column="F_UPDATETIME" property="updateTime" jdbcType="VARCHAR"/>
@@ -96,7 +96,7 @@
         SELECT
             t1.F_ID,
             t2.F_NAME,
-            t2.F_ENAME,
+            t2.F_EN_NAME,
             t2.F_BRAND,
             t1.F_SHOPNUM,
             t1.F_PRICE

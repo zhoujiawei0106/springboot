@@ -70,7 +70,7 @@
         <if test="inventory.name != null and inventory.name != ''">
             AND t2.F_NAME like '%' || #{inventory.name, jdbcType=VARCHAR} || '%'
         </if>
-        ORDER BY  t1.F_SHOPNUM
+        ORDER BY  CAST(t1.F_SHOPNUM AS int)
     </select>
 
     <select id="getInventory" resultMap="Inventorys">

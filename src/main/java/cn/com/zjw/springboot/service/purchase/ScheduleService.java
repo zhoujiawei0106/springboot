@@ -4,6 +4,7 @@ import cn.com.zjw.springboot.entity.purchase.Schedule;
 import com.github.pagehelper.PageInfo;
 
 import java.text.ParseException;
+import java.util.List;
 
 /**
  * 行程管理
@@ -47,4 +48,12 @@ public interface ScheduleService {
      * @param userId
      */
     public void scheduleEnd(String id, String userId) throws Exception;
+
+    /**
+     * 导出报表
+     * @param schedule
+     * @param userId
+     * @return
+     */
+    List<Schedule> export(Schedule schedule, String userId) throws Exception;
 }

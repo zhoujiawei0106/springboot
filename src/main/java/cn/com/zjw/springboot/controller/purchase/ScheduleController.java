@@ -2,6 +2,7 @@ package cn.com.zjw.springboot.controller.purchase;
 
 import cn.com.zjw.springboot.constants.purchase.ScheduleStatus;
 import cn.com.zjw.springboot.controller.BaseController;
+import cn.com.zjw.springboot.entity.purchase.Customer;
 import cn.com.zjw.springboot.entity.purchase.Schedule;
 import cn.com.zjw.springboot.service.purchase.ScheduleService;
 import com.github.pagehelper.PageInfo;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -124,6 +126,24 @@ public class ScheduleController extends BaseController {
     public Map<String, Object> commodityCategory() {
         try {
             return success(ScheduleStatus.getScheduleStatus());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
+
+    /**
+     * 导出行程
+     * @author zhoujiawei
+     * @param schedule
+     * @param request
+     * @return
+     */
+    @GetMapping("/export")
+    public Map<String, Object> export(Schedule schedule, HttpServletRequest request) {
+        try {
+            List<Schedule> list = scheduleService.export(schedule, getUserId(getToken(request)));
+            return success(list);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());

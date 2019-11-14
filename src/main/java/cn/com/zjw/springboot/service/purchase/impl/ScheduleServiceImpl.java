@@ -130,6 +130,26 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
+    public List<Schedule> export(Schedule schedule, String userId) throws Exception {
+        logger.info("根据条件查询所有行程----" + schedule.toString());
+        //时间戳
+        SimpleDateFormat df= new SimpleDateFormat("yyyy-MM-dd");
+        //判断日期是否为非空
+        Date startTime = null;
+        Date endTime = null;
+        if(StringUtils.isNotBlank(schedule.getStartTime())) {
+            startTime = df.parse(schedule.getStartTime());
+        }
+        if(StringUtils.isNotBlank(schedule.getEndTime())) {
+            endTime = df.parse(schedule.getEndTime());
+        }
+        List<Schedule> list = scheduleMapper.getSchedules(schedule, startTime, endTime, userId);
+        transfer(list);
+        logger.info("导出的行程数据共 " + list.size() + "条");
+        return list;
+    }
+
+    @Override
     public Schedule getSchedule(String id, String userId) throws Exception {
         if (StringUtils.isBlank(id)) {
             throw new Exception("行程id不能为空");

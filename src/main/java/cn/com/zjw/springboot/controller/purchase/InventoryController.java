@@ -1,6 +1,7 @@
 package cn.com.zjw.springboot.controller.purchase;
 
 import cn.com.zjw.springboot.controller.BaseController;
+import cn.com.zjw.springboot.entity.purchase.Commodity;
 import cn.com.zjw.springboot.entity.purchase.Inventory;
 import cn.com.zjw.springboot.service.purchase.InventoryService;
 import com.github.pagehelper.PageInfo;
@@ -9,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -87,6 +90,24 @@ public class InventoryController extends BaseController {
         try {
             inventoryService.reset(id);
             return success("库存销毁成功");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
+
+    /**
+     * 导出商品
+     * @author zhoujiawei
+     * @param inventory
+     * @param request
+     * @return
+     */
+    @GetMapping("/export")
+    public Map<String, Object> export(Inventory inventory, HttpServletRequest request) {
+        try {
+            List<Inventory> list = inventoryService.export(inventory, getUserId(getToken(request)));
+            return success(list);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());

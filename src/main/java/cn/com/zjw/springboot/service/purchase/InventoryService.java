@@ -3,6 +3,8 @@ package cn.com.zjw.springboot.service.purchase;
 import cn.com.zjw.springboot.entity.purchase.Inventory;
 import com.github.pagehelper.PageInfo;
 
+import java.util.List;
+
 /**
  * 库存管理
  * @author zhoujiawei
@@ -38,4 +40,12 @@ public interface InventoryService {
      * @param id
      */
     public void reset(String id) throws Exception;
+
+    /**
+     * 导出报表
+     * @param inventory
+     * @param userId
+     * @return
+     */
+    List<Inventory> export(Inventory inventory, String userId);
 }

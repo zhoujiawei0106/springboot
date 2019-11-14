@@ -6,6 +6,7 @@ import cn.com.zjw.springboot.constants.purchase.CustomerType;
 import cn.com.zjw.springboot.controller.BaseController;
 import cn.com.zjw.springboot.entity.purchase.Commodity;
 import cn.com.zjw.springboot.entity.purchase.Customer;
+import cn.com.zjw.springboot.entity.purchase.Schedule;
 import cn.com.zjw.springboot.service.purchase.CommodityService;
 import com.github.pagehelper.PageInfo;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -132,4 +133,21 @@ public class CommodityController extends BaseController {
         }
     }
 
+    /**
+     * 导出商品
+     * @author zhoujiawei
+     * @param commodity
+     * @param request
+     * @return
+     */
+    @GetMapping("/export")
+    public Map<String, Object> export(Commodity commodity, HttpServletRequest request) {
+        try {
+            List<Commodity> list = commodityService.export(commodity, getUserId(getToken(request)));
+            return success(list);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
 }

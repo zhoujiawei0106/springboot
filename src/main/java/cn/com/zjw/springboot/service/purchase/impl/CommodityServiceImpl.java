@@ -120,7 +120,7 @@ public class CommodityServiceImpl implements CommodityService {
     public List<Commodity> export(Commodity commodity, String userId) {
         logger.info("根据条件导出所有商品信息----" + commodity.toString());
         List<Commodity> list = commodityMapper.getCommoditys(commodity, userId);
-        /*transfer(list);*/
+        transfer(list);
         logger.info("导出的商品数据共 " + list.size() + "条");
         return list;
     }
@@ -135,5 +135,7 @@ public class CommodityServiceImpl implements CommodityService {
             commodity.setCategory(CommodityCategory.getLabel(commodity.getCategory()));
         }
     }
+
+
 
 }

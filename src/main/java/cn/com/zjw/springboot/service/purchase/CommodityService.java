@@ -49,10 +49,10 @@ public interface CommodityService {
     public void delete(String id, String userId) throws Exception;
 
     /**
-     * 导出报表
+     * 导出商品
      * @param commodity
      * @param userId
      * @return
      */
-    public List<Commodity> export(Commodity commodity, String userId);
+    List<Commodity> export(Commodity commodity, String userId);
 }

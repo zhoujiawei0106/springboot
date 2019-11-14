@@ -1,5 +1,6 @@
 package cn.com.zjw.springboot.service.purchase.impl;
 
+import cn.com.zjw.springboot.entity.purchase.Commodity;
 import cn.com.zjw.springboot.entity.purchase.Inventory;
 import cn.com.zjw.springboot.mapper.purchase.InventoryMapper;
 import cn.com.zjw.springboot.service.purchase.InventoryService;
@@ -73,6 +74,14 @@ public class InventoryServiceImpl implements InventoryService {
         logger.info("库存销毁的商品id为-----" + id);
         inventoryMapper.reset(id);
         logger.info("库存销毁成功");
+    }
+
+    @Override
+    public List<Inventory> export(Inventory inventory, String userId) {
+        logger.info("根据条件导出所有库存信息----" + inventory.toString());
+        List<Inventory> list = inventoryMapper.getInventorys(inventory, userId);
+        logger.info("导出的商品数据共 " + list.size() + "条");
+        return list;
     }
 
 }

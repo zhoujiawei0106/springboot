@@ -79,6 +79,7 @@ public abstract class BaseController {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("flag", true);
         map.put("msg", msg);
+        map.put("code", 200000);
         return map;
     }
 
@@ -91,6 +92,7 @@ public abstract class BaseController {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("flag", true);
         map.put("data", data);
+        map.put("code", 200000);
         return map;
     }
 
@@ -105,6 +107,7 @@ public abstract class BaseController {
         map.put("flag", true);
         map.put("data", data);
         map.put("msg", msg);
+        map.put("code",100001);
         return map;
     }
 
@@ -117,6 +120,7 @@ public abstract class BaseController {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("flag", false);
         map.put("msg", msg);
+        map.put("code",100001);
         return map;
     }
 }

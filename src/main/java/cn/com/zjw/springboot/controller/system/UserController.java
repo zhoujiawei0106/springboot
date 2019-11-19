@@ -149,12 +149,12 @@ public class UserController extends BaseController {
 
 
     /**
-     * 获取客户类型常量
+     * 获取客户状态常量
      * @author zhoujiawei
      * @return
      */
-    @GetMapping("/customerType")
-    public Map<String, Object> customerType() {
+    @GetMapping("/customerStatus")
+    public Map<String, Object> customerStatus() {
         try {
             return success(CustomerStatus.getCustomerStatus());
         } catch (Exception e) {

@@ -33,6 +33,7 @@ public interface UserService {
      * 保存用户信息
      * @author zhoujiawei
      * @param user
+     * @throws Exception
      * @return
      */
     public void save(User user) throws Exception;
@@ -41,6 +42,7 @@ public interface UserService {
      * 获取用户
      * @author zhoujiawei
      * @param user
+     * @throws Exception
      * @return
      */
     public User getUser(User user) throws Exception;
@@ -49,13 +51,16 @@ public interface UserService {
      * 更新用户信息
      * @author zhoujiawei
      * @param user
+     * @param oldPwd
+     * @throws Exception
      */
-    public void update(User user) throws Exception;
+    public void update(User user, String oldPwd) throws Exception;
 
     /**
      * 删除用户
      * @author zhoujiawei
      * @param id
+     * @throws Exception
      */
     public void delete(String id) throws Exception;
 
@@ -63,8 +68,9 @@ public interface UserService {
      * 重置用户登陆次数
      * @author zhoujiawei
      * @param id
+     * @throws Exception
      */
-    public void reset(String id) throws Exception;
+    public void resetTimes(String id) throws Exception;
 
     /**
      * 根据客户修改信息同步用户信息
@@ -73,4 +79,12 @@ public interface UserService {
      * @throws Exception
      */
     public void updateByCustomer(Customer customer) throws Exception;
+
+    /**
+     * 重置密码
+     * @author zhoujiawei
+     * @param id
+     * @throws Exception
+     */
+    public void resetPwd(String id) throws Exception;
 }

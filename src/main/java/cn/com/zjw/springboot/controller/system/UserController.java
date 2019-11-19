@@ -1,5 +1,6 @@
 package cn.com.zjw.springboot.controller.system;
 
+import cn.com.zjw.springboot.constants.enumConstants.CustomerStatus;
 import cn.com.zjw.springboot.controller.BaseController;
 import cn.com.zjw.springboot.entity.system.User;
 import cn.com.zjw.springboot.service.system.UserService;
@@ -81,12 +82,13 @@ public class UserController extends BaseController {
      * 更新用户信息
      * @author zhoujiawei
      * @param user
+     * @param oldPwd
      * @return
      */
     @PutMapping("/update")
-    public Map<String, Object> update(User user) {
+    public Map<String, Object> update(User user, String oldPwd) {
         try {
-            userService.update(user);
+            userService.update(user, oldPwd);
             return success("用户修改成功");
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -112,15 +114,15 @@ public class UserController extends BaseController {
     }
 
     /**
-     * 重置用户登陆次数
+     * 重置用户密码,密码为用户登录名
      * @author zhoujiawei
      * @param id
      * @return
      */
-    @PutMapping("/reset")
-    public Map<String, Object> reset(String id) {
+    @PutMapping("/resetPwd")
+    public Map<String, Object> resetPwd(String id) {
         try {
-            userService.reset(id);
+            userService.resetPwd(id);
             return success("重置用户登陆次数成功");
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -128,4 +130,36 @@ public class UserController extends BaseController {
         }
     }
 
+    /**
+     * 重置用户登陆次数
+     * @author zhoujiawei
+     * @param id
+     * @return
+     */
+    @PutMapping("/resetTimes")
+    public Map<String, Object> resetTimes(String id) {
+        try {
+            userService.resetTimes(id);
+            return success("重置用户登陆次数成功");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
+
+
+    /**
+     * 获取客户类型常量
+     * @author zhoujiawei
+     * @return
+     */
+    @GetMapping("/customerType")
+    public Map<String, Object> customerType() {
+        try {
+            return success(CustomerStatus.getCustomerStatus());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
 }

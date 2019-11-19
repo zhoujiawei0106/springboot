@@ -57,7 +57,7 @@ public interface UserMapper {
      * @author zhoujiawei
      * @param id
      */
-    public void reset(@Param("id") String id);
+    public void resetTimes(@Param("id") String id);
 
     /**
      * 根据客户信息修改用户信息
@@ -65,4 +65,19 @@ public interface UserMapper {
      * @param customer
      */
     public void updateByCustomer(@Param("customer") Customer customer);
+
+    /**
+     * 更新用户密码
+     * @author zhoujiawei
+     * @param user
+     */
+    public void updatePassword(@Param("user") User user);
+
+    /**
+     * 根据用户id获取用户信息
+     * @author zhoujiawei
+     * @param id
+     * @return
+     */
+    public User getUserById(@Param("id") String id);
 }

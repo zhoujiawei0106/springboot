@@ -1,22 +1,17 @@
 package cn.com.zjw.springboot.controller.purchase;
 
-import cn.com.zjw.springboot.constants.purchase.CustomerStatus;
-import cn.com.zjw.springboot.constants.purchase.CustomerType;
+import cn.com.zjw.springboot.constants.enumConstants.CustomerStatus;
+import cn.com.zjw.springboot.constants.enumConstants.CustomerType;
 import cn.com.zjw.springboot.controller.BaseController;
 import cn.com.zjw.springboot.entity.purchase.Customer;
 import cn.com.zjw.springboot.service.purchase.CustomerService;
 import com.github.pagehelper.PageInfo;
-import org.apache.poi.ss.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.InputStream;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 

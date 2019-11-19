@@ -85,16 +85,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(User user) throws Exception {
+    public void update(User user, String oldPwd) throws Exception {
         check(user);
-        if (StringUtils.isBlank(user.getId())) {
-            throw new Exception("用户代码不能为空");
+
+        if (StringUtils.isBlank(oldPwd)) {
+            throw new Exception("旧密码不能为空");
         }
 
         // 校验修改的用户是否存在
         User userData = new User();
         userData.setId(user.getId());
         getUser(userData);
+
+        if (!oldPwd.equals(userData.getPassword())) {
+            throw new Exception("旧密码与新密码不一致");
+        }
 
         user.setPassword(BlowfishCipher.encode(user.getPassword()));
         logger.info("修改用户信息-----" + user.toString());
@@ -112,11 +117,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void reset(String id) throws Exception {
+    public void resetTimes(String id) throws Exception {
         checkUserById(id);
 
         logger.info("重置登陆次数用户的id为-----" + id);
-        userMapper.reset(id);
+        userMapper.resetTimes(id);
         logger.info("重置用户登陆次数成功");
     }
 
@@ -145,6 +150,24 @@ public class UserServiceImpl implements UserService {
 
         logger.info("根据客户更新的用户信息为-----" + customer.toString());
         userMapper.updateByCustomer(customer);
+    }
+
+    @Override
+    public void resetPwd(String id) throws Exception {
+        logger.info("-----传入的用户id为:" + id);
+        if (StringUtils.isBlank(id)) {
+            throw new Exception("登录名不能为空");
+        }
+
+        User user = userMapper.getUserById(id);
+        logger.info("根据登录名查询用户-----");
+        if (user == null || StringUtils.isBlank(user.getLoginName())) {
+            throw new Exception("用户信息为空,不能重置密码!");
+        }
+
+        user.setPassword(BlowfishCipher.encode(user.getLoginName()));
+        logger.info("更新的用户信息为-----" + user);
+        userMapper.updatePassword(user);
     }
 
     /**

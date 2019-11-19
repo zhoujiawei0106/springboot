@@ -1,7 +1,7 @@
 package cn.com.zjw.springboot.service.purchase.impl;
 
-import cn.com.zjw.springboot.constants.purchase.CustomerStatus;
-import cn.com.zjw.springboot.constants.purchase.CustomerType;
+import cn.com.zjw.springboot.constants.enumConstants.CustomerStatus;
+import cn.com.zjw.springboot.constants.enumConstants.CustomerType;
 import cn.com.zjw.springboot.entity.purchase.Customer;
 import cn.com.zjw.springboot.entity.system.User;
 import cn.com.zjw.springboot.mapper.purchase.CustomerMapper;

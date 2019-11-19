@@ -1,6 +1,6 @@
 package cn.com.zjw.springboot.service.purchase.impl;
 
-import cn.com.zjw.springboot.constants.purchase.ScheduleStatus;
+import cn.com.zjw.springboot.constants.enumConstants.ScheduleStatus;
 import cn.com.zjw.springboot.entity.purchase.Schedule;
 import cn.com.zjw.springboot.mapper.purchase.ScheduleMapper;
 import cn.com.zjw.springboot.service.purchase.ScheduleService;
@@ -16,10 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 客户管理

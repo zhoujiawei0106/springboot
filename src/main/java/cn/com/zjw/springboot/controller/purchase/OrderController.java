@@ -1,6 +1,6 @@
 package cn.com.zjw.springboot.controller.purchase;
 
-import cn.com.zjw.springboot.constants.purchase.OrderStatus;
+import cn.com.zjw.springboot.constants.enumConstants.OrderStatus;
 import cn.com.zjw.springboot.controller.BaseController;
 import cn.com.zjw.springboot.entity.purchase.Order;
 import cn.com.zjw.springboot.service.purchase.OrderService;

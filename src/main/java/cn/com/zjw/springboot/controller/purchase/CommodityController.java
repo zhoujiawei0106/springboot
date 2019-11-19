@@ -1,12 +1,8 @@
 package cn.com.zjw.springboot.controller.purchase;
 
-import cn.com.zjw.springboot.constants.purchase.CommodityCategory;
-import cn.com.zjw.springboot.constants.purchase.CustomerStatus;
-import cn.com.zjw.springboot.constants.purchase.CustomerType;
+import cn.com.zjw.springboot.constants.enumConstants.CommodityCategory;
 import cn.com.zjw.springboot.controller.BaseController;
 import cn.com.zjw.springboot.entity.purchase.Commodity;
-import cn.com.zjw.springboot.entity.purchase.Customer;
-import cn.com.zjw.springboot.entity.purchase.Schedule;
 import cn.com.zjw.springboot.service.purchase.CommodityService;
 import com.github.pagehelper.PageInfo;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;

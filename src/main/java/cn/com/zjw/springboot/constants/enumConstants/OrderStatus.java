@@ -1,4 +1,4 @@
-package cn.com.zjw.springboot.constants.purchase;
+package cn.com.zjw.springboot.constants.enumConstants;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

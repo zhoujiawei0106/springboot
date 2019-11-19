@@ -1,39 +1,39 @@
-package cn.com.zjw.springboot.constants.purchase;
+package cn.com.zjw.springboot.constants.enumConstants;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public enum ScheduleStatus {
-    noDone("0","未开始"),
-    ing("1", "进行中"),
-    gone("2", "已完成");
+public enum CustomerType {
+
+    Agency("1", "代理"),
+    Customer("2", "客户");
 
     private String value;
 
     private String label;
 
-    private ScheduleStatus(String value, String label) {
+    private CustomerType(String value, String label) {
         this.value = value;
         this.label = label;
     }
 
     public static String getLabel(String value) {
-        for (ScheduleStatus scheduleStatus : ScheduleStatus.values()) {
-            if (scheduleStatus.getValue().equals(value)) {
-                return scheduleStatus.getLabel();
+        for (CustomerType customerType : CustomerType.values()) {
+            if (customerType.getValue().equals(value)) {
+                return customerType.getLabel();
             }
         }
         return "";
     }
 
-    public static List<Map<String, String>> getScheduleStatus() {
+    public static List<Map<String, String>> getCustomerType() {
         List<Map<String, String>> list = new ArrayList<>();
-        for (ScheduleStatus scheduleStatus : ScheduleStatus.values()) {
+        for (CustomerType customerType : CustomerType.values()) {
             Map<String, String> map = new LinkedHashMap<>();
-            map.put("value", scheduleStatus.getValue());
-            map.put("label", scheduleStatus.getLabel());
+            map.put("value", customerType.getValue());
+            map.put("label", customerType.getLabel());
             list.add(map);
         }
         return list;

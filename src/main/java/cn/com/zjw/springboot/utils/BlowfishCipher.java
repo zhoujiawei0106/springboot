@@ -42,13 +42,7 @@ public class BlowfishCipher {
 
 
     public static void main(String[] args) throws Exception{
-//        if(args == null || args.length <1) {
-//            System.out.println("请输入需要加密的数据库密码！");
-//            return;
-//        }
-//
-//        String passwd = args[0];
-        System.out.println("加密后的数据库密码是:"+encode("test123")+"");
+        System.out.println("加密后的数据库密码是:"+encode("admin")+"");
         return;
     }
 

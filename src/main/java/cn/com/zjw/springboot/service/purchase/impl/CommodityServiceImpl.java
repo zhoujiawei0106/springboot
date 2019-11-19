@@ -1,6 +1,6 @@
 package cn.com.zjw.springboot.service.purchase.impl;
 
-import cn.com.zjw.springboot.constants.purchase.CommodityCategory;
+import cn.com.zjw.springboot.constants.enumConstants.CommodityCategory;
 import cn.com.zjw.springboot.entity.purchase.Commodity;
 import cn.com.zjw.springboot.entity.purchase.Inventory;
 import cn.com.zjw.springboot.mapper.purchase.CommodityMapper;
@@ -19,7 +19,6 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * 客户管理

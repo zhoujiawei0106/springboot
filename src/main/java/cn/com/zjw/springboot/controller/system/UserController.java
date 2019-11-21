@@ -146,20 +146,4 @@ public class UserController extends BaseController {
             return fail(e.getMessage());
         }
     }
-
-
-    /**
-     * 获取客户状态常量
-     * @author zhoujiawei
-     * @return
-     */
-    @GetMapping("/customerStatus")
-    public Map<String, Object> customerStatus() {
-        try {
-            return success(CustomerStatus.getCustomerStatus());
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            return fail(e.getMessage());
-        }
-    }
 }

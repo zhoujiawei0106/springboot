@@ -37,7 +37,8 @@
         SET
             ip = #{user.ip, jdbcType=VARCHAR},
             login_fail_times = #{user.loginFailTimes} + 1,
-            last_login_date = sysdate
+            last_login_date = sysdate,
+            update_timestamp = sysdate
         WHERE
             login_name = #{user.loginName}
     </update>
@@ -66,6 +67,9 @@
         <if test="user.id != null and user.id != ''">
             AND id = #{user.id}
         </if>
+        <if test="user.status != null and user.status != ''">
+            AND status = #{user.status}
+        </if>
         ORDER BY
             login_name
     </select>
@@ -80,7 +84,9 @@
             login_fail_times,
             parent_id,
             tel,
-            status
+            status,
+            create_timestamp,
+            update_timestamp
         ) VALUES (
             #{user.id},
             #{user.userName},
@@ -90,7 +96,9 @@
             0,
             #{user.parentId},
             #{user.tel},
-            #{user.status, jdbcType=NUMERIC}
+            #{user.status, jdbcType=NUMERIC},
+            sysdate,
+            sysdate
         )
     </insert>
 
@@ -99,9 +107,12 @@
             t_user
         SET
             user_name = #{user.userName},
-            password = #{user.password},
+            <if test="user.password != null and user.password != ''">
+                password = #{user.password},
+            </if>
             tel = #{user.tel},
-            status = #{user.status}
+            status = #{user.status},
+            update_timestamp = sysdate
         WHERE
             id = #{user.id}
     </update>
@@ -118,6 +129,7 @@
             t_user
         SET
             LOGIN_FAIL_TIMES = 0
+            update_timestamp = sysdate,
         WHERE
             id = #{id}
     </update>
@@ -128,7 +140,8 @@
         SET
             user_name = #{customer.name},
             tel = #{customer.tel},
-            status = #{customer.status}
+            status = #{customer.status},
+            update_timestamp = sysdate
         WHERE
             id = #{customer.id}
         AND
@@ -139,7 +152,8 @@
         UPDATE
             t_user
         SET
-            password = #{user.password}
+            password = #{user.password},
+            update_timestamp = sysdate
         WHERE
             login_name = #{user.loginName}
     </update>

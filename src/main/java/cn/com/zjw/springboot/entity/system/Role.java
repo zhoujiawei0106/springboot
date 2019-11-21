@@ -1,13 +1,12 @@
 package cn.com.zjw.springboot.entity.system;
 
-public class Role {
+import cn.com.zjw.springboot.entity.BaseEntity;
+
+import java.io.Serializable;
+
+public class Role extends BaseEntity implements Serializable {
 
     private String id;
-
-    /**
-     * 权限ID
-     */
-    private String premissionId;
 
     /**
      * 用户ID
@@ -15,14 +14,19 @@ public class Role {
     private String userId;
 
     /**
-     * 菜单ID
-     */
-    private String menuId;
-
-    /**
      * 角色名称
      */
     private String roleName;
+
+    /**
+     * 备注
+     */
+    private String remark;
+
+    /**
+     * 用户名
+     */
+    private String userName;
 
     public String getId() {
         return id;
@@ -30,14 +34,6 @@ public class Role {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getPremissionId() {
-        return premissionId;
-    }
-
-    public void setPremissionId(String premissionId) {
-        this.premissionId = premissionId;
     }
 
     public String getUserId() {
@@ -48,19 +44,27 @@ public class Role {
         this.userId = userId;
     }
 
-    public String getMenuId() {
-        return menuId;
-    }
-
-    public void setMenuId(String menuId) {
-        this.menuId = menuId;
-    }
-
     public String getRoleName() {
         return roleName;
     }
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

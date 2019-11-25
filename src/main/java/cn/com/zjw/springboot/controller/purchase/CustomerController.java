@@ -136,36 +136,6 @@ public class CustomerController extends BaseController {
     }
 
     /**
-     * 获取客户类型常量
-     * @author zhoujiawei
-     * @return
-     */
-    @GetMapping("/customerType")
-    public Map<String, Object> customerType() {
-        try {
-            return success(CustomerType.getCustomerType());
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            return fail(e.getMessage());
-        }
-    }
-
-    /**
-     * 获取客户状态常量
-     * @author zhoujiawei
-     * @return
-     */
-    @GetMapping("/customerStatus")
-    public Map<String, Object> customerStatus() {
-        try {
-            return success(CustomerStatus.getCustomerStatus());
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            return fail(e.getMessage());
-        }
-    }
-
-    /**
      * 导出客户
      * @author zhoujiawei
      * @param customer

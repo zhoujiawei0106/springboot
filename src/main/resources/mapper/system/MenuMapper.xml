@@ -28,7 +28,7 @@
         INNER JOIN
             t_menu t4
         ON
-            t3.menu_id = t4.id
+            t2.menu_id = t4.id
         where
             t1.user_id = #{userId}
         ORDER BY

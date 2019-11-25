@@ -1,5 +1,6 @@
 package cn.com.zjw.springboot.service.system.impl;
 
+import cn.com.zjw.springboot.constants.enumConstants.CustomerStatus;
 import cn.com.zjw.springboot.entity.purchase.Customer;
 import cn.com.zjw.springboot.entity.system.User;
 import cn.com.zjw.springboot.mapper.system.UserMapper;
@@ -41,6 +42,7 @@ public class UserServiceImpl implements UserService {
         PageHelper.startPage(user.getPage(), user.getRows());
         logger.info("根据条件查询所有用户----" + user.toString());
         List<User> list = userMapper.getUsers(user);
+        transfer(list);
         PageInfo pageInfo = new PageInfo(list);
         return pageInfo;
     }
@@ -48,6 +50,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(User user) throws Exception{
         check(user);
+        if (StringUtils.isBlank(user.getPassword())) {
+            throw new Exception("请输入密码");
+        }
 
         if (userMapper.getUser(user.getLoginName()) != null) {
             throw new Exception("登录名已存在,请重新输入");
@@ -88,20 +93,25 @@ public class UserServiceImpl implements UserService {
     public void update(User user, String oldPwd) throws Exception {
         check(user);
 
-        if (StringUtils.isBlank(oldPwd)) {
-            throw new Exception("旧密码不能为空");
-        }
-
         // 校验修改的用户是否存在
         User userData = new User();
         userData.setId(user.getId());
-        getUser(userData);
+        userData = getUser(userData);
 
-        if (!oldPwd.equals(userData.getPassword())) {
-            throw new Exception("旧密码与新密码不一致");
+        // 若用户存在，且填写了新密码或旧密码时，校验新旧密码
+        if (StringUtils.isNotBlank(oldPwd) || StringUtils.isNotBlank(user.getPassword())) {
+            if (StringUtils.isBlank(oldPwd)) {
+                throw new Exception("请输入旧密码");
+            }
+            if (StringUtils.isBlank(user.getPassword())) {
+                throw new Exception("请输入密码");
+            }
+            if (!oldPwd.equals(userData.getPassword())) {
+                throw new Exception("旧密码与新密码不一致");
+            }
+            user.setPassword(BlowfishCipher.encode(user.getPassword()));
         }
 
-        user.setPassword(BlowfishCipher.encode(user.getPassword()));
         logger.info("修改用户信息-----" + user.toString());
         userMapper.update(user);
         logger.info("用户信息修改成功");
@@ -183,9 +193,6 @@ public class UserServiceImpl implements UserService {
         if (StringUtils.isBlank(user.getLoginName())) {
             throw new Exception("请输入登录名");
         }
-        if (StringUtils.isBlank(user.getPassword())) {
-            throw new Exception("请输入密码");
-        }
         if (StringUtils.isBlank(user.getStatus())) {
             throw new Exception("请选择用户状态");
         }
@@ -206,6 +213,12 @@ public class UserServiceImpl implements UserService {
             throw new Exception("删除的用户信息不存在");
         } else if (list.size() > 1) {
             throw new Exception("请检查用户信息是否重复");
+        }
+    }
+
+    private final void transfer(List<User> list) {
+        for (User user : list) {
+            user.setStatus(CustomerStatus.getLabel(user.getStatus()));
         }
     }
 }

@@ -16,6 +16,11 @@ public class Order extends BaseEntity implements Serializable {
     private String orderNum;
 
     /**
+     * 快递单号
+     */
+    private String trackId;
+
+    /**
      * 订单状态
      */
     private String orderStatus;
@@ -57,6 +62,8 @@ public class Order extends BaseEntity implements Serializable {
 
     private String brand;
 
+    private String tableData;
+
     /**
      * 订单
      */
@@ -69,6 +76,22 @@ public class Order extends BaseEntity implements Serializable {
     private String nameAll;
 
     private String idAll;
+
+    public String getTrackId() {
+        return trackId;
+    }
+
+    public String getTableData() {
+        return tableData;
+    }
+
+    public void setTableData(String tableData) {
+        this.tableData = tableData;
+    }
+
+    public void setTrackId(String trackId) {
+        this.trackId = trackId;
+    }
 
     public String geteName() {
         return eName;

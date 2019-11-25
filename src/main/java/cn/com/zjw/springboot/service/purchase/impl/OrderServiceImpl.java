@@ -70,15 +70,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void save(List<Order> orderList, String userId) {
-        logger.info("新增订单信息-----" + orderList.toString());
+    public void save(Order order, String userId) {
+        logger.info("新增订单信息-----" + order.toString());
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("YYMMddHHmmss");
         String orderId = "OD" + sdf.format(date);
-        Order order = new Order();
-        order.setId(orderId);
-        order.setOrderStatus("2");
-        orderMapper.save(order,orderList);
+        Order newOrder = new Order();
+        newOrder.setId(orderId);
+        newOrder.setOrderStatus("2");
+        order.getTableData();
+
+
+
+
+       /* orderMapper.save(order,orderList);*/
         logger.info("订单信息新增成功");
     }
 

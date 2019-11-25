@@ -1,11 +1,13 @@
 package cn.com.zjw.springboot.controller;
 
+import cn.com.zjw.springboot.entity.purchase.Commodity;
 import com.auth0.jwt.JWT;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class BaseController {
@@ -79,6 +81,28 @@ public abstract class BaseController {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("flag", true);
         map.put("msg", msg);
+        map.put("code", 200000);
+        return map;
+    }
+
+    /**
+     * 请求成功返回前台数据
+     * @param data
+     * @return
+     */
+    public Map<String, Object> succeed(List<Commodity> data) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> data1 = new HashMap<String, Object>();
+        Map<String, Object> data2 = new HashMap<String, Object>();
+        for(Commodity c : data) {
+            data1.put(c.getId(),c);
+        }
+        data2.put("data",data);
+        map.put("flag", true);
+        //id分散格式
+        map.put("data1", data1);
+        //合并模式
+        map.put("data2", data2);
         map.put("code", 200000);
         return map;
     }

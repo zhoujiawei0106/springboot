@@ -47,15 +47,26 @@ public class CommodityServiceImpl implements CommodityService {
     }
 
     @Override
+    public List<Commodity> getCommoditysOfOrder(Commodity commodity, String userId) {
+        logger.info("根据条件查询所有商品----" + commodity.toString());
+        List<Commodity> list = commodityMapper.getCommoditys(commodity, userId);
+        transfer(list);
+        return list;
+    }
+
+    @Override
     public void save(Commodity commodity) {
+        //设置后台行程编号IN+YYMMddHHmmss
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("YYMMddHHmmss");
+        String commodityId = "CM" + sdf.format(date);
+        commodity.setId(commodityId);
         logger.info("新增商品----" + commodity.toString());
+        commodity.setIsDelete("1");
         commodityMapper.save(commodity);
         logger.info("商品信息新增成功");
         logger.info("新增库存----   商品名称：" + commodity.getName() +
                 "、英文名称：" + commodity.getEnName() + "、商品数量:" + commodity.getShopNum());
-        //设置后台行程编号IN+YYMMddHHmmss
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("YYMMddHHmmss");
         String inventoryId = "IN" + sdf.format(date);
         Inventory inventory = new Inventory();
         inventory.setId(inventoryId);
@@ -70,9 +81,30 @@ public class CommodityServiceImpl implements CommodityService {
         if (StringUtils.isBlank(commodity.getId())) {
             throw new Exception("请选择一条记录");
         }
+        Commodity cm = getCommodity(commodity.getId(), userId);
         logger.info("修改客户信息-----" + commodity.toString());
-        commodityMapper.update(commodity);
-        logger.info("客户信息修改成功");
+        if(cm.getPrice().equals(commodity.getPrice())) {
+            commodityMapper.update(commodity);
+            logger.info("客户信息修改成功");
+        } else {
+            //删除商品信息
+            commodityMapper.delete(cm.getId());
+            logger.info("商品信息删除成功");
+            //设置后台行程编号IN+YYMMddHHmmss
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("YYMMddHHmmss");
+            String commodityId = "CM" + sdf.format(date);
+            commodity.setId(commodityId);
+            commodity.setIsDelete("1");
+            commodityMapper.save(commodity);
+            String inventoryId = "IN" + sdf.format(date);
+            Inventory inventory = new Inventory();
+            inventory.setId(inventoryId);
+            inventory.setShopNum(commodity.getShopNum());
+            inventory.setCommodityId(commodity.getId());
+            inventoryMapper.save(inventory);
+            logger.info("库存信息新增成功");
+        }
     }
 
     @Override
@@ -111,8 +143,8 @@ public class CommodityServiceImpl implements CommodityService {
         logger.info("删除的商品信息-----" + commodity);
         commodityMapper.delete(id);
         logger.info("删除商品成功");
-        inventoryMapper.delete(commodity.getId());
-        logger.info("删除库存成功");
+       /* inventoryMapper.delete(commodity.getId());
+        logger.info("删除库存成功");*/
     }
 
     @Override
@@ -134,7 +166,5 @@ public class CommodityServiceImpl implements CommodityService {
             commodity.setCategory(CommodityCategory.getLabel(commodity.getCategory()));
         }
     }
-
-
 
 }

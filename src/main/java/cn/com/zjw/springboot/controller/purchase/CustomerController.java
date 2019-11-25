@@ -47,6 +47,24 @@ public class CustomerController extends BaseController {
     }
 
     /**
+     * 获取客户列表(order)
+     * @author zhoujiawei
+     * @param customer
+     * @param request
+     * @return
+     */
+    @GetMapping("/listOfOrder")
+    public Map<String, Object> listOfOrder(Customer customer, HttpServletRequest request) {
+        try {
+            List<Customer> list = customerService.getCustomersOfOrder(customer, getUserId(getToken(request)));
+            return success(list);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
+
+    /**
      * 保存客户信息
      * @author zhoujiawei
      * @param customer

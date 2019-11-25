@@ -8,16 +8,16 @@
         <result column="F_EN_NAME" property="enName" jdbcType="VARCHAR"/>
         <result column="F_CREATE_TIMESTAMP" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="F_UPDATE_TIMESTAMP" property="updateTime" jdbcType="TIMESTAMP"/>
-        <result column="F_SHOPNUM" property="shopNum" jdbcType="NUMERIC"/>
+        <result column="F_SHOP_NUM" property="shopNum" jdbcType="NUMERIC"/>
     </resultMap>
 
     <insert id="save">
         INSERT INTO T_INVENTORY (
             F_ID,
-            F_SHOPNUM,
+            F_SHOP_NUM,
             F_CREATE_TIMESTAMP,
             F_UPDATE_TIMESTAMP,
-            F_COMMODITYID
+            F_COMMODITY_ID
         ) VALUES (
             #{inventory.id, jdbcType=VARCHAR},
             #{inventory.shopNum,jdbcType=NUMERIC},
@@ -31,7 +31,7 @@
         UPDATE
             T_INVENTORY
         SET
-            F_SHOPNUM = #{inventory.shopNum, jdbcType=NUMERIC},
+            F_SHOP_NUM = #{inventory.shopNum, jdbcType=NUMERIC},
             F_UPDATE_TIMESTAMP = sysdate
         WHERE
             F_ID = #{inventory.id, jdbcType=VARCHAR}
@@ -41,7 +41,7 @@
         UPDATE
             T_INVENTORY
         SET
-            F_SHOPNUM = 0,
+            F_SHOP_NUM = 0,
             F_UPDATE_TIMESTAMP = sysdate
         WHERE
             F_ID = #{inventory.id, jdbcType=VARCHAR}
@@ -51,7 +51,7 @@
             DELETE FROM
             T_INVENTORY
             WHERE
-            F_COMMODITYID = #{id, jdbcType=VARCHAR}
+            F_COMMODITY_ID = #{id, jdbcType=VARCHAR}
     </delete>
 
     <select id="getInventorys" resultMap="Inventorys">
@@ -61,26 +61,27 @@
             t2.F_EN_NAME,
             t1.F_CREATE_TIMESTAMP,
             t1.F_UPDATE_TIMESTAMP,
-            t1.F_SHOPNUM
+            t1.F_SHOP_NUM
         FROM T_INVENTORY t1
         LEFT JOIN T_COMMODITY t2
-        ON t1.F_COMMODITYID = t2.F_Id
+        ON t1.F_COMMODITY_ID = t2.F_Id
         WHERE
         1 = 1
+        AND t2.F_IS_DELETE = '1'
         <if test="inventory.name != null and inventory.name != ''">
             AND t2.F_NAME like '%' || #{inventory.name, jdbcType=VARCHAR} || '%'
         </if>
-        ORDER BY  CAST(t1.F_SHOPNUM AS int)
+        ORDER BY  CAST(t1.F_SHOP_NUM AS int)
     </select>
 
     <select id="getInventory" resultMap="Inventorys">
         SELECT
             t2.F_NAME,
             t2.F_EN_NAME,
-            t1.F_SHOPNUM
+            t1.F_SHOP_NUM
         FROM T_INVENTORY t1
         LEFT JOIN T_COMMODITY t2
-        ON t1.F_COMMODITYID = t2.F_Id
+        ON t1.F_COMMODITY_ID = t2.F_Id
         WHERE
         t1.F_ID = #{id, jdbcType=VARCHAR}
     </select>

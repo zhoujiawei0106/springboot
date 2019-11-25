@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.com.zjw.springboot.mapper.purchase.OrderMapper">
-
     <resultMap id="Orders" type="cn.com.zjw.springboot.entity.purchase.Order">
         <id column="F_ID" property="id" jdbcType="VARCHAR"/>
-        <result column="F_ORDERSTATUS" property="orderStatus" jdbcType="VARCHAR"/>
-        <result column="F_TOTALPRICE" property="totalPrice" jdbcType="NUMERIC"/>
-        <result column="F_PRICE" property="price" jdbcType="NUMERIC"/>
-        <result column="F_SHOPNUM" property="shopNum" jdbcType="NUMERIC"/>
-        <result column="F_INVENTORYID" property="inventoryId" jdbcType="NUMERIC"/>
+        <result column="F_ORDER_STATUS" property="orderStatus" jdbcType="VARCHAR"/>
+        <result column="F_TRACK_ID" property="trackId" jdbcType="VARCHAR"/>
+        <result column="F_SHOP_NUM" property="shopNum" jdbcType="NUMERIC"/>
         <result column="F_NAME" property="name" jdbcType="VARCHAR"/>
-        <result column="F_EN_EAME" property="eName" jdbcType="VARCHAR"/>
-        <result column="F_BRAND" property="brand" jdbcType="VARCHAR"/>
-        <result column="F_CREATETIME" property="createTime" jdbcType="VARCHAR"/>
-        <result column="F_UPDATETIME" property="updateTime" jdbcType="VARCHAR"/>
+        <result column="F_CREATE_TIMESTAMP" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="F_UPDATE_TIMESTAMP" property="updateTime" jdbcType="TIMESTAMP"/>
+        <!-- <result column="F_TOTALPRICE" property="totalPrice" jdbcType="NUMERIC"/>-->
+        <!-- <result column="F_EN_EAME" property="eName" jdbcType="VARCHAR"/>-->
+        <!--<result column="F_BRAND" property="brand" jdbcType="VARCHAR"/>-->
     </resultMap>
 
     <insert id="save">
@@ -69,7 +67,9 @@
             F_ID = #{id, jdbcType=VARCHAR}
     </delete>
 
-    <select id="getOrders" resultMap="Orders">
+
+
+    <!--<select id="getOrders" resultMap="Orders">
         WITH tmp AS (
           SELECT
             (F_PRICE*F_SHOPNUM) AS F_TOTALPRICE,
@@ -90,7 +90,7 @@
         1 = 1
         GROUP BY F_ID,F_ORDERSTATUS,F_CREATETIME,F_UPDATETIME
         ORDER BY F_ID DESC
-    </select>
+    </select>-->
 
     <select id="getOrder" resultMap="Orders">
         SELECT
@@ -105,6 +105,15 @@
         ON t1.F_INVENTORYID = t2.F_ID
         WHERE
         t1.F_ID = #{id, jdbcType=VARCHAR}
+    </select>
+
+    <select id="getOrders" resultMap="Orders">
+        SELECT t1.F_ID, t1.F_TRACK_ID, t3.NAME, t1.F_ORDER_STATUS FROM
+        T_ORDER t1
+        LEFT JOIN T_ORDER_COMMODITY t2
+        ON t1.F_ID = t2.F_ORDER_ID
+        LEFT JOIN T_COMMODITY t3
+        ON t2.F_COMMODITY_ID = t3.F_ID
     </select>
 
 </mapper>

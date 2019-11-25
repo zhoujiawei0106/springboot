@@ -10,6 +10,11 @@ public class Commodity extends BaseEntity implements Serializable {
     private String id;
 
     /**
+     * 商品名称（前端格式所需）
+     */
+    private String value;
+
+    /**
      * 商品名称
      */
     private String name;
@@ -49,10 +54,16 @@ public class Commodity extends BaseEntity implements Serializable {
      */
     private BigDecimal shopNum;
 
+    /**
+     * 有效状态 0.无效 1.有效
+     */
+    private String isDelete;
+
     @Override
     public String toString() {
         return "Commodity{" +
                 "id='" + id + '\'' +
+                ", value='" + value + '\'' +
                 ", name='" + name + '\'' +
                 ", enName='" + enName + '\'' +
                 ", price='" + price + '\''  +
@@ -60,7 +71,24 @@ public class Commodity extends BaseEntity implements Serializable {
                 ", basePrice='" + basePrice + '\''  +
                 ", category='" + category + '\''  +
                 ", brand='" + brand + '\''  +
+                ", isDelete='" + isDelete + '\''  +
                 '}';
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(String isDelete) {
+        this.isDelete = isDelete;
     }
 
     public String getEnName() {

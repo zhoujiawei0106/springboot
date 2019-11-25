@@ -5,27 +5,31 @@
     <resultMap id="commoditys" type="cn.com.zjw.springboot.entity.purchase.Commodity">
         <id column="F_ID" property="id" jdbcType="VARCHAR"/>
         <result column="F_NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="F_VALUE" property="value" jdbcType="VARCHAR"/>
         <result column="F_EN_NAME" property="enName" jdbcType="VARCHAR"/>
         <result column="F_PRICE" property="price" jdbcType="NUMERIC"/>
-        <result column="F_BASEPRICE" property="basePrice" jdbcType="NUMERIC"/>
+        <result column="F_BASE_PRICE" property="basePrice" jdbcType="NUMERIC"/>
         <result column="F_CATEGORY" property="category" jdbcType="VARCHAR"/>
         <result column="F_BRAND" property="brand" jdbcType="VARCHAR"/>
-        <result column="F_SHOPNUM" property="shopNum" jdbcType="NUMERIC"/>
+        <result column="F_SHOP_NUM" property="shopNum" jdbcType="NUMERIC"/>
+        <result column="F_IS_DELETE" property="isDelete" jdbcType="VARCHAR"/>
     </resultMap>
 
     <select id="getCommoditys" resultMap="commoditys">
         SELECT
             F_ID,
+            F_NAME AS F_VALUE,
             F_NAME,
             F_EN_NAME,
             F_PRICE,
-            F_BASEPRICE,
+            F_BASE_PRICE,
             F_CATEGORY,
             F_BRAND
         FROM
             T_COMMODITY
         WHERE
         1 = 1
+        AND F_IS_DELETE = '1'
         <if test="commodity.name != null and commodity.name != ''">
             AND F_NAME like '%' || #{commodity.name, jdbcType=VARCHAR} || '%'
         </if>
@@ -46,14 +50,14 @@
             t1.F_NAME,
             t1.F_EN_NAME,
             t1.F_PRICE,
-            t1.F_BASEPRICE,
+            t1.F_BASE_PRICE,
             t1.F_CATEGORY,
             t1.F_BRAND,
-            t2.F_SHOPNUM
+            t2.F_SHOP_NUM
         FROM
             T_COMMODITY t1
         LEFT JOIN T_INVENTORY t2
-        ON t1.F_ID = t2.F_COMMODITYID
+        ON t1.F_ID = t2.F_COMMODITY_ID
         WHERE
         t1.F_ID = #{id, jdbcType=VARCHAR}
     </select>
@@ -64,9 +68,10 @@
             F_NAME,
             F_EN_NAME,
             F_PRICE,
-            F_BASEPRICE,
+            F_BASE_PRICE,
             F_CATEGORY,
             F_BRAND,
+            F_IS_DELETE,
             F_CREATE_TIMESTAMP,
             F_UPDATE_TIMESTAMP
         ) VALUES (
@@ -77,6 +82,7 @@
             #{commodity.basePrice, jdbcType=NUMERIC},
             #{commodity.category, jdbcType=VARCHAR},
             #{commodity.brand, jdbcType=VARCHAR},
+            #{commodity.isDelete, jdbcType=VARCHAR},
             sysdate,
             sysdate
         )
@@ -89,7 +95,7 @@
             F_NAME = #{commodity.name, jdbcType=VARCHAR},
             F_EN_NAME = #{commodity.enName, jdbcType=VARCHAR},
             F_PRICE = #{commodity.price, jdbcType=NUMERIC},
-            F_BASEPRICE = #{commodity.basePrice, jdbcType=NUMERIC},
+            F_BASE_PRICE = #{commodity.basePrice, jdbcType=NUMERIC},
             F_CATEGORY = #{commodity.category, jdbcType=VARCHAR},
             F_BRAND = #{commodity.brand, jdbcType=VARCHAR},
             F_UPDATE_TIMESTAMP = sysdate
@@ -98,9 +104,11 @@
     </update>
 
     <delete id="delete">
-         DELETE FROM
-           T_COMMODITY
-        WHERE
-            f_id = #{id, jdbcType=VARCHAR}
+         UPDATE
+            T_COMMODITY
+         SET
+            F_IS_DELETE = '0'
+         WHERE
+            F_ID = #{id, jdbcType=VARCHAR}
     </delete>
 </mapper>

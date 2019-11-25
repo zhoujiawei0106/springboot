@@ -37,9 +37,9 @@ public interface OrderService {
 
     /**
      * 新增订单信息
-     * @param orderList
+     * @param order
      * @param userId
      */
-    public void save(List<Order> orderList, String userId);
+    public void save(Order order, String userId);
 
 }

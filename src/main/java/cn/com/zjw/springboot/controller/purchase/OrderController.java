@@ -72,20 +72,7 @@ public class OrderController extends BaseController {
     @PostMapping(value = "/save")
     public Map<String, Object> save(Order order, HttpServletRequest request) {
         try {
-            List<Order> orderList = new ArrayList();
-            String[] priceAll = order.getPriceAll().split(",");
-            String[] nameAll = order.getNameAll().split(",");
-            String[] shopNumAll = order.getShopNumAll().split(",");
-            String[] idAll = order.getIdAll().split(",");
-            for(int i = 0; i <order.getPriceAll().split(",").length; i++) {
-                Order entity = new Order();
-                entity.setShopNum(new BigDecimal(shopNumAll[i]));
-                entity.setPrice(new BigDecimal(priceAll[i]));
-                entity.setName(nameAll[i]);
-                entity.setInventoryId(idAll[i]);
-                orderList.add(entity);
-            }
-            orderService.save(orderList, getUserId(getToken(request)));
+            orderService.save(order, getUserId(getToken(request)));
             return success("订单新增成功");
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

@@ -41,5 +41,5 @@ public interface CommodityMapper {
      * 删除商品
      * @param id
      */
-    public void delete(String id);
+    public void delete(@Param("id") String id);
 }

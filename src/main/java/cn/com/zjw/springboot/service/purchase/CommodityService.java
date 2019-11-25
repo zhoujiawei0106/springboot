@@ -21,6 +21,14 @@ public interface CommodityService {
     public PageInfo getCommoditys(Commodity commodity, String userId);
 
     /**
+     * 获取客户列表（order）
+     * @param commodity
+     * @param userId
+     * @return
+     */
+    public List<Commodity> getCommoditysOfOrder(Commodity commodity, String userId);
+
+    /**
      * 新增商品
      * @param commodity
      */

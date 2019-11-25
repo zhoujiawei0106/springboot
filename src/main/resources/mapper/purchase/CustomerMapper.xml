@@ -5,6 +5,7 @@
     <resultMap id="customers" type="cn.com.zjw.springboot.entity.purchase.Customer">
         <id column="f_id" property="id" jdbcType="VARCHAR"/>
         <result column="F_NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="F_VALUE" property="value" jdbcType="VARCHAR"/>
         <result column="F_PARENT_ID" property="parentId" jdbcType="VARCHAR"/>
         <result column="F_TEL" property="tel" jdbcType="NUMERIC"/>
         <result column="F_ADDRESS" property="address" jdbcType="VARCHAR"/>
@@ -27,8 +28,9 @@
             ELSE
                 t1.f_name
             END AS f_name,
-            t1.f_name as name ,
-            t2.user_name as f_parent_id,
+            t1.f_name AS F_VALUE,
+            t1.f_name AS NAME ,
+            t2.user_name AS f_parent_id,
             t1.f_tel,
             t1.f_address,
             t1.f_idcard,

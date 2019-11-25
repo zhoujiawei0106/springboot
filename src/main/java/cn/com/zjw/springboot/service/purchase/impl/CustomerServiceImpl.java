@@ -45,6 +45,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public List<Customer> getCustomersOfOrder(Customer customer, String userId) {
+        logger.info("根据条件查询所有用户----" + customer.toString());
+        List<Customer> list = customerMapper.getCustomers(customer, userId);
+        transfer(list);
+        return list;
+    }
+
+    @Override
     public void save(Customer customer) throws Exception {
         checkData(customer);
 

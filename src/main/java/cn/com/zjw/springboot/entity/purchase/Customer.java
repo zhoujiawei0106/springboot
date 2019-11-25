@@ -10,6 +10,11 @@ public class Customer extends BaseEntity implements Serializable {
     private String id;
 
     /**
+     * 客户名称(order)
+     */
+    private String value;
+
+    /**
      * 客户名称
      */
     private String name;
@@ -80,6 +85,14 @@ public class Customer extends BaseEntity implements Serializable {
                 ", createTimestamp='" + createTimestamp + '\'' +
                 ", updateTimestamp='" + updateTimestamp + '\'' +
                 '}';
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public String getId() {

@@ -24,6 +24,11 @@
             <name>aliyun</name>
             <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
         </repository>
+<!--        <repository>-->
+<!--            <id>mvn</id>-->
+<!--            <name>mvn</name>-->
+<!--            <url>http://repo1.maven.org/maven2/</url>-->
+<!--        </repository>-->
     </repositories>
 
     <properties>
@@ -36,6 +41,7 @@
         <pagehelper.version>5.1.10</pagehelper.version>
         <jwt.version>3.8.1</jwt.version>
         <poi.version>4.1.0</poi.version>
+        <fastjson.version>1.2.9</fastjson.version>
     </properties>
 
     <dependencies>
@@ -141,6 +147,13 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
             <version>${poi.version}</version>
+        </dependency>
+
+        <!-- fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.62</version>
         </dependency>
     </dependencies>
 

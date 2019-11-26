@@ -48,6 +48,8 @@ public class User extends BaseEntity implements Serializable {
      */
     private String status;
 
+    private Integer userType;
+
     @Override
     public String toString() {
         return "User{" +
@@ -61,6 +63,7 @@ public class User extends BaseEntity implements Serializable {
                 ", parentId='" + parentId + '\'' +
                 ", tel='" + tel + '\'' +
                 ", status='" + status + '\'' +
+                ", userType='" + userType + '\'' +
                 '}';
     }
 
@@ -142,5 +145,13 @@ public class User extends BaseEntity implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Integer getUserType() {
+        return userType;
+    }
+
+    public void setUserType(Integer userType) {
+        this.userType = userType;
     }
 }

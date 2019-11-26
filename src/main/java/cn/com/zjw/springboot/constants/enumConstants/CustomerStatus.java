@@ -13,7 +13,7 @@ public enum CustomerStatus {
 
     private String label;
 
-    private CustomerStatus(String value, String label) {
+    CustomerStatus(String value, String label) {
         this.value = value;
         this.label = label;
     }

@@ -1,7 +1,9 @@
 package cn.com.zjw.springboot.controller.system;
 
 import cn.com.zjw.springboot.controller.BaseController;
+import cn.com.zjw.springboot.dto.system.PermissionMenu;
 import cn.com.zjw.springboot.entity.system.Role;
+import cn.com.zjw.springboot.service.system.MenuService;
 import cn.com.zjw.springboot.service.system.RoleService;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,6 +29,9 @@ public class RoleController extends BaseController {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private MenuService menuService;
 
     /**
      * 获取角色
@@ -44,5 +50,25 @@ public class RoleController extends BaseController {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());
         }
+    }
+
+    /**
+     * 获取登陆用户未分配菜单(所有用户均只能看到自己的角色)
+     * @author zhoujiawei
+     * @param roleId
+     * @param type 操作类型，新增查询还是修改查询
+     * @param request
+     * @return
+     */
+    @GetMapping("/getUndistributedMenu")
+    public Map<String, Object> getUndistributedMenu(String roleId, String type, HttpServletRequest request) {
+        try {
+            List<PermissionMenu> list = menuService.getUndistributedMenu(getUserId(getToken(request)), type, roleId);
+            return success(list);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+
     }
 }

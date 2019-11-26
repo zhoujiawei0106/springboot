@@ -20,7 +20,7 @@ public enum CommodityCategory {
 
     private String label;
 
-    private CommodityCategory(String value, String label) {
+    CommodityCategory(String value, String label) {
         this.value = value;
         this.label = label;
     }

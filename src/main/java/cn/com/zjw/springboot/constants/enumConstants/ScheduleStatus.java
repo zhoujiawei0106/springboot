@@ -14,7 +14,7 @@ public enum ScheduleStatus {
 
     private String label;
 
-    private ScheduleStatus(String value, String label) {
+    ScheduleStatus(String value, String label) {
         this.value = value;
         this.label = label;
     }

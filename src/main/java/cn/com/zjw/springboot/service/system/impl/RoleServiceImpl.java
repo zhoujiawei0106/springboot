@@ -1,6 +1,7 @@
 package cn.com.zjw.springboot.service.system.impl;
 
 import cn.com.zjw.springboot.entity.system.Role;
+import cn.com.zjw.springboot.mapper.system.MenuMapper;
 import cn.com.zjw.springboot.mapper.system.RoleMapper;
 import cn.com.zjw.springboot.service.system.RoleService;
 import com.github.pagehelper.PageHelper;
@@ -22,6 +23,9 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private RoleMapper roleMapper;
 
+    @Autowired
+    private MenuMapper menuMapper;
+
     @Override
     public PageInfo getRoles(Role role) {
         PageHelper.startPage(role.getPage(), role.getRows());
@@ -30,4 +34,6 @@ public class RoleServiceImpl implements RoleService {
         PageInfo pageInfo = new PageInfo(list);
         return pageInfo;
     }
+
+
 }

@@ -22,16 +22,8 @@
             t_user t2
         ON
             t1.user_id = t2.id
-
         WHERE
-            t1.user_id LIKE (
-            CASE
-                WHEN t2.parent_id = '0' THEN
-                    '%%'
-                ELSE
-                    #{role.userId}
-            END
-        )
+            t1.user_id = #{role.userId}
     </select>
 
 </mapper>

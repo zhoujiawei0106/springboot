@@ -45,4 +45,12 @@ public class CodeConstants {
     public static final String VAILD = "1";
     // 注销
     public static final String CANCEL = "2";
+
+    /**
+     * 用户类型
+     */
+    // 管理员用户
+    public static final Integer USER_TYPE_ADMIN = 1;
+    // 普通用户
+    public static final Integer USER_TYPE_NORMAL = 2;
 }

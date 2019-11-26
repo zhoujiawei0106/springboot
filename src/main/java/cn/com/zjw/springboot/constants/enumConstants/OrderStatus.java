@@ -17,7 +17,7 @@ public enum OrderStatus {
 
     private String label;
 
-    private OrderStatus(String value, String label) {
+    OrderStatus(String value, String label) {
         this.value = value;
         this.label = label;
     }

@@ -107,8 +107,8 @@ public class LoginController extends BaseController {
             // 返回用户的菜单
             List<Menu> menuList = menuService.getUserMenu(user.getId());
             // 复制返回用户的菜单
-            List<Menu> coypMenus = new ArrayList<>();
-            coypMenus.addAll(menuList);
+            List<Menu> copyMenus = new ArrayList<>();
+            copyMenus.addAll(menuList);
             // 所有一级菜单
             List<MenuDto> addList = new ArrayList<>();
             for (Menu menu : menuList) {
@@ -118,9 +118,9 @@ public class LoginController extends BaseController {
                     menuDto.setName(menu.getMenuName());
                     addList.add(menuDto);
 
-                    coypMenus.remove(menu);
+                    copyMenus.remove(menu);
 
-                    recursionMenu(coypMenus, addList, menuDto, menu.getId());
+                    recursionMenu(copyMenus, addList, menuDto, menu.getId());
                 }
             }
 
@@ -160,6 +160,4 @@ public class LoginController extends BaseController {
         }
         return addList;
     }
-
-
 }

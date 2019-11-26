@@ -14,7 +14,7 @@ public enum CustomerType {
 
     private String label;
 
-    private CustomerType(String value, String label) {
+    CustomerType(String value, String label) {
         this.value = value;
         this.label = label;
     }

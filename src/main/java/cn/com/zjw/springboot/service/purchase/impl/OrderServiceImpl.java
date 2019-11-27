@@ -1,9 +1,13 @@
 package cn.com.zjw.springboot.service.purchase.impl;
 
 import cn.com.zjw.springboot.constants.enumConstants.OrderStatus;
+import cn.com.zjw.springboot.entity.purchase.Commodity;
+import cn.com.zjw.springboot.entity.purchase.Customer;
 import cn.com.zjw.springboot.entity.purchase.Order;
 import cn.com.zjw.springboot.mapper.purchase.OrderMapper;
 import cn.com.zjw.springboot.service.purchase.OrderService;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -60,31 +64,77 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void update(List<Order> orderList,String id, String userId) throws Exception {
-        logger.info("修改订单信息-----" + orderList.toString());
-        Order order = new Order();
-        order.setOrderStatus("2");
-        orderMapper.delete(id);
-        orderMapper.update(order, id, orderList);
-        logger.info("订单信息新增成功");
+    public Order getCustomerForOrder(String id, String userId) throws Exception {
+        if (StringUtils.isBlank(id)) {
+            throw new Exception("订单编码不能为空");
+        }
+        if (StringUtils.isBlank(userId)) {
+            logger.error("系统异常，上级用户代码为空");
+            throw new Exception("系统异常，上级用户代码为空");
+        }
+        Order order = orderMapper.getCustomerForOrder(id, userId);
+        if (order == null) {
+            throw new Exception("无法获取订单信息");
+        }
+        logger.info(order.toString());
+        return order;
     }
 
     @Override
-    public void save(Order order, String userId) {
+    public List<Commodity> getCommodityForOrder(String id, String userId) throws Exception {
+        if (StringUtils.isBlank(id)) {
+            throw new Exception("订单编码不能为空");
+        }
+        if (StringUtils.isBlank(userId)) {
+            logger.error("系统异常，上级用户代码为空");
+            throw new Exception("系统异常，上级用户代码为空");
+        }
+        List<Commodity> commodityList = orderMapper.getCommodityForOrder(id);
+        return commodityList;
+    }
+
+    @Override
+    public void save(Order order, String userId) throws Exception {
         logger.info("新增订单信息-----" + order.toString());
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("YYMMddHHmmss");
         String orderId = "OD" + sdf.format(date);
         Order newOrder = new Order();
         newOrder.setId(orderId);
-        newOrder.setOrderStatus("2");
-        order.getTableData();
-
-
-
-
-       /* orderMapper.save(order,orderList);*/
+        if(order.getOrderStatus().equals(OrderStatus.Order_FALSE.getValue()) && StringUtils.isNotBlank(order.getTrackId())){
+            throw new Exception("未支付状态无法填写快递单号");
+        }
+        newOrder.setOrderStatus(order.getOrderStatus());
+        newOrder.setTrackId(order.getTrackId());
+        JSONArray orderArray = JSON.parseArray(order.getTableData());
+        orderMapper.saveOrderAndCommodity(orderArray,orderId);
+        orderMapper.saveOrder(newOrder,order.getId());
         logger.info("订单信息新增成功");
+    }
+
+    @Override
+    public void update(Order order, String userId) throws Exception {
+        if (StringUtils.isBlank(order.getId())) {
+            throw new Exception("订单id不能为空");
+        }
+        if (StringUtils.isBlank(userId)) {
+            logger.error("系统异常，上级用户代码为空");
+            throw new Exception("系统异常，上级用户代码为空");
+        }
+        logger.info("修改订单信息-----" + order.toString());
+        Order newOrder = new Order();
+        newOrder.setId(order.getId());
+        if(order.getOrderStatus().equals(OrderStatus.Order_FALSE.getValue()) && StringUtils.isNotBlank(order.getTrackId())){
+            throw new Exception("未支付状态无法填写快递单号");
+        }
+        newOrder.setOrderStatus(order.getOrderStatus());
+        newOrder.setTrackId(order.getTrackId());
+        JSONArray orderArray = JSON.parseArray(order.getTableData());
+        orderMapper.deleteOrderAndCommodity(order.getId());
+        orderMapper.deleteOrder(order.getId());
+        orderMapper.saveOrderAndCommodity(orderArray,order.getId());
+        orderMapper.saveOrder(newOrder,order.getCustomerId());
+        logger.info("订单信息修改成功");
     }
 
     /**

@@ -45,4 +45,12 @@ public interface CustomerMapper {
      * @param id
      */
     public void delete(@Param("id") String id);
+
+    /**
+     * 获取订单客户信息
+     * @param id
+     * @param userId
+     * @return
+     */
+    Customer getCustomerForOrder(String id, String userId);
 }

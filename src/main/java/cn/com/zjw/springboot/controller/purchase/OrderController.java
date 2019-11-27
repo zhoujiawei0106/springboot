@@ -2,7 +2,10 @@ package cn.com.zjw.springboot.controller.purchase;
 
 import cn.com.zjw.springboot.constants.enumConstants.OrderStatus;
 import cn.com.zjw.springboot.controller.BaseController;
+import cn.com.zjw.springboot.entity.purchase.Commodity;
+import cn.com.zjw.springboot.entity.purchase.Customer;
 import cn.com.zjw.springboot.entity.purchase.Order;
+import cn.com.zjw.springboot.service.purchase.CustomerService;
 import cn.com.zjw.springboot.service.purchase.OrderService;
 import com.github.pagehelper.PageInfo;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -10,8 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,9 @@ public class OrderController extends BaseController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private CustomerService customerService;
 
     /**
      * 获取订单列表
@@ -55,8 +59,9 @@ public class OrderController extends BaseController {
     @GetMapping("/getOrder")
     public Map<String, Object> getOrder(String id, HttpServletRequest request) {
         try {
-            List<Order> orderList = orderService.getOrder(id, getUserId(getToken(request)));
-            return success(orderList);
+            Order order = orderService.getCustomerForOrder(id,getUserId(getToken(request)));
+            List<Commodity> commodityList = orderService.getCommodityForOrder(id,getUserId(getToken(request)));
+            return success(order,commodityList);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());
@@ -88,22 +93,9 @@ public class OrderController extends BaseController {
      * @return
      */
     @PostMapping("/update")
-    public Map<String, Object> update(Order order,String id, HttpServletRequest request) {
+    public Map<String, Object> update(Order order, HttpServletRequest request) {
         try {
-            List<Order> orderList = new ArrayList();
-            String[] priceAll = order.getPriceAll().split(",");
-            String[] nameAll = order.getNameAll().split(",");
-            String[] shopNumAll = order.getShopNumAll().split(",");
-            String[] idAll = order.getIdAll().split(",");
-            for(int i = 0; i <order.getPriceAll().split(",").length; i++) {
-                Order entity = new Order();
-                entity.setShopNum(new BigDecimal(shopNumAll[i]));
-                entity.setPrice(new BigDecimal(priceAll[i]));
-                entity.setName(nameAll[i]);
-                entity.setInventoryId(idAll[i]);
-                orderList.add(entity);
-            }
-            orderService.update(orderList, id, getUserId(getToken(request)));
+            orderService.update(order, getUserId(getToken(request)));
             return success("订单修改成功");
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

@@ -4,7 +4,6 @@ import cn.com.zjw.springboot.entity.BaseEntity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 
 public class Order extends BaseEntity implements Serializable {
 
@@ -31,18 +30,6 @@ public class Order extends BaseEntity implements Serializable {
     private BigDecimal totalPrice;
 
     /**
-     * 商品单价
-     * @return
-     */
-    private BigDecimal price;
-
-    /**
-     * 商品数量
-     * @return
-     */
-    private BigDecimal shopNum;
-
-    /**
      * 创建时间
      * @return
      */
@@ -65,105 +52,33 @@ public class Order extends BaseEntity implements Serializable {
     private String tableData;
 
     /**
-     * 订单
+     * Order中商品信息
      */
-    private List<Order> orderList;
+    private String sName;
 
-    private String priceAll;
+    private BigDecimal price;
 
-    private String shopNumAll;
+    private BigDecimal basePrice;
 
-    private String nameAll;
+    private BigDecimal rePrice;
 
-    private String idAll;
+    private BigDecimal shopNum;
 
-    public String getTrackId() {
-        return trackId;
-    }
 
-    public String getTableData() {
-        return tableData;
-    }
+    /**
+     * Order中客户信息
+     */
+    private String commodityId;
 
-    public void setTableData(String tableData) {
-        this.tableData = tableData;
-    }
+    private String customerId;
 
-    public void setTrackId(String trackId) {
-        this.trackId = trackId;
-    }
+    private String address;
 
-    public String geteName() {
-        return eName;
-    }
+    private String tel;
 
-    public void seteName(String eName) {
-        this.eName = eName;
-    }
+    private String nickName;
 
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
-
-    public String getInventoryId() {
-        return inventoryId;
-    }
-
-    public void setInventoryId(String inventoryId) {
-        this.inventoryId = inventoryId;
-    }
-
-    public String getIdAll() {
-        return idAll;
-    }
-
-    public void setIdAll(String idAll) {
-        this.idAll = idAll;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPriceAll() {
-        return priceAll;
-    }
-
-    public void setPriceAll(String priceAll) {
-        this.priceAll = priceAll;
-    }
-
-    public String getShopNumAll() {
-        return shopNumAll;
-    }
-
-    public void setShopNumAll(String shopNumAll) {
-        this.shopNumAll = shopNumAll;
-    }
-
-    public String getNameAll() {
-        return nameAll;
-    }
-
-    public void setNameAll(String nameAll) {
-        this.nameAll = nameAll;
-    }
-
-    public List<Order> getOrderList() {
-        return orderList;
-    }
-
-    public void setOrderList(List<Order> orderList) {
-        this.orderList = orderList;
-    }
+    private String idCard;
 
     public String getId() {
         return id;
@@ -173,21 +88,28 @@ public class Order extends BaseEntity implements Serializable {
         this.id = id;
     }
 
+    public String getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(String orderNum) {
+        this.orderNum = orderNum;
+    }
+
+    public String getTrackId() {
+        return trackId;
+    }
+
+    public void setTrackId(String trackId) {
+        this.trackId = trackId;
+    }
+
     public String getOrderStatus() {
         return orderStatus;
     }
 
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
-    }
-
-
-    public String getOrderNum() {
-        return this.getId();
-    }
-
-    public void setOrderNum(String orderNum) {
-        this.orderNum = id;
     }
 
     public BigDecimal getTotalPrice() {
@@ -228,5 +150,117 @@ public class Order extends BaseEntity implements Serializable {
 
     public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getInventoryId() {
+        return inventoryId;
+    }
+
+    public void setInventoryId(String inventoryId) {
+        this.inventoryId = inventoryId;
+    }
+
+    public String geteName() {
+        return eName;
+    }
+
+    public void seteName(String eName) {
+        this.eName = eName;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getTableData() {
+        return tableData;
+    }
+
+    public void setTableData(String tableData) {
+        this.tableData = tableData;
+    }
+
+    public String getsName() {
+        return sName;
+    }
+
+    public void setsName(String sName) {
+        this.sName = sName;
+    }
+
+    public BigDecimal getBasePrice() {
+        return basePrice;
+    }
+
+    public void setBasePrice(BigDecimal basePrice) {
+        this.basePrice = basePrice;
+    }
+
+    public BigDecimal getRePrice() {
+        return rePrice;
+    }
+
+    public void setRePrice(BigDecimal rePrice) {
+        this.rePrice = rePrice;
+    }
+
+    public String getCommodityId() {
+        return commodityId;
+    }
+
+    public void setCommodityId(String commodityId) {
+        this.commodityId = commodityId;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
     }
 }

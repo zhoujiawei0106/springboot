@@ -3,15 +3,26 @@
 <mapper namespace="cn.com.zjw.springboot.mapper.purchase.OrderMapper">
     <resultMap id="Orders" type="cn.com.zjw.springboot.entity.purchase.Order">
         <id column="F_ID" property="id" jdbcType="VARCHAR"/>
+        <result column="F_ORDER_NUM" property="orderNum" jdbcType="VARCHAR"/>
+        <result column="F_NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="F_COMMODITY_ID" property="commodityId" jdbcType="VARCHAR"/>
+        <result column="F_COMMODITY_NAME" property="sName" jdbcType="VARCHAR"/>
+        <result column="F_PRICE" property="price" jdbcType="VARCHAR"/>
+        <result column="F_BASE_PRICE" property="basePrice" jdbcType="VARCHAR"/>
+        <result column="F_REPRICE" property="rePrice" jdbcType="VARCHAR"/>
+        <result column="F_COMMODITY_ID" property="commodityId" jdbcType="VARCHAR"/>
+        <result column="F_COMMODITY_ID" property="commodityId" jdbcType="VARCHAR"/>
+        <result column="F_CUSTOMER_ID" property="customerId" jdbcType="VARCHAR"/>
+        <result column="F_ADDRESS" property="address" jdbcType="VARCHAR"/>
+        <result column="F_TEL" property="tel" jdbcType="VARCHAR"/>
+        <result column="F_NICKNAME" property="nickName" jdbcType="VARCHAR"/>
+        <result column="F_IDCARD" property="idCard" jdbcType="VARCHAR"/>
         <result column="F_ORDER_STATUS" property="orderStatus" jdbcType="VARCHAR"/>
         <result column="F_TRACK_ID" property="trackId" jdbcType="VARCHAR"/>
         <result column="F_SHOP_NUM" property="shopNum" jdbcType="NUMERIC"/>
-        <result column="F_NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="F_TOTAL_PRICE" property="totalPrice" jdbcType="NUMERIC"/>
         <result column="F_CREATE_TIMESTAMP" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="F_UPDATE_TIMESTAMP" property="updateTime" jdbcType="TIMESTAMP"/>
-        <!-- <result column="F_TOTALPRICE" property="totalPrice" jdbcType="NUMERIC"/>-->
-        <!-- <result column="F_EN_EAME" property="eName" jdbcType="VARCHAR"/>-->
-        <!--<result column="F_BRAND" property="brand" jdbcType="VARCHAR"/>-->
     </resultMap>
 
     <insert id="save">
@@ -37,60 +48,56 @@
         </foreach>
     </insert>
 
-    <update id="update">
-        INSERT INTO T_ORDER(
+    <insert id="saveOrderAndCommodity">
+        INSERT INTO T_ORDER_COMMODITY(
         F_ID,
-        F_INVENTORYID,
-        F_ORDERSTATUS,
-        F_PRICE,
-        F_SHOPNUM,
-        F_CREATETIME,
-        F_UPDATETIME
+        F_COMMODITY_ID,
+        F_ORDER_ID,
+        F_SHOP_NUM
         )
-        <foreach collection="orderList" item="list" index="index" separator="UNION ALL">
+        <foreach collection="orderArray" item="oa" index="index" separator="UNION ALL">
             SELECT
-            #{id,jdbcType=VARCHAR},
-            #{list.inventoryId,jdbcType=VARCHAR},
-            #{order.orderStatus,jdbcType=VARCHAR},
-            #{list.price,jdbcType=NUMERIC},
-            #{list.shopNum,jdbcType=NUMERIC},
-            to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),
-            to_char(sysdate,'yyyy-mm-dd hh24:mi:ss')
+            #{oa.id,jdbcType=VARCHAR} || to_char(sysdate,'yyyymmddhh24miss'),
+            #{oa.id,jdbcType=VARCHAR},
+            #{orderId,jdbcType=VARCHAR},
+            #{oa.shopNum,jdbcType=NUMERIC}
             FROM dual
         </foreach>
-    </update>
+    </insert>
 
-    <delete id="delete">
+    <insert id="saveOrder">
+        INSERT INTO T_ORDER(
+        F_ID,
+        F_CUSTOMER_ID,
+        F_TRACK_ID,
+        F_ORDER_STATUS,
+        F_CREATE_TIMESTAMP,
+        F_UPDATE_TIMESTAMP
+        )
+        VALUES (
+        #{order.id,jdbcType=VARCHAR},
+        #{customerId,jdbcType=VARCHAR},
+        #{order.trackId,jdbcType=VARCHAR},
+        #{order.orderStatus,jdbcType=VARCHAR},
+        sysdate,
+        sysdate
+        )
+    </insert>
+
+    <delete id="deleteOrder">
         DELETE FROM
-            T_ORDER
-            WHERE
-            F_ID = #{id, jdbcType=VARCHAR}
+        T_ORDER
+        WHERE
+        F_ID = #{id}
     </delete>
 
-
-
-    <!--<select id="getOrders" resultMap="Orders">
-        WITH tmp AS (
-          SELECT
-            (F_PRICE*F_SHOPNUM) AS F_TOTALPRICE,
-            F_ID,
-            F_ORDERSTATUS,
-             F_CREATETIME,
-            F_UPDATETIME
-          FROM T_ORDER
-        )
-        SELECT
-            F_ID,
-            F_ORDERSTATUS,
-            sum(F_TOTALPRICE) AS F_TOTALPRICE,
-            F_CREATETIME,
-            F_UPDATETIME
-        FROM tmp
+    <delete id="deleteOrderAndCommodity">
+        DELETE FROM
+        T_ORDER_COMMODITY
         WHERE
-        1 = 1
-        GROUP BY F_ID,F_ORDERSTATUS,F_CREATETIME,F_UPDATETIME
-        ORDER BY F_ID DESC
-    </select>-->
+        F_ORDER_ID = #{id}
+    </delete>
+
 
     <select id="getOrder" resultMap="Orders">
         SELECT
@@ -108,12 +115,46 @@
     </select>
 
     <select id="getOrders" resultMap="Orders">
-        SELECT t1.F_ID, t1.F_TRACK_ID, t3.NAME, t1.F_ORDER_STATUS FROM
+    WITH tmp AS (
+          SELECT t1.F_ID,SUM(t2.f_shop_num * t3.f_price) F_TOTAL_PRICE
+          FROM T_ORDER t1
+          LEFT JOIN T_ORDER_COMMODITY t2
+          ON t1.F_ID = t2.F_ORDER_ID
+          LEFT JOIN T_COMMODITY t3
+          ON t2.F_COMMODITY_ID = t3.F_ID
+          WHERE 1=1
+          GROUP BY t1.F_ID
+        )
+        SELECT t1.F_ID, t1.F_ID F_ORDER_NUM, t1.F_TRACK_ID, t1.F_ORDER_STATUS,t2.F_NAME F_NAME,t3.F_TOTAL_PRICE F_TOTAL_PRICE
+        FROM
         T_ORDER t1
+        LEFT JOIN T_CUSTOMER t2
+        ON t1.F_CUSTOMER_ID = t2.F_ID
+        LEFT JOIN tmp t3
+        ON t1.F_ID = t3.F_ID
+        ORDER BY F_ORDER_NUM
+    </select>
+
+    <select id="getCustomerForOrder" resultMap="Orders">
+        SELECT t1.F_ID F_ORDER_NUM,t2.F_ID F_CUSTOMER_ID,t2.F_NAME,t2.F_NICKNAME,t2.F_IDCARD,t2.F_TEL,t2.F_ADDRESS,t1.F_TRACK_ID,t1.F_ORDER_STATUS
+        FROM
+        T_ORDER t1
+        LEFT JOIN T_CUSTOMER t2
+        ON t1.F_CUSTOMER_ID = t2.F_ID
+        WHERE 1=1
+        AND t1.F_ID = #{id, jdbcType=VARCHAR}
+    </select>
+
+    <select id="getCommodityForOrder" resultMap="Orders">
+        SELECT
+        t3.F_ID,t3.F_NAME F_COMMODITY_NAME,t2.F_SHOP_NUM,t3.F_PRICE,t3.F_BASE_PRICE,(t3.F_PRICE - t3.F_BASE_PRICE) F_REPRICE
+        FROM T_ORDER t1
         LEFT JOIN T_ORDER_COMMODITY t2
         ON t1.F_ID = t2.F_ORDER_ID
         LEFT JOIN T_COMMODITY t3
         ON t2.F_COMMODITY_ID = t3.F_ID
+        WHERE t1.F_ID = #{id, jdbcType=VARCHAR}
     </select>
+
 
 </mapper>

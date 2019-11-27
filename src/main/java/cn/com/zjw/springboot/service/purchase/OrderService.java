@@ -1,5 +1,7 @@
 package cn.com.zjw.springboot.service.purchase;
 
+import cn.com.zjw.springboot.entity.purchase.Commodity;
+import cn.com.zjw.springboot.entity.purchase.Customer;
 import cn.com.zjw.springboot.entity.purchase.Order;
 import com.github.pagehelper.PageInfo;
 
@@ -29,17 +31,32 @@ public interface OrderService {
     public List<Order> getOrder(String id, String userId) throws Exception;
 
     /**
-     * 修改订单信息
-     * @param orderList
-     * @param userId
-     */
-    public void update(List<Order> orderList, String id, String userId) throws Exception;
-
-    /**
      * 新增订单信息
      * @param order
      * @param userId
      */
-    public void save(Order order, String userId);
+    public void save(Order order, String userId) throws Exception;
 
+    /**
+     * 修改订单信息
+     * @param order
+     * @param userId
+     */
+    public void update(Order order, String userId) throws Exception;
+
+    /**
+     * 加载订单上相关的客户信息
+     * @param id
+     * @param userId
+     * @return
+     */
+    public Order getCustomerForOrder(String id, String userId) throws Exception;
+
+    /**
+     * 加载订单上相关的商品信息
+     * @param id
+     * @param userId
+     * @return
+     */
+    List<Commodity> getCommodityForOrder(String id, String userId) throws Exception;
 }

@@ -6,11 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 public enum OrderStatus {
-    Order_Success("1", "订单下单成功"),
-    Order_NoInventory("2", "订单下单成功库存不足"),
-    Order_Done("3", "订单已完成"),
-    Order_back("4", "订单撤销成功"),
-    Order_BackOfPart("5", "订单部分撤销成功"),
+    Order_FALSE("0", "未支付"),
+    Order_NoInventory("1", "已支付"),
     ;
 
     private String value;

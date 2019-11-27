@@ -136,6 +136,20 @@ public abstract class BaseController {
     }
 
     /**
+     * 请求成功返回前台数据
+     * @param data1 data2
+     * @return
+     */
+    public Map<String, Object> success(Object data1, Object data2) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("flag", true);
+        map.put("data1", data1);
+        map.put("data2", data2);
+        map.put("code",100001);
+        return map;
+    }
+
+    /**
      * 请求失败返回前台数据
      * @param msg
      * @return

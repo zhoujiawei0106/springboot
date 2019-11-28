@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 public enum CustomerStatus {
-    Agency("1", "有效"),
-    Customer("2", "注销");
+    Valid("1", "有效"),
+    Invalid("2", "注销");
 
     private String value;
 

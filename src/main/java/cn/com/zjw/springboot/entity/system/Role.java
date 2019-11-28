@@ -19,6 +19,11 @@ public class Role extends BaseEntity implements Serializable {
     private String roleName;
 
     /**
+     * 登陆名称
+     */
+    private String loginName;
+
+    /**
      * 备注
      */
     private String remark;
@@ -27,6 +32,18 @@ public class Role extends BaseEntity implements Serializable {
      * 用户名
      */
     private String userName;
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", roleName='" + roleName + '\'' +
+                ", roleName='" + loginName + '\'' +
+                ", remark='" + remark + '\'' +
+                ", userName='" + userName + '\'' +
+                '}';
+    }
 
     public String getId() {
         return id;
@@ -66,5 +83,13 @@ public class Role extends BaseEntity implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
     }
 }

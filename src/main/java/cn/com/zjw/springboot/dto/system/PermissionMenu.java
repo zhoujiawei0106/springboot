@@ -20,6 +20,17 @@ public class PermissionMenu implements Serializable {
 
     private List<PermissionMenu> children = new ArrayList<>();
 
+    @Override
+    public String toString() {
+        return "PermissionMenu{" +
+                "id='" + id + '\'' +
+                ", pid='" + pid + '\'' +
+                ", label='" + label + '\'' +
+                ", type='" + type + '\'' +
+                ", children=" + children +
+                '}';
+    }
+
     public String getId() {
         return id;
     }

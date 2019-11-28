@@ -7,6 +7,7 @@
         <result column="USER_ID" property="userId" jdbcType="VARCHAR"/>
         <result column="ROLE_NAME" property="roleName" jdbcType="VARCHAR"/>
         <result column="USER_NAME" property="userName" jdbcType="VARCHAR"/>
+        <result column="LOGIN_NAME" property="loginName" jdbcType="VARCHAR"/>
         <result column="REMARK" property="remark" jdbcType="VARCHAR"/>
     </resultMap>
 
@@ -15,7 +16,8 @@
             t1.id,
             t1.role_name,
             t1.remark,
-            t2.user_name
+            t2.user_name,
+            t2.login_name
         FROM
             t_role t1
         INNER JOIN
@@ -26,4 +28,51 @@
             t1.user_id = #{role.userId}
     </select>
 
+    <insert id="insert">
+        INSERT INTO t_role (
+            id,
+            user_id,
+            role_name,
+            remark,
+            creat_timestamp,
+            update_timestamp
+        )
+        VALUES (
+            #{role.id},
+            #{userId},
+            #{role.roleName},
+            #{role.remark, jdbcType=VARCHAR},
+            sysdate,
+            sysdate
+        )
+    </insert>
+
+    <insert id="insertPermission">
+        INSERT INTO t_permission (
+            id,
+            create_timestamp,
+            update_timestamp
+        )
+        VALUES (
+            #{id},
+            sysdate,
+            sysdate
+        )
+    </insert>
+
+    <insert id="insertRolePermission">
+        INSERT INTO T_ROLE_PERMISSION (
+            permission_id,
+            role_id,
+            menu_id
+        )
+        <foreach collection="list" item="item" index="index" separator="UNION ALL">
+            SELECT
+                #{permissionId},
+                #{roleId},
+                #{item.id}
+            FROM
+                dual
+        </foreach>
+    </insert>
 </mapper>

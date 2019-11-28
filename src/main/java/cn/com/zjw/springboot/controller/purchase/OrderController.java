@@ -30,8 +30,6 @@ public class OrderController extends BaseController {
     @Autowired
     private OrderService orderService;
 
-    @Autowired
-    private CustomerService customerService;
 
     /**
      * 获取订单列表
@@ -112,6 +110,24 @@ public class OrderController extends BaseController {
     public Map<String, Object> orderStatus() {
         try {
             return success(OrderStatus.getOrderStatus());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
+
+    /**
+     * 导出订单
+     * @author zhoujiawei
+     * @param order
+     * @param request
+     * @return
+     */
+    @GetMapping("/export")
+    public Map<String, Object> export(Order order, HttpServletRequest request) {
+        try {
+            List<Order> list = orderService.export(order, getUserId(getToken(request)));
+            return success(list);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());

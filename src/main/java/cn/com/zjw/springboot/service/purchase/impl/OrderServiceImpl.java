@@ -94,6 +94,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> export(Order order, String userId) {
+        logger.info("根据条件查询所有订单----" + order.toString());
+        List<Order> list = orderMapper.getOrders(order, userId);
+        transfer(list);
+        logger.info("导出的订单数据共 " + list.size() + "条");
+        return list;
+    }
+
+    @Override
     public void save(Order order, String userId) throws Exception {
         logger.info("新增订单信息-----" + order.toString());
         Date date = new Date();

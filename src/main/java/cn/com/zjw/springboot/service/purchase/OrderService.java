@@ -58,5 +58,13 @@ public interface OrderService {
      * @param userId
      * @return
      */
-    List<Commodity> getCommodityForOrder(String id, String userId) throws Exception;
+    public List<Commodity> getCommodityForOrder(String id, String userId) throws Exception;
+
+    /**
+     * 导出订单
+     * @param order
+     * @param userId
+     * @return
+     */
+    public List<Order> export(Order order, String userId);
 }

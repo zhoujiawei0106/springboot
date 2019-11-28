@@ -12,4 +12,14 @@ public interface RoleService {
      * @return
      */
     public PageInfo getRoles(Role role);
+
+    /**
+     * 保存角色
+     * @author zhoujiawei
+     * @param role
+     * @param menus
+     * @param userId
+     * @throws
+     */
+    public void save(Role role, String menus, String userId) throws Exception;
 }

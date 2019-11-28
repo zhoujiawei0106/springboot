@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -69,6 +70,24 @@ public class RoleController extends BaseController {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());
         }
+    }
 
+    /**
+     * 保存角色
+     * @author zhoujiawei
+     * @param role
+     * @param menus
+     * @param request
+     * @return
+     */
+    @PostMapping("/save")
+    public Map<String, Object> save(Role role, String menus, HttpServletRequest request) {
+        try {
+            roleService.save(role, menus, getUserId(getToken(request)));
+            return success("角色添加成功");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
     }
 }

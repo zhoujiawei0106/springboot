@@ -1,7 +1,6 @@
 package cn.com.zjw.springboot.service.system.impl;
 
 import cn.com.zjw.springboot.constants.enumConstants.CustomerStatus;
-import cn.com.zjw.springboot.dto.system.PermissionMenu;
 import cn.com.zjw.springboot.entity.system.Role;
 import cn.com.zjw.springboot.entity.system.User;
 import cn.com.zjw.springboot.mapper.system.RoleMapper;
@@ -62,6 +61,17 @@ public class RoleServiceImpl implements RoleService {
             insertRolePermission(list, role.getId(), permissionId);
         }
         logger.info("插入角色权限信息成功");
+    }
+
+    @Override
+    public Role getByRoleIdAndUserId(String roleId, String userId) throws Exception {
+        if (StringUtils.isBlank(roleId)) {
+            throw new Exception("角色代码不能为空");
+        }
+        if (StringUtils.isBlank(userId)) {
+            throw new Exception("用户代码不能为空");
+        }
+        return roleMapper.getByRoleIdAndUserId(roleId, userId);
     }
 
     private final void check(Role role, List<JSONObject> list, String userId) throws Exception {

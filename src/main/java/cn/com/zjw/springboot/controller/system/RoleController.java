@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -85,6 +86,34 @@ public class RoleController extends BaseController {
         try {
             roleService.save(role, menus, getUserId(getToken(request)));
             return success("角色添加成功");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
+
+    /**
+     * 获取角色已分配的菜单
+     * @author zhoujiawei
+     * @param roleId
+     * @param type 操作类型，新增查询还是修改查询
+     * @param request
+     * @return
+     */
+    @GetMapping("/getSelectRole")
+    public Map<String, Object> getSelectRole(String roleId, String type, HttpServletRequest request) {
+        try {
+            String userId = getUserId(getToken(request));
+            List<PermissionMenu> distributeMenu = menuService.getDistributeMenu(userId, roleId);
+            List<PermissionMenu> undistributedMenu = menuService.getUndistributedMenu(userId, type, roleId);
+            Role role = roleService.getByRoleIdAndUserId(roleId, userId);
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("distributeMenu", distributeMenu);
+            map.put("undistributedMenu", undistributedMenu);
+            map.put("role", role);
+
+            return success(map);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());

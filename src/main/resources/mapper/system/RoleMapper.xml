@@ -75,4 +75,18 @@
                 dual
         </foreach>
     </insert>
+
+    <select id="getByRoleIdAndUserId" resultMap="roleMap">
+        SELECT
+            id,
+            user_id,
+            role_name,
+            remark
+        FROM
+            t_role
+        WHERE
+            id = #{roleId}
+        AND
+            user_id = #{userId}
+    </select>
 </mapper>

@@ -22,4 +22,13 @@ public interface RoleService {
      * @throws
      */
     public void save(Role role, String menus, String userId) throws Exception;
+
+    /**
+     * 根据用户id和角色id获取角色信息
+     * @author zhoujiawei
+     * @param roleId
+     * @param userId
+     * @return
+     */
+    public Role getByRoleIdAndUserId(String roleId, String userId) throws Exception;
 }

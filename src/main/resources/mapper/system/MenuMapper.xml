@@ -17,7 +17,7 @@
 
     <select id="getUserMenu" resultMap="menuMap">
         SELECT
-            t4.id,
+            distinct t4.id,
             t4.menu_name,
             t4.menu_route_path,
             t4.pid
@@ -44,7 +44,7 @@
 
     <select id="getUndistributedMenu" resultMap="permissionMenuMap">
         SELECT
-            t4.id,
+            distinct t4.id,
             t4.menu_name,
             t4.pid
         FROM
@@ -63,22 +63,47 @@
             t2.menu_id = t4.id
         WHERE
             1 = 1
-        <if test="roleId != null and roleId != ''">
-            t3.role_id = #{roleId}
-        </if>
         <if test="type != 'save'">
-            not EXISTS (
+            AND t4.id NOT IN (
                 SELECT
                     menu_id
                 FROM
                     t_role_permission
                 WHERE
-                    role_id = t2.role_id
+                    role_id = #{roleId, jdbcType=VARCHAR}
+                AND
+                    pid IS NOT NULL
             )
         </if>
         <if test="flag">
-            and t1.user_id = #{userId}
+            AND t1.user_id = #{userId}
         </if>
+        ORDER BY
+            id,
+            pid
+    </select>
+
+    <select id="getDistributeMenu" resultMap="permissionMenuMap">
+        SELECT
+            distinct t4.id,
+            t4.menu_name,
+            t4.pid
+        FROM
+            t_permission t1
+        INNER JOIN
+            t_role_permission t2
+        ON
+            t1.id = t2.permission_id
+        INNER JOIN
+            t_role t3
+        ON
+            t2.role_id = t3.id
+        INNER JOIN
+            t_menu t4
+        ON
+            t2.menu_id = t4.id
+        WHERE
+            role_id = #{roleId, jdbcType=VARCHAR}
         ORDER BY
             id,
             pid

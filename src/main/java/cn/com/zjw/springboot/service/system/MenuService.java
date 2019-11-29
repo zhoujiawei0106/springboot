@@ -24,4 +24,13 @@ public interface MenuService {
      * @throws Exception
      */
     public List<PermissionMenu> getUndistributedMenu(String userId, String type, String roleId) throws Exception;
+
+    /**
+     * 获取角色已分配的菜单
+     * @author zhoujiawei
+     * @param userId
+     * @param roleId
+     * @return
+     */
+    public List<PermissionMenu> getDistributeMenu(String userId, String roleId) throws Exception;
 }

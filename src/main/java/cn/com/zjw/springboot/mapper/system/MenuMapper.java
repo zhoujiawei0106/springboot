@@ -1,5 +1,6 @@
 package cn.com.zjw.springboot.mapper.system;
 
+import cn.com.zjw.springboot.dto.system.PermissionMenu;
 import cn.com.zjw.springboot.entity.system.Menu;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,4 +27,13 @@ public interface MenuMapper {
      */
     public List getUndistributedMenu(@Param("userId") String userId, @Param("roleId") String roleId,
                                      @Param("type") String type, @Param("flag") boolean flag);
+
+    /**
+     * 根据角色获取已分配的菜单
+     * @author zhoujiawei
+     * @param userId
+     * @param roleId
+     * @return
+     */
+    public List<PermissionMenu> getDistributeMenu(@Param("userId") String userId, @Param("roleId") String roleId);
 }

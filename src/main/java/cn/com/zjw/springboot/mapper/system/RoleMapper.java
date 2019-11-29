@@ -8,7 +8,6 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface RoleMapper {
-
     /**
      * 获取用户角色
      * @author zhoujiawei
@@ -40,4 +39,13 @@ public interface RoleMapper {
      */
     public void insertRolePermission(@Param("list") List<JSONObject> list, @Param("roleId") String roleId,
                                      @Param("permissionId") String permissionId);
+
+    /**
+     * 根据roleId获取角色信息
+     * @author zhoujiawei
+     * @param roleId
+     * @param userId
+     * @return
+     */
+    public Role getByRoleIdAndUserId(@Param("roleId") String roleId, @Param("userId") String userId);
 }

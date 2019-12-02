@@ -1,6 +1,6 @@
 package cn.com.zjw.springboot.service.system.impl;
 
-import cn.com.zjw.springboot.constants.enumConstants.CustomerStatus;
+import cn.com.zjw.springboot.constants.enumConstants.ValidStatus;
 import cn.com.zjw.springboot.entity.system.Role;
 import cn.com.zjw.springboot.entity.system.User;
 import cn.com.zjw.springboot.mapper.system.RoleMapper;
@@ -92,7 +92,7 @@ public class RoleServiceImpl implements RoleService {
         }
 
         User user = userMapper.getUserById(userId);
-        if (user == null || user.getStatus().equals(CustomerStatus.Invalid)) {
+        if (user == null || user.getStatus().equals(ValidStatus.Invalid)) {
             throw new Exception("登陆用户不存在或状态非有效");
         }
 

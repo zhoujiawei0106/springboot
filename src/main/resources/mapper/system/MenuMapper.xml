@@ -37,6 +37,8 @@
             t2.menu_id = t4.id
         WHERE
             t1.user_id = #{userId}
+        AND
+            t4.is_valid = #{isValid}
         ORDER BY
             id,
             pid
@@ -62,7 +64,7 @@
         ON
             t2.menu_id = t4.id
         WHERE
-            1 = 1
+            t4.is_valid = #{isValid}
         <if test="type != 'save'">
             AND t4.id NOT IN (
                 SELECT
@@ -104,6 +106,8 @@
             t2.menu_id = t4.id
         WHERE
             role_id = #{roleId, jdbcType=VARCHAR}
+        AND
+            t4.is_valid = #{isValid}
         ORDER BY
             id,
             pid

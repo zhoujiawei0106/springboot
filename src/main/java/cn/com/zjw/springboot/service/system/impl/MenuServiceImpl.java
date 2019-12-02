@@ -1,6 +1,7 @@
 package cn.com.zjw.springboot.service.system.impl;
 
 import cn.com.zjw.springboot.constants.CodeConstants;
+import cn.com.zjw.springboot.constants.enumConstants.ValidStatus;
 import cn.com.zjw.springboot.dto.system.PermissionMenu;
 import cn.com.zjw.springboot.entity.system.Menu;
 import cn.com.zjw.springboot.entity.system.User;
@@ -30,7 +31,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<Menu> getUserMenu(String userId) {
-        return menuMapper.getUserMenu(userId);
+        return menuMapper.getUserMenu(userId, ValidStatus.Valid.getValue());
     }
 
     @Override
@@ -47,12 +48,12 @@ public class MenuServiceImpl implements MenuService {
         // 根据登陆用户类型，获取用户可分配的菜单
         List<PermissionMenu> menuList = new ArrayList<>();
         if (CodeConstants.USER_TYPE_ADMIN.equals(user.getUserType())) {
-            menuList = menuMapper.getUndistributedMenu(userId, roleId, type, false);
+            menuList = menuMapper.getUndistributedMenu(userId, roleId, type, false, ValidStatus.Valid.getValue());
         } else if (CodeConstants.USER_TYPE_NORMAL.equals(user.getUserType())) {
             if (StringUtils.isNotEmpty(roleId)) {
                 throw new Exception("角色代码不能为空");
             }
-            menuList = menuMapper.getUndistributedMenu(userId, roleId, type, true);
+            menuList = menuMapper.getUndistributedMenu(userId, roleId, type, true, ValidStatus.Valid.getValue());
         } else {
             throw new Exception("用户类型不匹配，请联系管理员");
         }
@@ -96,7 +97,7 @@ public class MenuServiceImpl implements MenuService {
         }
 
         // 根据登陆用户类型，获取用户可分配的菜单
-        List<PermissionMenu> menuList = menuMapper.getDistributeMenu(userId, roleId);
+        List<PermissionMenu> menuList = menuMapper.getDistributeMenu(userId, roleId, ValidStatus.Valid.getValue());
         List<PermissionMenu> copyMenus = new ArrayList<>();
         copyMenus.addAll(menuList);
         // 所有一级菜单

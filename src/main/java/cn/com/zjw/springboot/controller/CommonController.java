@@ -1,7 +1,7 @@
 package cn.com.zjw.springboot.controller;
 
-import cn.com.zjw.springboot.constants.enumConstants.CustomerStatus;
 import cn.com.zjw.springboot.constants.enumConstants.CustomerType;
+import cn.com.zjw.springboot.constants.enumConstants.ValidStatus;
 import cn.com.zjw.springboot.controller.system.RoleController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ public class CommonController extends BaseController {
     @GetMapping("/customerStatus")
     public Map<String, Object> customerStatus() {
         try {
-            return success(CustomerStatus.getCustomerStatus());
+            return success(ValidStatus.getCustomerStatus());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());

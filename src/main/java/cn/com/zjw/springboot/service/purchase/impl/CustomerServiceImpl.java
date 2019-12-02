@@ -1,7 +1,7 @@
 package cn.com.zjw.springboot.service.purchase.impl;
 
-import cn.com.zjw.springboot.constants.enumConstants.CustomerStatus;
 import cn.com.zjw.springboot.constants.enumConstants.CustomerType;
+import cn.com.zjw.springboot.constants.enumConstants.ValidStatus;
 import cn.com.zjw.springboot.entity.purchase.Customer;
 import cn.com.zjw.springboot.entity.system.User;
 import cn.com.zjw.springboot.mapper.purchase.CustomerMapper;
@@ -180,7 +180,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final void transfer(List<Customer> list) {
         for (Customer customer : list) {
             customer.setType(CustomerType.getLabel(customer.getType()));
-            customer.setStatus(CustomerStatus.getLabel(customer.getStatus()));
+            customer.setStatus(ValidStatus.getLabel(customer.getStatus()));
         }
     }
 }

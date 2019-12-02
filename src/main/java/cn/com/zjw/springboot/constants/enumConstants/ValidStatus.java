@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public enum CustomerStatus {
+public enum ValidStatus {
     Valid("1", "有效"),
     Invalid("2", "注销");
 
@@ -13,13 +13,13 @@ public enum CustomerStatus {
 
     private String label;
 
-    CustomerStatus(String value, String label) {
+    ValidStatus(String value, String label) {
         this.value = value;
         this.label = label;
     }
 
     public static String getLabel(String value) {
-        for (CustomerStatus customerStatus : CustomerStatus.values()) {
+        for (ValidStatus customerStatus : ValidStatus.values()) {
             if (customerStatus.getValue().equals(value)) {
                 return customerStatus.getLabel();
             }
@@ -29,7 +29,7 @@ public enum CustomerStatus {
 
     public static List<Map<String, String>> getCustomerStatus() {
         List<Map<String, String>> list = new ArrayList<>();
-        for (CustomerStatus customerStatus : CustomerStatus.values()) {
+        for (ValidStatus customerStatus : ValidStatus.values()) {
             Map<String, String> map = new LinkedHashMap<>();
             map.put("value", customerStatus.getValue());
             map.put("label", customerStatus.getLabel());
@@ -52,5 +52,9 @@ public enum CustomerStatus {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(ValidStatus.Valid.getValue());
     }
 }

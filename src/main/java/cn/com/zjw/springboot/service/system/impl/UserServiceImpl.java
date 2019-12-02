@@ -1,6 +1,6 @@
 package cn.com.zjw.springboot.service.system.impl;
 
-import cn.com.zjw.springboot.constants.enumConstants.CustomerStatus;
+import cn.com.zjw.springboot.constants.enumConstants.ValidStatus;
 import cn.com.zjw.springboot.entity.purchase.Customer;
 import cn.com.zjw.springboot.entity.system.User;
 import cn.com.zjw.springboot.mapper.system.UserMapper;
@@ -218,7 +218,7 @@ public class UserServiceImpl implements UserService {
 
     private final void transfer(List<User> list) {
         for (User user : list) {
-            user.setStatus(CustomerStatus.getLabel(user.getStatus()));
+            user.setStatus(ValidStatus.getLabel(user.getStatus()));
         }
     }
 }

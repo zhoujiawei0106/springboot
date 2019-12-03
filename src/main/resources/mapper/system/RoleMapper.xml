@@ -118,4 +118,11 @@
         AND
             role_id = #{roleId}
     </delete>
+
+    <delete id="delete">
+        DELETE FROM
+            t_role
+        WHERE
+            id = #{roleId}
+    </delete>
 </mapper>

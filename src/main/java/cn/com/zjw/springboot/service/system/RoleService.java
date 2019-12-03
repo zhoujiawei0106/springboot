@@ -43,4 +43,13 @@ public interface RoleService {
      * @throws
      */
     public void update(Role role, String menus, String userId) throws Exception;
+
+    /**
+     * 删除用户角色
+     * @author zhoujiawei
+     * @param id
+     * @param userId
+     * @throws
+     */
+    public void delete(String id, String userId) throws Exception;
 }

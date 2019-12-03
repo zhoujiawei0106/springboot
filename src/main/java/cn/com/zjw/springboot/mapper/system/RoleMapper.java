@@ -71,4 +71,10 @@ public interface RoleMapper {
      * @param permissionId
      */
     public void deleteRolePermission(@Param("roleId") String roleId, @Param("permissionId") String permissionId);
+
+    /**
+     * 删除角色信息
+     * @param roleId
+     */
+    public void delete(@Param("roleId") String roleId);
 }

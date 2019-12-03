@@ -134,4 +134,15 @@ public class RoleController extends BaseController {
             return fail(e.getMessage());
         }
     }
+
+    @DeleteMapping("/delete")
+    public Map<String, Object> delete(String id, HttpServletRequest request) {
+        try {
+            roleService.delete(id, getUserId(getToken(request)));
+            return success("角色删除成功");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
 }

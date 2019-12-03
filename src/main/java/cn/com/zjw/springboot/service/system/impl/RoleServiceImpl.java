@@ -10,9 +10,8 @@ import cn.com.zjw.springboot.utils.CommonUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +33,10 @@ public class RoleServiceImpl implements RoleService {
     private UserMapper userMapper;
 
     @Override
-    public PageInfo getRoles(Role role) {
-        PageHelper.startPage(role.getPage(), role.getRows());
+    public List<Role> getRoles(Role role) {
         logger.info("根据条件查询所有用户----" + role.toString());
         List<Role> list = roleMapper.getRoles(role);
-        PageInfo pageInfo = new PageInfo(list);
-        return pageInfo;
+        return list;
     }
 
     @Override
@@ -74,6 +71,29 @@ public class RoleServiceImpl implements RoleService {
         return roleMapper.getByRoleIdAndUserId(roleId, userId);
     }
 
+    @Override
+    public void update(Role role, String menus, String userId) throws Exception {
+        // 将json字符串转换成对象
+        List<JSONObject> list = JSON.parseObject(menus, List.class);
+
+        check(role, list, userId);
+
+        // 更新角色信息
+        roleMapper.update(role);
+        logger.info("插入角色信息成功" + role.toString());
+
+        // 获取t_role_permission表中role_id对应的permission_id后，先删除再重新插入
+        String permissionId = roleMapper.getPermissionId(role.getId());
+        if (StringUtils.isBlank(permissionId)) {
+            throw new Exception("系统异常,未能获取角色相应的权限id");
+        }
+        roleMapper.deleteRolePermission(role.getId(), permissionId);
+        if (list != null && list.size() > 0) {
+            insertRolePermission(list, role.getId(), permissionId);
+        }
+        logger.info("插入角色权限信息成功");
+    }
+
     private final void check(Role role, List<JSONObject> list, String userId) throws Exception {
         if (role == null) {
             throw new Exception("角色信息为空");
@@ -97,8 +117,8 @@ public class RoleServiceImpl implements RoleService {
         }
 
         role.setUserId(userId);
-        if (roleMapper.getRoles(role).size() > 15) {
-            throw new Exception("一个用户最多只能添加15个角色");
+        if (roleMapper.getRoles(role).size() > 10) {
+            throw new Exception("一个用户最多只能添加10个角色");
         }
     }
 

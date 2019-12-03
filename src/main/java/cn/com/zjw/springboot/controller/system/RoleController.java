@@ -5,14 +5,10 @@ import cn.com.zjw.springboot.dto.system.PermissionMenu;
 import cn.com.zjw.springboot.entity.system.Role;
 import cn.com.zjw.springboot.service.system.MenuService;
 import cn.com.zjw.springboot.service.system.RoleService;
-import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -46,8 +42,8 @@ public class RoleController extends BaseController {
     public Map<String, Object> getUsers(Role role, HttpServletRequest request) {
         try {
             role.setUserId(getUserId(getToken(request)));
-            PageInfo pageInfo = roleService.getRoles(role);
-            return success(pageInfo);
+            List<Role> list = roleService.getRoles(role);
+            return success(list);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());
@@ -114,6 +110,25 @@ public class RoleController extends BaseController {
             map.put("role", role);
 
             return success(map);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
+
+    /**
+     * 修改用户角色
+     * @author zhoujiawei
+     * @param role
+     * @param menus
+     * @param request
+     * @return
+     */
+    @PutMapping("/update")
+    public Map<String, Object> update(Role role, String menus, HttpServletRequest request) {
+        try {
+            roleService.update(role, menus, getUserId(getToken(request)));
+            return success("角色修改成功");
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());

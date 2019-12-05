@@ -132,7 +132,14 @@
         ON t1.F_CUSTOMER_ID = t2.F_ID
         LEFT JOIN tmp t3
         ON t1.F_ID = t3.F_ID
+        LEFT JOIN T_ORDER_COMMODITY t4
+        ON t1.F_ID = t4.F_ORDER_ID
+        LEFT JOIN T_COMMODITY t5
+        ON t4.F_COMMODITY_ID = t5.F_ID
         WHERE 1=1
+        <if test="userId != null and userId != ''">
+        AND t5.F_USER_ID = #{userId, jdbcType=VARCHAR}
+        </if>
         <if test="order.orderStatus != null and order.orderStatus != ''">
             AND t1.F_ORDER_STATUS = #{order.orderStatus, jdbcType=VARCHAR}
         </if>
@@ -147,6 +154,7 @@
         ON t1.F_CUSTOMER_ID = t2.F_ID
         WHERE 1=1
         AND t1.F_ID = #{id, jdbcType=VARCHAR}
+        AND t2.F_PARENT_ID = #{userId}
     </select>
 
     <select id="getCommodityForOrder" resultMap="Orders">
@@ -157,7 +165,16 @@
         ON t1.F_ID = t2.F_ORDER_ID
         LEFT JOIN T_COMMODITY t3
         ON t2.F_COMMODITY_ID = t3.F_ID
-        WHERE t1.F_ID = #{id, jdbcType=VARCHAR}
+        WHERE 1=1
+        <if test="id != null and id != ''">
+            AND t1.F_ID = #{id, jdbcType=VARCHAR}
+        </if>
+        <if test="commodityId != null and commodityId != ''">
+            AND t3.F_ID = #{commodityId, jdbcType=VARCHAR}
+        </if>
+        <if test="userId != null and userId != ''">
+            AND t3.F_USER_ID = #{userId, jdbcType=VARCHAR}
+        </if>
     </select>
 
 

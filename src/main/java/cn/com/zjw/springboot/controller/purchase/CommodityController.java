@@ -51,8 +51,8 @@ public class CommodityController extends BaseController {
     @GetMapping("/listOfOrder")
     public Map<String, Object> listOfOrder(Commodity commodity, HttpServletRequest request) {
         try {
-            List<Commodity> info = commodityService.getCommoditysOfOrder(commodity, getUserId(getToken(request)));
-            return succeed(info);
+            Map<String, Object> map = commodityService.getCommoditysOfOrder(commodity, getUserId(getToken(request)));
+            return map;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());
@@ -66,9 +66,9 @@ public class CommodityController extends BaseController {
      * @return
      */
     @PostMapping("/save")
-    public Map<String, Object> save(Commodity commodity) {
+    public Map<String, Object> save(Commodity commodity, HttpServletRequest request) {
         try {
-            commodityService.save(commodity);
+            commodityService.save(commodity, getUserId(getToken(request)));
             return success("商品新增成功");
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -102,7 +102,7 @@ public class CommodityController extends BaseController {
      * @return
      */
     @GetMapping("/getCustomer")
-    public Map<String, Object> getCustomer(String id, javax.servlet.http.HttpServletRequest request) {
+    public Map<String, Object> getCustomer(String id, HttpServletRequest request) {
         try {
             Commodity commodity = commodityService.getCommodity(id, getUserId(getToken(request)));
             return success(commodity);
@@ -120,7 +120,7 @@ public class CommodityController extends BaseController {
      * @return
      */
     @DeleteMapping("/delete")
-    public Map<String, Object> delete(String id, javax.servlet.http.HttpServletRequest request) {
+    public Map<String, Object> delete(String id, HttpServletRequest request) {
         try {
             commodityService.delete(id, getUserId(getToken(request)));
             return success("商品删除成功");

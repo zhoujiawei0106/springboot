@@ -1,9 +1,11 @@
 package cn.com.zjw.springboot.service.purchase.impl;
 
+import cn.com.zjw.springboot.constants.enumConstants.CustomerType;
 import cn.com.zjw.springboot.constants.enumConstants.OrderStatus;
 import cn.com.zjw.springboot.entity.purchase.Commodity;
 import cn.com.zjw.springboot.entity.purchase.Customer;
 import cn.com.zjw.springboot.entity.purchase.Order;
+import cn.com.zjw.springboot.mapper.purchase.CustomerMapper;
 import cn.com.zjw.springboot.mapper.purchase.OrderMapper;
 import cn.com.zjw.springboot.service.purchase.OrderService;
 import com.alibaba.fastjson.JSON;
@@ -19,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 客户管理
@@ -34,11 +38,24 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderMapper orderMapper;
 
+    @Autowired
+    private CustomerMapper customerMapper;
+
     @Override
     public PageInfo getOrders(Order order, String userId) {
         PageHelper.startPage(order.getPage(), order.getRows());
         logger.info("根据条件查询所有订单----" + order.toString());
-        List<Order> list = orderMapper.getOrders(order, userId);
+        //先暂时userId为空，后面根据类型改
+        Customer customer = customerMapper.getCustomerd(userId);
+        List<Order> list = null;
+        if(customer == null){
+            list = orderMapper.getOrders(order, userId);
+        } else if(CustomerType.getLabel(customer.getType()).equals(CustomerType.Agency)){
+            userId = null;
+            list = orderMapper.getOrders(order, userId);
+        } else {
+            list = orderMapper.getOrders(order, userId);
+        }
         transfer(list);
         PageInfo pageInfo = new PageInfo(list);
         return pageInfo;
@@ -64,7 +81,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order getCustomerForOrder(String id, String userId) throws Exception {
+    public Map<String, Object> getCustomerAndCommodityForOrder(String id, String userId) throws Exception {
         if (StringUtils.isBlank(id)) {
             throw new Exception("订单编码不能为空");
         }
@@ -72,26 +89,21 @@ public class OrderServiceImpl implements OrderService {
             logger.error("系统异常，上级用户代码为空");
             throw new Exception("系统异常，上级用户代码为空");
         }
-        Order order = orderMapper.getCustomerForOrder(id, userId);
-        if (order == null) {
-            throw new Exception("无法获取订单信息");
+        Map<String, Object> map = new HashMap<String, Object>();
+        Order customer = orderMapper.getCustomerForOrder(id, userId);
+        if (customer == null) {
+            throw new Exception("无法获取订单客户信息");
         }
-        logger.info(order.toString());
-        return order;
+        List<Commodity> commodityList = orderMapper.getCommodityForOrder(id,null,userId);
+        map.put("customer",customer);
+        map.put("commodityList",commodityList);
+        map.put("flag", true);
+        map.put("code", 200000);
+        logger.info(customer.toString());
+        logger.info(commodityList.toString());
+        return map;
     }
 
-    @Override
-    public List<Commodity> getCommodityForOrder(String id, String userId) throws Exception {
-        if (StringUtils.isBlank(id)) {
-            throw new Exception("订单编码不能为空");
-        }
-        if (StringUtils.isBlank(userId)) {
-            logger.error("系统异常，上级用户代码为空");
-            throw new Exception("系统异常，上级用户代码为空");
-        }
-        List<Commodity> commodityList = orderMapper.getCommodityForOrder(id);
-        return commodityList;
-    }
 
     @Override
     public List<Order> export(Order order, String userId) {

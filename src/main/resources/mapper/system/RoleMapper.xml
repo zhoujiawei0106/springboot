@@ -89,4 +89,40 @@
         AND
             user_id = #{userId}
     </select>
+
+    <update id="update">
+        UPDATE
+            t_role
+        SET
+            role_name = #{role.roleName},
+            remark = #{role.remark, jdbcType=VARCHAR},
+            update_timestamp = sysdate
+        WHERE
+            id = #{role.id}
+    </update>
+
+    <select id="getPermissionId" resultType="String">
+        SELECT
+            distinct permission_id
+        FROM
+            t_role_permission
+        WHERE
+            role_id = #{roleId}
+    </select>
+
+    <delete id="deleteRolePermission">
+        DELETE FROM
+            t_role_permission
+        WHERE
+            permission_id = #{permissionId}
+        AND
+            role_id = #{roleId}
+    </delete>
+
+    <delete id="delete">
+        DELETE FROM
+            t_role
+        WHERE
+            id = #{roleId}
+    </delete>
 </mapper>

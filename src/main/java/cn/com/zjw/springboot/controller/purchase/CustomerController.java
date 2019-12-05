@@ -1,7 +1,5 @@
 package cn.com.zjw.springboot.controller.purchase;
 
-import cn.com.zjw.springboot.constants.enumConstants.CustomerStatus;
-import cn.com.zjw.springboot.constants.enumConstants.CustomerType;
 import cn.com.zjw.springboot.controller.BaseController;
 import cn.com.zjw.springboot.entity.purchase.Customer;
 import cn.com.zjw.springboot.service.purchase.CustomerService;

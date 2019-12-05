@@ -1,8 +1,9 @@
 package cn.com.zjw.springboot.service.system.impl;
 
-import cn.com.zjw.springboot.constants.enumConstants.CustomerStatus;
+import cn.com.zjw.springboot.constants.enumConstants.ValidStatus;
 import cn.com.zjw.springboot.entity.system.Role;
 import cn.com.zjw.springboot.entity.system.User;
+import cn.com.zjw.springboot.mapper.system.PermissionMapper;
 import cn.com.zjw.springboot.mapper.system.RoleMapper;
 import cn.com.zjw.springboot.mapper.system.UserMapper;
 import cn.com.zjw.springboot.service.system.RoleService;
@@ -10,8 +11,6 @@ import cn.com.zjw.springboot.utils.CommonUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,13 +32,14 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private PermissionMapper permissionMapper;
+
     @Override
-    public PageInfo getRoles(Role role) {
-        PageHelper.startPage(role.getPage(), role.getRows());
+    public List<Role> getRoles(Role role) {
         logger.info("根据条件查询所有用户----" + role.toString());
         List<Role> list = roleMapper.getRoles(role);
-        PageInfo pageInfo = new PageInfo(list);
-        return pageInfo;
+        return list;
     }
 
     @Override
@@ -74,6 +74,55 @@ public class RoleServiceImpl implements RoleService {
         return roleMapper.getByRoleIdAndUserId(roleId, userId);
     }
 
+    @Override
+    public void update(Role role, String menus, String userId) throws Exception {
+        // 将json字符串转换成对象
+        List<JSONObject> list = JSON.parseObject(menus, List.class);
+
+        check(role, list, userId);
+
+        // 更新角色信息
+        roleMapper.update(role);
+        logger.info("修改角色信息成功" + role.toString());
+
+        // 获取t_role_permission表中role_id对应的permission_id后，先删除再重新插入
+        String permissionId = roleMapper.getPermissionId(role.getId());
+        if (StringUtils.isBlank(permissionId)) {
+            throw new Exception("系统异常,未能获取角色相应的权限id");
+        }
+        roleMapper.deleteRolePermission(role.getId(), permissionId);
+        logger.info("删除角色权限信息成功");
+        if (list != null && list.size() > 0) {
+            insertRolePermission(list, role.getId(), permissionId);
+        }
+        logger.info("插入角色权限信息成功");
+    }
+
+    @Override
+    public void delete(String id, String userId) throws Exception {
+        if (StringUtils.isBlank(id)) {
+            throw new Exception("角色代码不能为空");
+        }
+        // 获取t_role_permission表中role_id对应的permission_id及角色是否分配权限
+        String permissionId = roleMapper.getPermissionId(id);
+        if (StringUtils.isBlank(permissionId)) {
+            throw new Exception("系统异常,未能获取角色相应的权限id");
+        }
+        if (permissionMapper.count(permissionId) > 0) {
+            throw new Exception("改角色已给用户分配权限，不能删除");
+        }
+
+        // 若校验通过，删除角色权限和权限信息
+        roleMapper.deleteRolePermission(id, permissionId);
+        logger.info("删除角色权限信息成功");
+        permissionMapper.delete(permissionId);
+        logger.info("删除权限信息成功");
+
+        // 更新角色信息
+        roleMapper.delete(id);
+        logger.info("修改角色信息成功");
+    }
+
     private final void check(Role role, List<JSONObject> list, String userId) throws Exception {
         if (role == null) {
             throw new Exception("角色信息为空");
@@ -92,13 +141,13 @@ public class RoleServiceImpl implements RoleService {
         }
 
         User user = userMapper.getUserById(userId);
-        if (user == null || user.getStatus().equals(CustomerStatus.Invalid)) {
+        if (user == null || user.getStatus().equals(ValidStatus.Invalid)) {
             throw new Exception("登陆用户不存在或状态非有效");
         }
 
         role.setUserId(userId);
-        if (roleMapper.getRoles(role).size() > 15) {
-            throw new Exception("一个用户最多只能添加15个角色");
+        if (roleMapper.getRoles(role).size() > 10) {
+            throw new Exception("一个用户最多只能添加10个角色");
         }
     }
 

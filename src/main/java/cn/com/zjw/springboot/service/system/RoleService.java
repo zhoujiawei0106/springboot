@@ -3,6 +3,8 @@ package cn.com.zjw.springboot.service.system;
 import cn.com.zjw.springboot.entity.system.Role;
 import com.github.pagehelper.PageInfo;
 
+import java.util.List;
+
 public interface RoleService {
 
     /**
@@ -11,7 +13,7 @@ public interface RoleService {
      * @param role
      * @return
      */
-    public PageInfo getRoles(Role role);
+    public List<Role> getRoles(Role role);
 
     /**
      * 保存角色
@@ -31,4 +33,23 @@ public interface RoleService {
      * @return
      */
     public Role getByRoleIdAndUserId(String roleId, String userId) throws Exception;
+
+    /**
+     * 修改用户角色
+     * @author zhoujiawei
+     * @param role
+     * @param menus
+     * @param userId
+     * @throws
+     */
+    public void update(Role role, String menus, String userId) throws Exception;
+
+    /**
+     * 删除用户角色
+     * @author zhoujiawei
+     * @param id
+     * @param userId
+     * @throws
+     */
+    public void delete(String id, String userId) throws Exception;
 }

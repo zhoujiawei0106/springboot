@@ -35,8 +35,14 @@
             t_menu t4
         ON
             t2.menu_id = t4.id
+        INNER JOIN
+            t_user_permission t5
+        ON
+            t1.id = t5.permission_id
         WHERE
-            t1.user_id = #{userId}
+            t5.user_id = #{userId}
+        AND
+            t4.is_valid = #{isValid}
         ORDER BY
             id,
             pid
@@ -62,7 +68,7 @@
         ON
             t2.menu_id = t4.id
         WHERE
-            1 = 1
+            t4.is_valid = #{isValid}
         <if test="type != 'save'">
             AND t4.id NOT IN (
                 SELECT
@@ -76,7 +82,7 @@
             )
         </if>
         <if test="flag">
-            AND t1.user_id = #{userId}
+            AND t3.user_id = #{userId}
         </if>
         ORDER BY
             id,
@@ -104,6 +110,8 @@
             t2.menu_id = t4.id
         WHERE
             role_id = #{roleId, jdbcType=VARCHAR}
+        AND
+            t4.is_valid = #{isValid}
         ORDER BY
             id,
             pid

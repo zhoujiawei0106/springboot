@@ -48,4 +48,33 @@ public interface RoleMapper {
      * @return
      */
     public Role getByRoleIdAndUserId(@Param("roleId") String roleId, @Param("userId") String userId);
+
+    /**
+     * 根据角色id修改角色信息
+     * @author zhoujiawei
+     * @param role
+     */
+    public void update(@Param("role") Role role);
+
+    /**
+     * 根据角色id获取权限id
+     * @author zhoujiawei
+     * @param roleId
+     * @return
+     */
+    public String getPermissionId(@Param("roleId") String roleId);
+
+    /**
+     * 删除角色权限相应的数据
+     * @author zhoujiawei
+     * @param roleId
+     * @param permissionId
+     */
+    public void deleteRolePermission(@Param("roleId") String roleId, @Param("permissionId") String permissionId);
+
+    /**
+     * 删除角色信息
+     * @param roleId
+     */
+    public void delete(@Param("roleId") String roleId);
 }

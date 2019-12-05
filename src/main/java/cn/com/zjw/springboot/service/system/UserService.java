@@ -1,9 +1,12 @@
 package cn.com.zjw.springboot.service.system;
 
+import cn.com.zjw.springboot.dto.system.PermissionDto;
 import cn.com.zjw.springboot.entity.purchase.Customer;
 import cn.com.zjw.springboot.entity.system.User;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.Map;
 
 public interface UserService {
 

@@ -63,25 +63,6 @@ public class MenuServiceImpl implements MenuService {
         // 所有一级菜单
         List<PermissionMenu> addList = new ArrayList<>();
         firstFloorMenu(menuList, addList, copyMenus);
-//        for (PermissionMenu permissionMenu : menuList) {
-//            if (StringUtils.isBlank(permissionMenu.getPid())) {
-//                permissionMenu.setPid(UUID.randomUUID().toString());
-//                permissionMenu.setType(PinyinUtils.toPinyin(permissionMenu.getLabel()));
-//
-//                addList.add(permissionMenu);
-//
-//                copyMenus.remove(permissionMenu);
-//
-//                recursionMenu(copyMenus, addList, permissionMenu);
-//
-//                // 递归结束后如果最外层菜单的子菜单为空，不展示首层菜单
-//                if (permissionMenu.getChildren().size() == 0) {
-//                    addList.remove(permissionMenu);
-//                } else {
-//                    map.put(permissionMenu.getId(), permissionMenu.getPid());
-//                }
-//            }
-//        }
         return addList;
     }
 

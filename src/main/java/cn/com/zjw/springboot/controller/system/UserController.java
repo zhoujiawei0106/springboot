@@ -1,6 +1,7 @@
 package cn.com.zjw.springboot.controller.system;
 
 import cn.com.zjw.springboot.controller.BaseController;
+import cn.com.zjw.springboot.dto.system.PermissionDto;
 import cn.com.zjw.springboot.entity.system.User;
 import cn.com.zjw.springboot.service.system.UserService;
 import com.github.pagehelper.PageInfo;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 
 /**

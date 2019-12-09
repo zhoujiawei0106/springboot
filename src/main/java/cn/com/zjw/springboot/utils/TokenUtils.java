@@ -44,6 +44,7 @@ public class TokenUtils {
 
         //下面就是在为payload添加各种标准声明和私有声明了
         //这里其实就是new一个JwtBuilder，设置jwt的body
+        // TODO 单点登陆未实现
         JwtBuilder builder = Jwts.builder()
                 //如果有私有声明，一定要先设置这个自己创建的私有的声明，这个是给builder的claim赋值，一旦写在标准的声明赋值之后，就是覆盖了那些标准的声明的
                 .setClaims(claims)
@@ -63,7 +64,6 @@ public class TokenUtils {
         }
         return builder.compact();
     }
-
 
     /**
      * Token的解密

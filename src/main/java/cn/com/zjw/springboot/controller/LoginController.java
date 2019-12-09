@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +37,8 @@ public class LoginController extends BaseController {
 
     @Autowired
     private MenuService menuService;
+
+    public static final Map<String, String> userMap = new HashMap<>();
 
     /**
      * 用户登陆
@@ -82,6 +85,9 @@ public class LoginController extends BaseController {
             UserDto userDto = new UserDto();
             BeanUtils.copyProperties(user, userDto);
             userDto.setToken(TokenUtils.createToken(CodeConstants.EXPIRE_TIME, user));
+
+            // 缓存用户信息
+            userMap.put(user.getId(), userDto.getToken());
 
             return success(userDto);
         } catch (Exception e) {

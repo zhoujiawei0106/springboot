@@ -1,6 +1,7 @@
 package cn.com.zjw.springboot.filter;
 
 import cn.com.zjw.springboot.constants.CodeConstants;
+import cn.com.zjw.springboot.controller.LoginController;
 import cn.com.zjw.springboot.entity.system.User;
 import cn.com.zjw.springboot.service.system.UserService;
 import cn.com.zjw.springboot.utils.JsonParseUtils;
@@ -42,6 +43,9 @@ public class UserCheckFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
+        response.setContentType("application/json; charset=utf-8");
+        response.setCharacterEncoding("UTF-8");
+        User user = new User();
         try {
             String[] urls = url.split(";");
 
@@ -65,8 +69,6 @@ public class UserCheckFilter implements Filter {
 
             // 执行认证
             if (StringUtils.isBlank(token)) {
-                response.setContentType("application/json; charset=utf-8");
-                response.setCharacterEncoding("UTF-8");
                 Map<String, Object> map = failMap("无token，请重新登录", CodeConstants.LOGIN_INVALID);
                 response.getWriter().write(JsonParseUtils.toJson(map));
                 response.addHeader("Access-Control-Allow-Origin", "*");
@@ -88,7 +90,7 @@ public class UserCheckFilter implements Filter {
                 response.addHeader("Access-Control-Allow-Origin", "*");
                 return;
             }
-            User user = SpringContextUtils.getBean(UserService.class).getUser(loginName);
+            user = SpringContextUtils.getBean(UserService.class).getUser(loginName);
             if (user == null) {
                 Map<String, Object> map = failMap("用户不存在，请重新登录", CodeConstants.LOGIN_INVALID);
                 response.getWriter().write(JsonParseUtils.toJson(map));
@@ -109,8 +111,20 @@ public class UserCheckFilter implements Filter {
                 return;
             }
 
+            // 如果传入token不等于缓存中的用户token
+            if (!token.equals(LoginController.userMap.get(user.getId()))) {
+                Map<String, Object> map = failMap("用户\"" + user.getLoginName() + "\"已在其它设备中登陆", CodeConstants.LOGIN_INVALID);
+                response.getWriter().write(JsonParseUtils.toJson(map));
+                response.addHeader("Access-Control-Allow-Origin", "*");
+                return;
+            }
+
             filterChain.doFilter(servletRequest, servletResponse);
         } catch (Exception e) {
+            // token过期删除用户信息
+            if (e.getClass().getName().equals("io.jsonwebtoken.ExpiredJwtException") && StringUtils.isNotBlank(user.getId())) {
+                LoginController.userMap.remove(user.getId());
+            }
             Map<String, Object> map = failMap(e.getMessage(), CodeConstants.LOGIN_INVALID);
             response.getWriter().write(JsonParseUtils.toJson(map));
             response.addHeader("Access-Control-Allow-Origin", "*");

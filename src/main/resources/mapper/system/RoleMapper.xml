@@ -26,6 +26,10 @@
             t1.user_id = t2.id
         WHERE
             t1.user_id = #{role.userId}
+        AND
+            t2.status = '1'
+        AND
+            t2.expiring_date >= sysdate
     </select>
 
     <insert id="insert">

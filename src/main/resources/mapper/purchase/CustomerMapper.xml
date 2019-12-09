@@ -44,11 +44,15 @@
             (SELECT
                 id,
                 user_name
-             FROM
+            FROM
                 t_user
-             START WITH
+            WHERE
+                status = '1'
+            AND
+                expiring_date >= sysdate
+            START WITH
                 id = #{userId}
-             CONNECT BY PRIOR
+            CONNECT BY PRIOR
                 id = parent_id) t2
         ON
             t1.f_parent_id = t2.id
@@ -116,11 +120,15 @@
             (SELECT
                 id,
                 user_name
-             FROM
+            FROM
                 t_user
-             START WITH
+            WHERE
+                status = '1'
+            AND
+                expiring_date >= sysdate
+            START WITH
                 id = #{userId}
-             CONNECT BY PRIOR
+            CONNECT BY PRIOR
                 id = parent_id) t2
         ON
             t1.f_parent_id = t2.id

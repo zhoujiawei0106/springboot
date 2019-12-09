@@ -42,7 +42,7 @@
         ON
             t2.role_id = t3.id
         LEFT JOIN
-            t_user_permission   t4
+            t_user_permission t4
         ON
             t1.id = t4.permission_id
         WHERE

@@ -1,10 +1,14 @@
 package cn.com.zjw.springboot.service.purchase.impl;
 
 import cn.com.zjw.springboot.constants.enumConstants.CommodityCategory;
+import cn.com.zjw.springboot.constants.enumConstants.CustomerType;
 import cn.com.zjw.springboot.entity.purchase.Commodity;
+import cn.com.zjw.springboot.entity.purchase.Customer;
 import cn.com.zjw.springboot.entity.purchase.Inventory;
 import cn.com.zjw.springboot.mapper.purchase.CommodityMapper;
+import cn.com.zjw.springboot.mapper.purchase.CustomerMapper;
 import cn.com.zjw.springboot.mapper.purchase.InventoryMapper;
+import cn.com.zjw.springboot.mapper.purchase.OrderMapper;
 import cn.com.zjw.springboot.service.purchase.CommodityService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -18,7 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 客户管理
@@ -36,26 +42,65 @@ public class CommodityServiceImpl implements CommodityService {
     @Autowired
     private InventoryMapper inventoryMapper;
 
+    @Autowired
+    private OrderMapper orderMapper;
+
+    @Autowired
+    private CustomerMapper customerMapper;
+
     @Override
     public PageInfo getCommoditys(Commodity commodity, String userId) {
         PageHelper.startPage(commodity.getPage(), commodity.getRows());
         logger.info("根据条件查询所有商品----" + commodity.toString());
+        //先暂时userId为空，后面根据类型改
+        Customer customer = customerMapper.getCustomerd(userId);
         List<Commodity> list = commodityMapper.getCommoditys(commodity, userId);
+        if(customer == null){
+            list = commodityMapper.getCommoditys(commodity, userId);
+        } else if(CustomerType.getLabel(customer.getType()).equals(CustomerType.Agency)){
+            userId = null;
+            list = commodityMapper.getCommoditys(commodity, userId);
+        } else {
+            list = commodityMapper.getCommoditys(commodity, userId);
+        }
         transfer(list);
         PageInfo pageInfo = new PageInfo(list);
         return pageInfo;
     }
 
     @Override
-    public List<Commodity> getCommoditysOfOrder(Commodity commodity, String userId) {
+    public Map<String, Object> getCommoditysOfOrder(Commodity commodity, String userId) {
         logger.info("根据条件查询所有商品----" + commodity.toString());
-        List<Commodity> list = commodityMapper.getCommoditys(commodity, userId);
-        transfer(list);
-        return list;
+        //先暂时userId为空，后面根据类型改
+        Customer customer = customerMapper.getCustomerd(userId);
+        List<Commodity> list = null;
+        if(customer == null){
+            list = commodityMapper.getCommoditys(commodity, userId);
+        } else if(CustomerType.getLabel(customer.getType()).equals(CustomerType.Agency)){
+            userId = null;
+            list = commodityMapper.getCommoditys(commodity, userId);
+        } else {
+            list = commodityMapper.getCommoditys(commodity, userId);
+        }
+        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> dataById = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<String, Object>();
+        for(Commodity c : list) {
+            dataById.put(c.getId(),c);
+        }
+        dataById.put("data",list);
+        data.put("data",list);
+        map.put("flag", true);
+        //id分散格式
+        map.put("dataById", dataById);
+        //合并模式
+        map.put("data", data);
+        map.put("code", 200000);
+        return map;
     }
 
     @Override
-    public void save(Commodity commodity) {
+    public void save(Commodity commodity, String userId) {
         //设置后台行程编号IN+YYMMddHHmmss
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("YYMMddHHmmss");
@@ -63,7 +108,7 @@ public class CommodityServiceImpl implements CommodityService {
         commodity.setId(commodityId);
         logger.info("新增商品----" + commodity.toString());
         commodity.setIsDelete("1");
-        commodityMapper.save(commodity);
+        commodityMapper.save(commodity, userId);
         logger.info("商品信息新增成功");
         logger.info("新增库存----   商品名称：" + commodity.getName() +
                 "、英文名称：" + commodity.getEnName() + "、商品数量:" + commodity.getShopNum());
@@ -82,13 +127,15 @@ public class CommodityServiceImpl implements CommodityService {
             throw new Exception("请选择一条记录");
         }
         Commodity cm = getCommodity(commodity.getId(), userId);
-        logger.info("修改客户信息-----" + commodity.toString());
-        if(cm.getPrice().equals(commodity.getPrice())) {
-            commodityMapper.update(commodity);
-            logger.info("客户信息修改成功");
+        logger.info("修改商品信息-----" + commodity.toString());
+        //判断商品是否在订单中使用
+        List<Commodity> commodityList = orderMapper.getCommodityForOrder(null,commodity.getId(),userId);
+        if(commodityList.size()<1) {
+            commodityMapper.update(commodity, userId);
+            logger.info("商品信息修改成功");
         } else {
             //删除商品信息
-            commodityMapper.delete(cm.getId());
+            commodityMapper.delete(cm.getId(), userId);
             logger.info("商品信息删除成功");
             //设置后台行程编号IN+YYMMddHHmmss
             Date date = new Date();
@@ -96,7 +143,7 @@ public class CommodityServiceImpl implements CommodityService {
             String commodityId = "CM" + sdf.format(date);
             commodity.setId(commodityId);
             commodity.setIsDelete("1");
-            commodityMapper.save(commodity);
+            commodityMapper.save(commodity, userId);
             String inventoryId = "IN" + sdf.format(date);
             Inventory inventory = new Inventory();
             inventory.setId(inventoryId);
@@ -116,7 +163,6 @@ public class CommodityServiceImpl implements CommodityService {
             logger.error("系统异常，上级用户代码为空");
             throw new Exception("系统异常，上级用户代码为空");
         }
-
         Commodity commodity = commodityMapper.getCommodity(id, userId);
         if (commodity == null) {
             throw new Exception("无法获取商品信息");
@@ -141,10 +187,8 @@ public class CommodityServiceImpl implements CommodityService {
             throw new Exception("请先销毁库存");
         }
         logger.info("删除的商品信息-----" + commodity);
-        commodityMapper.delete(id);
+        commodityMapper.delete(id, userId);
         logger.info("删除商品成功");
-       /* inventoryMapper.delete(commodity.getId());
-        logger.info("删除库存成功");*/
     }
 
     @Override

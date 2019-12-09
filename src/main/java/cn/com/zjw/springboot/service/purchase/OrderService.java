@@ -6,6 +6,7 @@ import cn.com.zjw.springboot.entity.purchase.Order;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 订单管理
@@ -45,26 +46,18 @@ public interface OrderService {
     public void update(Order order, String userId) throws Exception;
 
     /**
-     * 加载订单上相关的客户信息
-     * @param id
-     * @param userId
-     * @return
-     */
-    public Order getCustomerForOrder(String id, String userId) throws Exception;
-
-    /**
-     * 加载订单上相关的商品信息
-     * @param id
-     * @param userId
-     * @return
-     */
-    public List<Commodity> getCommodityForOrder(String id, String userId) throws Exception;
-
-    /**
      * 导出订单
      * @param order
      * @param userId
      * @return
      */
     public List<Order> export(Order order, String userId);
+
+    /**
+     * 加载订单上相关的商品和客户信息
+     * @param id
+     * @param userId
+     * @return
+     */
+    public Map<String, Object> getCustomerAndCommodityForOrder(String id, String userId) throws Exception;
 }

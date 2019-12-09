@@ -57,9 +57,8 @@ public class OrderController extends BaseController {
     @GetMapping("/getOrder")
     public Map<String, Object> getOrder(String id, HttpServletRequest request) {
         try {
-            Order order = orderService.getCustomerForOrder(id,getUserId(getToken(request)));
-            List<Commodity> commodityList = orderService.getCommodityForOrder(id,getUserId(getToken(request)));
-            return success(order,commodityList);
+            Map<String, Object> map = orderService.getCustomerAndCommodityForOrder(id, getUserId(getToken(request)));
+            return map;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());

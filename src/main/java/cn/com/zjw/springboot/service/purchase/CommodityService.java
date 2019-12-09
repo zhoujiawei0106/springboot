@@ -4,6 +4,7 @@ import cn.com.zjw.springboot.entity.purchase.Commodity;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 客户管理
@@ -26,13 +27,13 @@ public interface CommodityService {
      * @param userId
      * @return
      */
-    public List<Commodity> getCommoditysOfOrder(Commodity commodity, String userId);
+    public Map<String, Object> getCommoditysOfOrder(Commodity commodity, String userId);
 
     /**
      * 新增商品
      * @param commodity
      */
-    public void save(Commodity commodity);
+    public void save(Commodity commodity, String userId);
 
     /**
      * 修改商品信息

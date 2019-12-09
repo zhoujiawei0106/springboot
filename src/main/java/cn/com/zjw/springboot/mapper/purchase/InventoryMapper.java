@@ -42,7 +42,7 @@ public interface InventoryMapper {
      * @param userId
      * @return
      */
-    public Inventory getInventory(@Param("id") String id, String userId);
+    public Inventory getInventory(@Param("id") String id, @Param("userId") String userId);
 
     /**
      * 库存销毁

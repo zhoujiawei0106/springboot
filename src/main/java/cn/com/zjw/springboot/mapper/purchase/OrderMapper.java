@@ -53,14 +53,14 @@ public interface OrderMapper {
      * @param userId
      * @return
      */
-    public Order getCustomerForOrder(@Param("id")String id, String userId);
+    public Order getCustomerForOrder(@Param("id") String id, @Param("userId") String userId);
 
     /**
      * 获取订单客户商品信息
      * @param id
      * @return
      */
-    public List<Commodity> getCommodityForOrder(String id);
+    public List<Commodity> getCommodityForOrder(@Param("id") String id, @Param("commodityId") String commodityId,@Param("userId") String userId);
 
     /**
      * 删除订单信息
@@ -73,4 +73,5 @@ public interface OrderMapper {
      * @param id
      */
     public void deleteOrderAndCommodity(String id);
+
 }

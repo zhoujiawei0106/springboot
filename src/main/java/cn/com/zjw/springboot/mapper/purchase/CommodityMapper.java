@@ -21,7 +21,7 @@ public interface CommodityMapper {
      * @author zhoujiawei
      * @param commodity
      */
-    public void save(@Param("commodity") Commodity commodity);
+    public void save(@Param("commodity") Commodity commodity, @Param("userId") String userId);
 
     /**
      * 查询商品信息
@@ -29,17 +29,17 @@ public interface CommodityMapper {
      * @param userId
      * @return
      */
-    public Commodity getCommodity(@Param("id") String id, String userId);
+    public Commodity getCommodity(@Param("id") String id, @Param("userId") String userId);
 
     /**
      * 修改商品信息
      * @param commodity
      */
-    public void update(@Param("commodity") Commodity commodity);
+    public void update(@Param("commodity") Commodity commodity, @Param("userId") String userId);
 
     /**
      * 删除商品
      * @param id
      */
-    public void delete(@Param("id") String id);
+    public void delete(@Param("id") String id, @Param("userId") String userId);
 }

@@ -85,27 +85,6 @@ public abstract class BaseController {
         return map;
     }
 
-    /**
-     * 请求成功返回前台数据
-     * @param data
-     * @return
-     */
-    public Map<String, Object> succeed(List<Commodity> data) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        Map<String, Object> data1 = new HashMap<String, Object>();
-        Map<String, Object> data2 = new HashMap<String, Object>();
-        for(Commodity c : data) {
-            data1.put(c.getId(),c);
-        }
-        data2.put("data",data);
-        map.put("flag", true);
-        //id分散格式
-        map.put("data1", data1);
-        //合并模式
-        map.put("data2", data2);
-        map.put("code", 200000);
-        return map;
-    }
 
     /**
      * 请求成功返回前台数据
@@ -131,20 +110,6 @@ public abstract class BaseController {
         map.put("flag", true);
         map.put("data", data);
         map.put("msg", msg);
-        map.put("code",100001);
-        return map;
-    }
-
-    /**
-     * 请求成功返回前台数据
-     * @param data1 data2
-     * @return
-     */
-    public Map<String, Object> success(Object data1, Object data2) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("flag", true);
-        map.put("data1", data1);
-        map.put("data2", data2);
         map.put("code",100001);
         return map;
     }

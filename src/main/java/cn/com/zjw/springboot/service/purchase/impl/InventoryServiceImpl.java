@@ -41,10 +41,10 @@ public class InventoryServiceImpl implements InventoryService {
         if (StringUtils.isBlank(inventory.getId())) {
             throw new Exception("请选择一条记录");
         }
-        logger.info("修改客户信息-----" + inventory.toString());
+        logger.info("修改库存信息-----" + inventory.toString());
         inventory.setShopNum(inventory.getShopNum().add(getInventory(inventory.getId(),userId).getShopNum()));
         inventoryMapper.update(inventory);
-        logger.info("客户信息修改成功");
+        logger.info("库存信息修改成功");
     }
 
     @Override

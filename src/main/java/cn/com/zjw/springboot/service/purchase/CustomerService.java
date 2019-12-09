@@ -32,9 +32,10 @@ public interface CustomerService {
      * 保存客户信息
      * @author zhoujiawei
      * @param customer
+     * @param userId 登陆用户的id
      * @throws Exception
      */
-    public void save(Customer customer) throws Exception;
+    public void save(Customer customer, String userId) throws Exception;
 
     /**
      * 获取客户信息

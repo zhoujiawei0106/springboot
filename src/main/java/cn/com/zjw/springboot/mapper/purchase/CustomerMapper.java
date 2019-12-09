@@ -51,4 +51,12 @@ public interface CustomerMapper {
      * @param userId
      */
     public Customer getCustomerd(String userId);
+
+    /**
+     * 根据登陆用户获取客户信息
+     * @author zhoujiawei
+     * @param userId
+     * @return
+     */
+    public Customer getByLoginUser(String userId);
 }

@@ -66,12 +66,13 @@ public class CustomerController extends BaseController {
      * 保存客户信息
      * @author zhoujiawei
      * @param customer
+     * @param request
      * @return
      */
     @PostMapping("/save")
-    public Map<String, Object> save(Customer customer) {
+    public Map<String, Object> save(Customer customer, HttpServletRequest request) {
         try {
-            customerService.save(customer);
+            customerService.save(customer, getUserId(getToken(request)));
             return success("客户新增成功");
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

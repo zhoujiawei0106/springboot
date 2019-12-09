@@ -179,4 +179,22 @@
         WHERE
             f_id = #{id}
     </delete>
+
+    <select id="getByLoginUser" resultMap="customers">
+        SELECT
+            f_id,
+            f_name,
+            f_parent_id,
+            f_tel,
+            f_address,
+            f_idcard,
+            f_point,
+            f_nickname,
+            f_type,
+            f_status
+        FROM
+            t_customer
+        WHERE
+            f_id = #{id}
+    </select>
 </mapper>

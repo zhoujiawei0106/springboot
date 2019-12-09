@@ -4,6 +4,7 @@ import cn.com.zjw.springboot.entity.BaseEntity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 
 public class User extends BaseEntity implements Serializable {
 
@@ -49,6 +50,11 @@ public class User extends BaseEntity implements Serializable {
     private String status;
 
     private Integer userType;
+
+    /**
+     * 客户有效日期
+     */
+    private Date expiringDate;
 
     @Override
     public String toString() {

@@ -53,7 +53,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void save(Customer customer) throws Exception {
+    public void save(Customer customer, String userId) throws Exception {
         checkData(customer);
 
         logger.info("新增客户----" + customer.toString());
@@ -67,7 +67,7 @@ public class CustomerServiceImpl implements CustomerService {
         user.setLoginName(customer.getNickName());
         user.setTel(customer.getTel());
         user.setStatus(customer.getStatus());
-        user.setPassword("test123");
+        user.setPassword(user.getLoginName());
         logger.info("新增客户-----" + customer.toString());
         userService.save(user);
         logger.info("客户信息新增成功");
@@ -146,6 +146,7 @@ public class CustomerServiceImpl implements CustomerService {
      * 数据校验
      * @author zhoujiawei
      * @param customer
+     * @param userId
      * @throws Exception
      */
     private final void checkData(Customer customer) throws Exception{

@@ -3,6 +3,7 @@ package cn.com.zjw.springboot.utils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,7 +22,7 @@ public class DateUtlis {
         try {
             return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage());
             throw e;
         }
     }
@@ -56,7 +57,17 @@ public class DateUtlis {
         try {
             return new SimpleDateFormat(pattern).format(new Date());
         } catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage());
+            throw e;
+        }
+    }
+
+    public static final Date parseDate(String date, String pattern) throws Exception {
+        try {
+            DateFormat dateFormat = new SimpleDateFormat(pattern);
+            return dateFormat.parse(date);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
             throw e;
         }
     }

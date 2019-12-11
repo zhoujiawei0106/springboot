@@ -13,6 +13,7 @@
         <result column="TEL" property="tel" jdbcType="NUMERIC"/>
         <result column="STATUS" property="status" jdbcType="NUMERIC"/>
         <result column="USER_TYPE" property="userType" jdbcType="NUMERIC"/>
+        <result column="EXPIRING_DATE" property="expiringDate" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <select id="getUser" resultMap="userMap">
@@ -25,7 +26,8 @@
             last_login_date,
             login_fail_times,
             tel,
-            status
+            status,
+            expiring_date
         FROM
             t_user
         WHERE
@@ -58,7 +60,8 @@
             last_login_date,
             login_fail_times,
             tel,
-            status
+            status,
+            expiring_date
         FROM
             t_user
         WHERE
@@ -93,7 +96,8 @@
             tel,
             status,
             create_timestamp,
-            update_timestamp
+            update_timestamp,
+            expiring_date
         ) VALUES (
             #{user.id},
             #{user.userName},
@@ -105,7 +109,8 @@
             #{user.tel},
             #{user.status, jdbcType=NUMERIC},
             sysdate,
-            sysdate
+            sysdate,
+            #{user.expiringDate}
         )
     </insert>
 
@@ -177,12 +182,13 @@
             parent_id,
             tel,
             status,
-            user_type
+            user_type,
+            expiring_date
         FROM
             t_user
         WHERE
             id = #{id}
-        WHERE
+        AND
             status = '1'
         AND
             expiring_date >= sysdate

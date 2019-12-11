@@ -70,6 +70,7 @@ public class User extends BaseEntity implements Serializable {
                 ", tel='" + tel + '\'' +
                 ", status='" + status + '\'' +
                 ", userType='" + userType + '\'' +
+                ", expiringDate='" + expiringDate + '\'' +
                 '}';
     }
 
@@ -159,5 +160,13 @@ public class User extends BaseEntity implements Serializable {
 
     public void setUserType(Integer userType) {
         this.userType = userType;
+    }
+
+    public Date getExpiringDate() {
+        return expiringDate;
+    }
+
+    public void setExpiringDate(Date expiringDate) {
+        this.expiringDate = expiringDate;
     }
 }

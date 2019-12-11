@@ -8,7 +8,7 @@ import java.util.Map;
 public enum CustomerType {
 
     Agency("1", "代理"),
-    Customer("2", "客户"),
+    Customer("2", "顾客"),
     Purchaser("3", "代购");
 
     private String value;

@@ -1,6 +1,7 @@
 package cn.com.zjw.springboot.mapper.purchase;
 
 import cn.com.zjw.springboot.entity.purchase.Customer;
+import cn.com.zjw.springboot.entity.system.User;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -59,4 +60,15 @@ public interface CustomerMapper {
      * @return
      */
     public Customer getByLoginUser(String userId);
+
+    /**
+     * 获取代购客户的用户信息
+     * @author zhoujiawei
+     * @param userId
+     * @param customerType
+     * @param userStatus
+     * @return
+     */
+    public User getPurchaserCustomer(@Param("userId") String userId, @Param("customerType") String customerType,
+                                     @Param("userStatus") String userStatus);
 }

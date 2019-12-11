@@ -1,10 +1,12 @@
 package cn.com.zjw.springboot.service.purchase.impl;
 
+import cn.com.zjw.springboot.constants.CodeConstants;
 import cn.com.zjw.springboot.constants.enumConstants.CustomerType;
 import cn.com.zjw.springboot.constants.enumConstants.ValidStatus;
 import cn.com.zjw.springboot.entity.purchase.Customer;
 import cn.com.zjw.springboot.entity.system.User;
 import cn.com.zjw.springboot.mapper.purchase.CustomerMapper;
+import cn.com.zjw.springboot.mapper.system.UserMapper;
 import cn.com.zjw.springboot.service.purchase.CustomerService;
 import cn.com.zjw.springboot.service.system.UserService;
 import com.github.pagehelper.PageHelper;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,6 +36,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public PageInfo getCustomers(Customer customer, String userId) {
@@ -53,8 +59,29 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void save(Customer customer, String userId) throws Exception {
+    public void save(Customer customer, String userId, Date expiringDate) throws Exception {
         checkData(customer);
+
+        // 根据登陆用户的不同，做不同用户的数据校验
+        User loginUser = userMapper.getUserById(userId);
+        if (CodeConstants.USER_TYPE_ADMIN.equals(loginUser.getUserType())) {
+            // 超级用户新增/修改客户时，客户有效期不能为空
+            if (expiringDate == null) {
+                throw new Exception("请选择客户有效期");
+            }
+        } else if (CodeConstants.USER_TYPE_NORMAL.equals(loginUser.getUserType())) {
+            Customer loginCustomer = customerMapper.getByLoginUser(userId);
+            // 代理和代购不能创建或修改平级用户的操作
+            if (CustomerType.Purchaser.getValue().equals(loginCustomer.getType()) &&
+                    CustomerType.Purchaser.getValue().equals(customer.getType())) {
+                throw new Exception("代购用户只能操作代理或顾客信息");
+            } else if (CustomerType.Agency.getValue().equals(loginCustomer.getType()) &&
+                    !CustomerType.Customer.getValue().equals(customer.getType())) {
+                throw new Exception("代理用户只能操作顾客信息");
+            } else {
+                throw new Exception("登陆的用户不允许进行此操作");
+            }
+        }
 
         logger.info("新增客户----" + customer.toString());
         customerMapper.save(customer);
@@ -68,6 +95,12 @@ public class CustomerServiceImpl implements CustomerService {
         user.setTel(customer.getTel());
         user.setStatus(customer.getStatus());
         user.setPassword(user.getLoginName());
+        // 管理员用户使用页面传入的有效日期，普通用户用当前登陆用户的日期
+        if (CodeConstants.USER_TYPE_ADMIN.equals(loginUser.getUserType())) {
+            user.setExpiringDate(expiringDate);
+        } else {
+            user.setExpiringDate(loginUser.getExpiringDate());
+        }
         logger.info("新增客户-----" + customer.toString());
         userService.save(user);
         logger.info("客户信息新增成功");
@@ -94,7 +127,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void update(Customer customer, String userId) throws Exception {
+    public void update(Customer customer, String userId, Date expiringDate) throws Exception {
         if (StringUtils.isBlank(customer.getId())) {
             throw new Exception("请选择一条记录");
         }
@@ -142,11 +175,23 @@ public class CustomerServiceImpl implements CustomerService {
         return list;
     }
 
+    @Override
+    public Object getUserType(String userId) {
+        User user = userMapper.getUserById(userId);
+        if (CodeConstants.USER_TYPE_ADMIN.equals(user.getUserType())) {
+            return false;
+        } else if (CodeConstants.USER_TYPE_NORMAL.equals(user.getUserType())) {
+            return user;
+        } else {
+            return user;
+        }
+    }
+
     /**
      * 数据校验
      * @author zhoujiawei
      * @param customer
-     * @param userId
+     * @return
      * @throws Exception
      */
     private final void checkData(Customer customer) throws Exception{
@@ -184,4 +229,5 @@ public class CustomerServiceImpl implements CustomerService {
             customer.setStatus(ValidStatus.getLabel(customer.getStatus()));
         }
     }
+
 }

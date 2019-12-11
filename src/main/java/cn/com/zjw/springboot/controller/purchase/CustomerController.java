@@ -3,6 +3,7 @@ package cn.com.zjw.springboot.controller.purchase;
 import cn.com.zjw.springboot.controller.BaseController;
 import cn.com.zjw.springboot.entity.purchase.Customer;
 import cn.com.zjw.springboot.service.purchase.CustomerService;
+import cn.com.zjw.springboot.utils.DateUtlis;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -66,13 +68,14 @@ public class CustomerController extends BaseController {
      * 保存客户信息
      * @author zhoujiawei
      * @param customer
+     * @param expiringDate
      * @param request
      * @return
      */
     @PostMapping("/save")
-    public Map<String, Object> save(Customer customer, HttpServletRequest request) {
+    public Map<String, Object> save(Customer customer, String expiringDate, HttpServletRequest request) {
         try {
-            customerService.save(customer, getUserId(getToken(request)));
+            customerService.save(customer, getUserId(getToken(request)), DateUtlis.parseDate(expiringDate, "yyyy-MM-dd"));
             return success("客户新增成功");
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -84,13 +87,14 @@ public class CustomerController extends BaseController {
      * 更新客户信息
      * @author zhoujiawei
      * @param customer
+     * @param expiringDate
      * @param request
      * @return
      */
     @PutMapping("/update")
-    public Map<String, Object> update(Customer customer, HttpServletRequest request) {
+    public Map<String, Object> update(Customer customer, Date expiringDate, HttpServletRequest request) {
         try {
-            customerService.update(customer, getUserId(getToken(request)));
+            customerService.update(customer, getUserId(getToken(request)), expiringDate);
             return success("客户修改成功");
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -146,6 +150,16 @@ public class CustomerController extends BaseController {
         try {
             List<Customer> list = customerService.export(customer, getUserId(getToken(request)));
             return success(list);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
+
+    @GetMapping("/getUserType")
+    public Map<String, Object> getUserType(HttpServletRequest request) {
+        try {
+            return success(customerService.getUserType(getUserId(getToken(request))));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return fail(e.getMessage());

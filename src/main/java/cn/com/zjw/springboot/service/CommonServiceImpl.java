@@ -20,7 +20,6 @@ public class CommonServiceImpl implements CommonService {
 
     @Override
     public List<Map<String, String>> customerType(String userId) throws Exception {
-        userId = "eecef4d42acfcb439eb81dd0565ed852";
         Customer customer = customerMapper.getByLoginUser(userId);
         List<Map<String, String>> list = CustomerType.getCustomerType();
 

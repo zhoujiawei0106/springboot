@@ -197,4 +197,44 @@
         WHERE
             f_id = #{id}
     </select>
+
+    <select id="getPurchaserCustomer" resultType="cn.com.zjw.springboot.entity.system.User">
+        SELECT
+            t2.expiring_date as expiringDate,
+            t2.user_type as userType
+        FROM
+            t_customer t1
+        INNER JOIN
+            (SELECT
+                id,
+                user_name,
+                login_name,
+                password,
+                ip,
+                last_login_date,
+                login_fail_times,
+                parent_id,
+                tel,
+                status,
+                user_type,
+                expiring_date
+            FROM
+                t_user
+            WHERE
+                status = #{userStatus}
+            AND
+                expiring_date >= sysdate
+            START WITH
+                id = #{userId}
+            CONNECT BY PRIOR
+                id = parent_id) t2
+        ON
+            t1.f_parent_id = t2.id
+        WHERE
+            t1.F_STATUS = #{customerType}
+        AND
+            t1.f_id = #{id}
+        AND
+            t1.f_parent_id = #{userId}
+    </select>
 </mapper>

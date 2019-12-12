@@ -5,7 +5,21 @@
     <resultMap id="BaseMap" type="cn.com.zjw.springboot.dto.system.PermissionDto">
         <result column="ID" property="key" jdbcType="VARCHAR"/>
         <result column="ROLE_NAME" property="label" jdbcType="VARCHAR"/>
+        <result column="PERMISSION_ID" property="permissionId" jdbcType="VARCHAR"/>
     </resultMap>
+
+    <insert id="saveUserPermission">
+        INSERT INTO T_USER_PERMISSION(
+        USER_ID,
+        PERMISSION_ID
+        )
+        <foreach collection="permissionIdList" item="list" index="index" separator="UNION ALL">
+            SELECT
+            #{userId,jdbcType=VARCHAR},
+            #{list.permissionId,jdbcType=VARCHAR}
+            FROM dual
+        </foreach>
+    </insert>
 
     <select id="count" resultType="int">
         SELECT
@@ -27,7 +41,14 @@
             id = #{id}
     </delete>
 
-    <select id="getUndistributedRoles" resultMap="BaseMap">
+    <delete id="deleteUserPermission">
+        DELETE FROM
+            T_USER_PERMISSION
+        WHERE
+            USER_ID = #{userId}
+    </delete>
+
+    <!--<select id="getUndistributedRoles" resultMap="BaseMap">
         SELECT
             distinct t3.id,
             t3.role_name
@@ -49,6 +70,22 @@
             t3.user_id = #{loginUser}
         AND
             (t4.user_id = #{userId} OR t4.user_id IS NULL)
+    </select>-->
+
+    <select id="getUserPermission" resultType="Integer">
+        SELECT count(*)
+        FROM T_USER_PERMISSION
+        WHERE USER_ID = #{userId}
     </select>
+
+    <select id="getPermissionByRoleId" resultMap="BaseMap">
+        SELECT DISTINCT PERMISSION_ID
+        FROM T_ROLE_PERMISSION
+        WHERE ROLE_ID IN
+        <foreach collection="role" item="role" open="(" close=")" separator=",">
+            trim(#{role.id})
+        </foreach>
+    </select>
+
 
 </mapper>

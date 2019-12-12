@@ -15,5 +15,12 @@ public interface PermissionService {
      * @return
      * @throws Exception
      */
-    public Map<String, List<PermissionDto>> getUserPermission(String userId, String loginUser) throws Exception;
+    /*public Map<String, List<PermissionDto>> getUserPermission(String userId, String loginUser) throws Exception;*/
+
+    /**
+     * 权限分配
+     * @param userId
+     * @param userSessionId
+     */
+    public void saveUserPermission(String userId, String role, String userSessionId);
 }

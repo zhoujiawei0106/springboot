@@ -55,9 +55,9 @@ public class Commodity extends BaseEntity implements Serializable {
     private BigDecimal shopNum;
 
     /**
-     * 有效状态 0.无效 1.有效
+     * 有效状态 1.有效 2.无效
      */
-    private String isDelete;
+    private String isValid;
 
     @Override
     public String toString() {
@@ -71,7 +71,7 @@ public class Commodity extends BaseEntity implements Serializable {
                 ", basePrice='" + basePrice + '\''  +
                 ", category='" + category + '\''  +
                 ", brand='" + brand + '\''  +
-                ", isDelete='" + isDelete + '\''  +
+                ", isDelete='" + isValid + '\''  +
                 '}';
     }
 
@@ -83,12 +83,12 @@ public class Commodity extends BaseEntity implements Serializable {
         this.value = value;
     }
 
-    public String getIsDelete() {
-        return isDelete;
+    public String getIsValid() {
+        return isValid;
     }
 
-    public void setIsDelete(String isDelete) {
-        this.isDelete = isDelete;
+    public void setIsValid(String isValid) {
+        this.isValid = isValid;
     }
 
     public String getEnName() {

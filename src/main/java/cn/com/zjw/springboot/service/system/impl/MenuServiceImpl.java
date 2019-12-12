@@ -2,10 +2,12 @@ package cn.com.zjw.springboot.service.system.impl;
 
 import cn.com.zjw.springboot.constants.CodeConstants;
 import cn.com.zjw.springboot.constants.enumConstants.ValidStatus;
+import cn.com.zjw.springboot.dto.system.PermissionDto;
 import cn.com.zjw.springboot.dto.system.PermissionMenu;
 import cn.com.zjw.springboot.entity.system.Menu;
 import cn.com.zjw.springboot.entity.system.User;
 import cn.com.zjw.springboot.mapper.system.MenuMapper;
+import cn.com.zjw.springboot.mapper.system.PermissionMapper;
 import cn.com.zjw.springboot.mapper.system.UserMapper;
 import cn.com.zjw.springboot.service.system.MenuService;
 import cn.com.zjw.springboot.utils.PinyinUtils;
@@ -86,6 +88,22 @@ public class MenuServiceImpl implements MenuService {
         firstFloorMenu(menuList, addList, copyMenus);
 
         return addList;
+    }
+
+    @Override
+    public Map<String, List<PermissionMenu>> getData(String userId, String loginUser) throws Exception {
+        Map<String, List<PermissionMenu>> map = new HashMap<>();
+        List<PermissionMenu> undistributed = menuMapper.getUndistributedRoles(userId, loginUser);
+        List<PermissionMenu> distribute = menuMapper.getDistributedRoles(userId, loginUser);
+        for (PermissionMenu undid : undistributed) {
+            undid.setType(PinyinUtils.toPinyin(undid.getLabel()));
+        }
+        for (PermissionMenu dist : distribute) {
+            dist.setType(PinyinUtils.toPinyin(dist.getLabel()));
+        }
+        map.put("undistributed",undistributed);
+        map.put("distribute",distribute);
+        return map;
     }
 
     private final List<PermissionMenu> firstFloorMenu(List<PermissionMenu> menuList, List<PermissionMenu> addList,

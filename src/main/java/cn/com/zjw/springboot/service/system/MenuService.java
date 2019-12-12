@@ -4,6 +4,7 @@ import cn.com.zjw.springboot.dto.system.PermissionMenu;
 import cn.com.zjw.springboot.entity.system.Menu;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MenuService {
 
@@ -33,4 +34,12 @@ public interface MenuService {
      * @return
      */
     public List<PermissionMenu> getDistributeMenu(String userId, String roleId) throws Exception;
+
+    /**
+     * 获取权限
+     * @param userId
+     * @param loginUser
+     * @return
+     */
+    Map<String, List<PermissionMenu>> getData(String userId, String loginUser) throws Exception;
 }

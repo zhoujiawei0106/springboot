@@ -12,39 +12,50 @@
         <result column="F_CATEGORY" property="category" jdbcType="VARCHAR"/>
         <result column="F_BRAND" property="brand" jdbcType="VARCHAR"/>
         <result column="F_SHOP_NUM" property="shopNum" jdbcType="NUMERIC"/>
-        <result column="F_IS_DELETE" property="isDelete" jdbcType="VARCHAR"/>
+        <result column="F_IS_VALID" property="isValid" jdbcType="VARCHAR"/>
     </resultMap>
 
-     <select id="getCommoditys" resultMap="commoditys">
+    <select id="getCommoditys" resultMap="commoditys">
         SELECT
-            F_ID,
-            F_NAME AS F_VALUE,
-            F_NAME,
-            F_EN_NAME,
-            F_PRICE,
-            F_BASE_PRICE,
-            F_CATEGORY,
-            F_BRAND
+        t1.F_ID,
+        t1.F_NAME AS F_VALUE,
+        t1.F_NAME,
+        t1.F_EN_NAME,
+        t1.F_PRICE,
+        t1.F_BASE_PRICE,
+        t1.F_CATEGORY,
+        t1.F_BRAND
         FROM
-            T_COMMODITY
-        WHERE
-        1 = 1
-        AND F_IS_DELETE = '1'
-        <if test="userId != null and userId != ''">
-        AND F_USER_ID <![CDATA[=]]> #{userId}
-        </if>
-        <if test="commodity.name != null and commodity.name != ''">
-            AND F_NAME like '%' || #{commodity.name, jdbcType=VARCHAR} || '%'
-        </if>
-        <if test="commodity.category != null and commodity.category != ''">
-            AND F_CATEGORY = #{commodity.category, jdbcType=VARCHAR}
-        </if>
-        <if test="commodity.price != null and commodity.price != ''">
-            AND F_PRICE <![CDATA[>=]]> #{commodity.price, jdbcType=NUMERIC}
-        </if>
-        <if test="commodity.priceMax != null and commodity.priceMax != ''">
-            AND F_PRICE <![CDATA[<=]]> #{commodity.priceMax, jdbcType=NUMERIC}
-        </if>
+        T_COMMODITY t1
+        LEFT JOIN
+        T_CUSTOMER t2
+        ON t1.F_USER_ID = t2.F_ID
+        <where>
+            t1.F_IS_VALID = #{commodity.isValid, jdbcType=VARCHAR}
+            <if test="commodity.name != null and commodity.name != ''">
+                AND t1.F_NAME like '%' ||t1 #{commodity.name, jdbcType=VARCHAR} || '%'
+            </if>
+            <if test="commodity.category != null and commodity.category != ''">
+                AND t1.F_CATEGORY = #{commodity.category, jdbcType=VARCHAR}
+            </if>
+            <if test="commodity.price != null and commodity.price != ''">
+                AND t1.F_PRICE <![CDATA[>=]]> #{commodity.price, jdbcType=NUMERIC}
+            </if>
+            <if test="commodity.priceMax != null and commodity.priceMax != ''">
+                AND t1.F_PRICE <![CDATA[<=]]> #{commodity.priceMax, jdbcType=NUMERIC}
+            </if>
+            <choose>
+                <when test="customer != null and customer.type = '2'">
+                    AND t1.F_USER_ID = #{userId}
+                </when>
+                <when test="customer != null and customer.type = '3'">
+                    AND t2.F_PARENT_ID = #{userId}
+                </when>
+                <otherwise>
+                    AND 1=1
+                </otherwise>
+            </choose>
+        </where>
     </select>
 
     <select id="getCommodity" resultMap="commoditys">
@@ -75,7 +86,7 @@
             F_BASE_PRICE,
             F_CATEGORY,
             F_BRAND,
-            F_IS_DELETE,
+            F_IS_VALID,
             F_USER_ID,
             F_CREATE_TIMESTAMP,
             F_UPDATE_TIMESTAMP
@@ -87,7 +98,7 @@
             #{commodity.basePrice, jdbcType=NUMERIC},
             #{commodity.category, jdbcType=VARCHAR},
             #{commodity.brand, jdbcType=VARCHAR},
-            #{commodity.isDelete, jdbcType=VARCHAR},
+            #{commodity.isValid, jdbcType=VARCHAR},
             #{userId, jdbcType=VARCHAR},
             sysdate,
             sysdate
@@ -114,7 +125,7 @@
          UPDATE
             T_COMMODITY
          SET
-            F_IS_DELETE = '0'
+            F_IS_VALID = '2'
          WHERE
             F_ID = #{id, jdbcType=VARCHAR}
             AND F_USER_ID = #{userId, jdbcType=VARCHAR}

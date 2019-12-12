@@ -47,12 +47,11 @@ public class OrderServiceImpl implements OrderService {
         logger.info("根据条件查询所有订单----" + order.toString());
         //先暂时userId为空，后面根据类型改
         Customer customer = customerMapper.getCustomerd(userId);
-        List<Order> list = null;
+        List<Order> list;
         if(customer == null){
             list = orderMapper.getOrders(order, userId);
         } else if(CustomerType.getLabel(customer.getType()).equals(CustomerType.Agency)){
-            userId = null;
-            list = orderMapper.getOrders(order, userId);
+            list = orderMapper.getOrders(order, null);
         } else {
             list = orderMapper.getOrders(order, userId);
         }

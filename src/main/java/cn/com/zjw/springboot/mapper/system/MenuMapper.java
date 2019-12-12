@@ -41,4 +41,13 @@ public interface MenuMapper {
      */
     public List<PermissionMenu> getDistributeMenu(@Param("userId") String userId, @Param("roleId") String roleId,
                                                   @Param("isValid") String isValid);
+
+    /**
+     * 获取未分配数据
+     * @param userId
+     * @param loginUser
+     * @return
+     */
+    List<PermissionMenu> getUndistributedRoles(@Param("userId") String userId, @Param("loginUser") String loginUser);
+    List<PermissionMenu> getDistributedRoles(@Param("userId") String userId, @Param("loginUser") String loginUser);
 }

@@ -116,4 +116,70 @@
             id,
             pid
     </select>
+
+    <select id="getUndistributedRoles" resultMap="permissionMenuMap">
+        SELECT
+            DISTINCT t3.ID ID,
+            t3.ROLE_NAME MENU_NAME,
+            0 PID
+        FROM
+            T_PERMISSION t1
+        INNER JOIN
+            T_ROLE_PERMISSION t2
+        ON
+            t1.ID = t2.PERMISSION_ID
+        INNER JOIN
+            T_ROLE t3
+        ON
+            t2.ROLE_ID = t3.ID
+        LEFT JOIN
+            T_USER_PERMISSION   t4
+        ON
+            t1.ID = t4.PERMISSION_ID
+        WHERE  t1.ID not in
+        (
+        SELECT
+        DISTINCT t4.PERMISSION_ID
+        FROM
+            T_PERMISSION t1
+        INNER JOIN
+            T_ROLE_PERMISSION t2
+        ON
+            t1.id = t2.PERMISSION_ID
+        INNER JOIN
+            T_ROLE t3
+        ON
+            t2.ROLE_ID = t3.id
+        LEFT JOIN
+            T_USER_PERMISSION   t4
+        ON
+            t1.ID = t4.PERMISSION_ID
+        WHERE t4.USER_ID = #{userId}
+        )
+        AND t3.USER_ID = #{loginUser}
+    </select>
+    <select id="getDistributedRoles" resultMap="permissionMenuMap">
+        SELECT
+            distinct t3.id ID,
+            t3.role_name MENU_NAME,
+            0 PID
+        FROM
+            t_permission t1
+        INNER JOIN
+            t_role_permission t2
+        ON
+            t1.id = t2.permission_id
+        INNER JOIN
+            t_role t3
+        ON
+            t2.role_id = t3.id
+        LEFT JOIN
+            t_user_permission   t4
+        ON
+            t1.id = t4.permission_id
+        WHERE
+            t3.user_id = #{loginUser}
+        AND
+            t4.user_id = #{userId}
+    </select>
 </mapper>

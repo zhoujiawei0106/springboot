@@ -10,6 +10,8 @@ public class PermissionDto implements Serializable {
 
     private String pinyin;
 
+    private String permissionId;
+
     @Override
     public String toString() {
         return "PermissionDto{" +

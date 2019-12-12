@@ -1,6 +1,7 @@
 package cn.com.zjw.springboot.mapper.purchase;
 
 import cn.com.zjw.springboot.entity.purchase.Commodity;
+import cn.com.zjw.springboot.entity.purchase.Customer;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface CommodityMapper {
      * @param userId
      * @return
      */
-    public List<Commodity> getCommoditys(@Param("commodity") Commodity commodity, @Param("userId") String userId);
+    public List<Commodity> getCommoditys(@Param("customer") Customer customer, @Param("commodity") Commodity commodity, @Param("userId") String userId);
 
     /**
      * 保存客户信息

@@ -67,7 +67,7 @@
         ON t1.F_COMMODITY_ID = t2.F_Id
         WHERE
         1 = 1
-        AND t2.F_IS_DELETE = '1'
+        AND t2.F_IS_VALID = '1'
         AND t2.F_USER_ID = #{userId}
         <if test="inventory.name != null and inventory.name != ''">
             AND t2.F_NAME like '%' || #{inventory.name, jdbcType=VARCHAR} || '%'

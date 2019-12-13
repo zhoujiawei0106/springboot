@@ -80,9 +80,9 @@ public class CustomerServiceImpl implements CustomerService {
                     !CustomerType.Customer.getValue().equals(customer.getType())) {
                 throw new Exception("代理用户只能操作顾客信息");
             }
-            //客户不允许进行新增操作
+            // 客户不允许进行新增操作
             if (CustomerType.Customer.getValue().equals(loginCustomer.getType())) {
-                throw new Exception("登陆的用户不允许进行此操作");
+                throw new Exception("登陆的用户不允许进行新增操作");
             }
         }
 

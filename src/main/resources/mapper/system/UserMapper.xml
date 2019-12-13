@@ -35,7 +35,7 @@
         AND
             status = '1'
         AND
-            expiring_date >= sysdate
+            expiring_date + 1 >= sysdate
     </select>
 
     <update id="updateLoginTimes">
@@ -67,18 +67,22 @@
         WHERE
             status = '1'
         AND
-            expiring_date >= sysdate
+            expiring_date + 1 >= sysdate
         <if test="user.loginName != null and user.loginName != ''">
             AND login_name like '%' || #{user.loginName} || '%'
         </if>
         <if test="user.userName != null and user.userName != ''">
             AND user_name like '%' || #{user.userName} || '%'
         </if>
-        <if test="user.id != null and user.id != ''">
-            AND id = #{user.id}
-        </if>
         <if test="user.status != null and user.status != ''">
             AND status = #{user.status}
+        </if>
+        <if test="user.id != null and user.id != ''">
+            AND id = #{user.id}
+            START WITH
+                id = #{userId}
+            CONNECT BY PRIOR
+                id = parent_id
         </if>
         ORDER BY
             login_name
@@ -191,6 +195,6 @@
         AND
             status = '1'
         AND
-            expiring_date >= sysdate
+            expiring_date + 1 >= sysdate
     </select>
 </mapper>

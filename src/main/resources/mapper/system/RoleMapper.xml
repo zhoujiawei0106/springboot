@@ -29,7 +29,7 @@
         AND
             t2.status = '1'
         AND
-            t2.expiring_date >= sysdate
+            t2.expiring_date + 1 >= sysdate
     </select>
 
     <insert id="insert">

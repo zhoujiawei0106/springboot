@@ -75,11 +75,14 @@ public class CustomerServiceImpl implements CustomerService {
             if (CustomerType.Purchaser.getValue().equals(loginCustomer.getType()) &&
                     CustomerType.Purchaser.getValue().equals(customer.getType())) {
                 throw new Exception("代购用户只能操作代理或顾客信息");
-            } else if (CustomerType.Agency.getValue().equals(loginCustomer.getType()) &&
+            }
+            if (CustomerType.Agency.getValue().equals(loginCustomer.getType()) &&
                     !CustomerType.Customer.getValue().equals(customer.getType())) {
                 throw new Exception("代理用户只能操作顾客信息");
-            } else {
-                throw new Exception("登陆的用户不允许进行此操作");
+            }
+            // 客户不允许进行新增操作
+            if (CustomerType.Customer.getValue().equals(loginCustomer.getType())) {
+                throw new Exception("登陆的用户不允许进行新增操作");
             }
         }
 

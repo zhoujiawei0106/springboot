@@ -49,7 +49,7 @@
             WHERE
                 status = '1'
             AND
-                expiring_date >= sysdate
+                expiring_date + 1 >= sysdate
             START WITH
                 id = #{userId}
             CONNECT BY PRIOR
@@ -125,7 +125,7 @@
             WHERE
                 status = '1'
             AND
-                expiring_date >= sysdate
+                expiring_date + 1 >= sysdate
             START WITH
                 id = #{userId}
             CONNECT BY PRIOR
@@ -223,7 +223,7 @@
             WHERE
                 status = #{userStatus}
             AND
-                expiring_date >= sysdate
+                expiring_date + 1 >= sysdate
             START WITH
                 id = #{userId}
             CONNECT BY PRIOR

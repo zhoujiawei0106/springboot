@@ -54,10 +54,19 @@ public interface OrderService {
     public List<Order> export(Order order, String userId);
 
     /**
-     * 加载订单上相关的商品和客户信息
+     * 加载订单上相关的商品和客户信息(修改)
      * @param id
      * @param userId
      * @return
      */
     public Map<String, Object> getCustomerAndCommodityForOrder(String id, String userId) throws Exception;
+
+    /**
+     * 加载订单上相关的商品和客户信息(增加)
+     * @param customer
+     * @param commodity
+     * @param userId
+     * @return
+     */
+    Map<String, Object> getOrderInfo(Customer customer, Commodity commodity, String userId);
 }

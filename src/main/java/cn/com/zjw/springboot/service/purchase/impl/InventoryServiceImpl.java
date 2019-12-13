@@ -36,17 +36,6 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public void update(Inventory inventory, String userId) throws Exception {
-        if (StringUtils.isBlank(inventory.getId())) {
-            throw new Exception("请选择一条记录");
-        }
-        logger.info("修改库存信息-----" + inventory.toString());
-        inventory.setShopNum(inventory.getShopNum().add(getInventory(inventory.getId(),userId).getShopNum()));
-        inventoryMapper.update(inventory);
-        logger.info("库存信息修改成功");
-    }
-
-    @Override
     public Inventory getInventory(String id, String userId) throws Exception {
         if (StringUtils.isBlank(id)) {
             throw new Exception("库存商品id不能为空");
@@ -64,6 +53,18 @@ public class InventoryServiceImpl implements InventoryService {
 
         return inventory;
     }
+
+    @Override
+    public void update(Inventory inventory, String userId) throws Exception {
+        if (StringUtils.isBlank(inventory.getId())) {
+            throw new Exception("请选择一条记录");
+        }
+        logger.info("修改库存信息-----" + inventory.toString());
+        inventory.setShopNum(inventory.getShopNum().add(getInventory(inventory.getId(),userId).getShopNum()));
+        inventoryMapper.update(inventory);
+        logger.info("库存信息修改成功");
+    }
+
 
     @Override
     public void reset(String id) throws Exception {

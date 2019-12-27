@@ -2,6 +2,7 @@ package cn.com.zjw.springboot.service.purchase.impl;
 
 import cn.com.zjw.springboot.constants.CodeConstants;
 import cn.com.zjw.springboot.constants.enumConstants.CustomerType;
+import cn.com.zjw.springboot.constants.enumConstants.UserType;
 import cn.com.zjw.springboot.constants.enumConstants.ValidStatus;
 import cn.com.zjw.springboot.entity.purchase.Customer;
 import cn.com.zjw.springboot.entity.system.User;
@@ -98,6 +99,8 @@ public class CustomerServiceImpl implements CustomerService {
         user.setTel(customer.getTel());
         user.setStatus(customer.getStatus());
         user.setPassword(user.getLoginName());
+        // 客户管理只能新增普通用户
+        user.setUserType(Integer.valueOf(UserType.User.getValue()));
         // 管理员用户使用页面传入的有效日期，普通用户用当前登陆用户的日期
         if (CodeConstants.USER_TYPE_ADMIN.equals(loginUser.getUserType())) {
             user.setExpiringDate(expiringDate);

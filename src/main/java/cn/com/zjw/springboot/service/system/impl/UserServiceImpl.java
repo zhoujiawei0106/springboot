@@ -1,5 +1,6 @@
 package cn.com.zjw.springboot.service.system.impl;
 
+import cn.com.zjw.springboot.constants.enumConstants.UserType;
 import cn.com.zjw.springboot.constants.enumConstants.ValidStatus;
 import cn.com.zjw.springboot.entity.purchase.Customer;
 import cn.com.zjw.springboot.entity.system.User;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -50,6 +52,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(User user) throws Exception{
         check(user);
+        if (user.getUserType() == null) {
+            throw new Exception("新增的用户没有定义用户类型");
+        }
+
         if (StringUtils.isBlank(user.getPassword())) {
             throw new Exception("请输入密码");
         }
@@ -198,6 +204,12 @@ public class UserServiceImpl implements UserService {
         }
         if (user.getTel() == null || user.getTel().toString().length() != 11) {
             throw new Exception("请输入正确的手机号码");
+        }
+        if (user.getExpiringDate() == null) {
+            throw new Exception("请选择有效期");
+        }
+        if (user.getExpiringDate().before(new Date())) {
+            throw new Exception("有效期必须大于当前日期");
         }
     }
 

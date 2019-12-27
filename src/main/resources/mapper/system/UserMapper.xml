@@ -27,7 +27,8 @@
             login_fail_times,
             tel,
             status,
-            expiring_date
+            expiring_date,
+            user_type
         FROM
             t_user
         WHERE
@@ -61,7 +62,8 @@
             login_fail_times,
             tel,
             status,
-            expiring_date
+            expiring_date,
+            user_type
         FROM
             t_user
         WHERE
@@ -101,7 +103,8 @@
             status,
             create_timestamp,
             update_timestamp,
-            expiring_date
+            expiring_date,
+            user_type
         ) VALUES (
             #{user.id},
             #{user.userName},
@@ -114,7 +117,8 @@
             #{user.status, jdbcType=NUMERIC},
             sysdate,
             sysdate,
-            #{user.expiringDate}
+            #{user.expiringDate},
+            #{user.userType}
         )
     </insert>
 

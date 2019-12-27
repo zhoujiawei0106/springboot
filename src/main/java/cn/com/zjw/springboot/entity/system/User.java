@@ -1,6 +1,8 @@
 package cn.com.zjw.springboot.entity.system;
 
 import cn.com.zjw.springboot.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -54,6 +56,8 @@ public class User extends BaseEntity implements Serializable {
     /**
      * 客户有效日期
      */
+    @DateTimeFormat(pattern = "yyyyMMdd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date expiringDate;
 
     @Override

@@ -1,5 +1,6 @@
 package cn.com.zjw.springboot.controller.system;
 
+import cn.com.zjw.springboot.constants.enumConstants.UserType;
 import cn.com.zjw.springboot.controller.BaseController;
 import cn.com.zjw.springboot.dto.system.PermissionDto;
 import cn.com.zjw.springboot.entity.system.User;
@@ -53,6 +54,8 @@ public class UserController extends BaseController {
     @PostMapping("/save")
     public Map<String, Object> save(User user, HttpServletRequest request) {
         try {
+            // 用户管理只能新增管理员用户
+            user.setUserType(Integer.valueOf(UserType.Admin.getValue()));
             user.setIp(getUserIp(request));
             userService.save(user);
             return success("用户新增成功");

@@ -5,7 +5,6 @@ import cn.com.zjw.springboot.controller.BaseController;
 import cn.com.zjw.springboot.entity.purchase.Commodity;
 import cn.com.zjw.springboot.entity.purchase.Customer;
 import cn.com.zjw.springboot.entity.purchase.Order;
-import cn.com.zjw.springboot.service.purchase.CustomerService;
 import cn.com.zjw.springboot.service.purchase.OrderService;
 import com.github.pagehelper.PageInfo;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -13,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Map;
 
@@ -58,6 +57,25 @@ public class OrderController extends BaseController {
     public Map<String, Object> getOrder(String id, HttpServletRequest request) {
         try {
             Map<String, Object> map = orderService.getCustomerAndCommodityForOrder(id, getUserId(getToken(request)));
+            return map;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return fail(e.getMessage());
+        }
+    }
+
+    /**
+     * 加载订单信息(customer and commodity)
+     * @author zhoujiawei
+     * @param customer
+     * @param commodity
+     * @param request
+     * @return
+     */
+    @GetMapping("/getOrderList")
+    public Map<String, Object> getOrderList(Customer customer, Commodity commodity, HttpServletRequest request) {
+        try {
+            Map<String, Object> map = orderService.getOrderInfo(customer, commodity,getUserId(getToken(request)));
             return map;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

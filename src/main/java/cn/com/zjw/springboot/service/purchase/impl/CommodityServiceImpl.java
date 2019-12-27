@@ -11,6 +11,7 @@ import cn.com.zjw.springboot.mapper.purchase.CustomerMapper;
 import cn.com.zjw.springboot.mapper.purchase.InventoryMapper;
 import cn.com.zjw.springboot.mapper.purchase.OrderMapper;
 import cn.com.zjw.springboot.service.purchase.CommodityService;
+import cn.com.zjw.springboot.utils.CommonUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -67,91 +68,6 @@ public class CommodityServiceImpl implements CommodityService {
     }
 
     @Override
-    public Map<String, Object> getCommoditysOfOrder(Commodity commodity, String userId) {
-        logger.info("根据条件查询所有商品----" + commodity.toString());
-        //先暂时userId为空，后面根据类型改
-        Customer customer = customerMapper.getCustomerd(userId);
-        List<Commodity> list;
-        if(customer == null){
-            list = commodityMapper.getCommoditys(null, commodity, userId);
-        } else if(CustomerType.getLabel(customer.getType()).equals(CustomerType.Agency)){
-            list = commodityMapper.getCommoditys(customer, commodity, null);
-        } else {
-            list = commodityMapper.getCommoditys(customer, commodity, userId);
-        }
-        Map<String, Object> map = new HashMap<String, Object>();
-        Map<String, Object> dataById = new HashMap<String, Object>();
-        Map<String, Object> data = new HashMap<String, Object>();
-        for(Commodity c : list) {
-            dataById.put(c.getId(),c);
-        }
-        dataById.put("data",list);
-        data.put("data",list);
-        map.put("flag", true);
-        //id分散格式
-        map.put("dataById", dataById);
-        //合并模式
-        map.put("data", data);
-        map.put("code", 200000);
-        return map;
-    }
-
-    @Override
-    public void save(Commodity commodity, String userId) {
-        //设置后台行程编号IN+YYMMddHHmmss
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("YYMMddHHmmss");
-        String commodityId = "CM" + sdf.format(date);
-        commodity.setId(commodityId);
-        logger.info("新增商品----" + commodity.toString());
-        commodity.setIsValid("1");
-        commodityMapper.save(commodity, userId);
-        logger.info("商品信息新增成功");
-        logger.info("新增库存----   商品名称：" + commodity.getName() +
-                "、英文名称：" + commodity.getEnName() + "、商品数量:" + commodity.getShopNum());
-        String inventoryId = "IN" + sdf.format(date);
-        Inventory inventory = new Inventory();
-        inventory.setId(inventoryId);
-        inventory.setShopNum(commodity.getShopNum());
-        inventory.setCommodityId(commodity.getId());
-        inventoryMapper.save(inventory);
-        logger.info("库存信息新增成功");
-    }
-
-    @Override
-    public void update(Commodity commodity, String userId) throws Exception {
-        if (StringUtils.isBlank(commodity.getId())) {
-            throw new Exception("请选择一条记录");
-        }
-        Commodity cm = getCommodity(commodity.getId(), userId);
-        logger.info("修改商品信息-----" + commodity.toString());
-        //判断商品是否在订单中使用
-        List<Commodity> commodityList = orderMapper.getCommodityForOrder(null,commodity.getId(),userId);
-        if(commodityList.size()<1) {
-            commodityMapper.update(commodity, userId);
-            logger.info("商品信息修改成功");
-        } else {
-            //删除商品信息
-            commodityMapper.delete(cm.getId(), userId);
-            logger.info("商品信息删除成功");
-            //设置后台行程编号IN+YYMMddHHmmss
-            Date date = new Date();
-            SimpleDateFormat sdf = new SimpleDateFormat("YYMMddHHmmss");
-            String commodityId = "CM" + sdf.format(date);
-            commodity.setId(commodityId);
-            commodity.setIsValid("1");
-            commodityMapper.save(commodity, userId);
-            String inventoryId = "IN" + sdf.format(date);
-            Inventory inventory = new Inventory();
-            inventory.setId(inventoryId);
-            inventory.setShopNum(commodity.getShopNum());
-            inventory.setCommodityId(commodity.getId());
-            inventoryMapper.save(inventory);
-            logger.info("库存信息新增成功");
-        }
-    }
-
-    @Override
     public Commodity getCommodity(String id, String userId) throws Exception {
         if (StringUtils.isBlank(id)) {
             throw new Exception("商品id不能为空");
@@ -167,6 +83,69 @@ public class CommodityServiceImpl implements CommodityService {
         logger.info(commodity.toString());
 
         return commodity;
+    }
+
+    @Override
+    public void save(Commodity commodity, String userId) throws Exception {
+        //设置后台行程编号IN+YYMMddHHmmss
+        /*Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("YYMMddHHmmss");
+        String commodityId = "CM" + sdf.format(date);*/
+        //校验商品
+        commodityCheck(commodity, userId);
+        String commodityId = CommonUtils.getUUID();
+        commodity.setId(commodityId);
+        logger.info("新增商品----" + commodity.toString());
+        commodity.setIsValid("1");
+        commodityMapper.save(commodity, userId);
+        logger.info("商品信息新增成功");
+        logger.info("新增库存----   商品名称：" + commodity.getName() +
+                "、英文名称：" + commodity.getEnName() + "、商品数量:" + commodity.getShopNum());
+        /*String inventoryId = "IN" + sdf.format(date);*/
+        String inventoryId = CommonUtils.getUUID();
+        Inventory inventory = new Inventory();
+        inventory.setId(inventoryId);
+        inventory.setShopNum(commodity.getShopNum());
+        inventory.setCommodityId(commodity.getId());
+        inventoryMapper.save(inventory);
+        logger.info("库存信息新增成功");
+    }
+
+    @Override
+    public void update(Commodity commodity, String userId) throws Exception {
+        if (StringUtils.isBlank(commodity.getId())) {
+            throw new Exception("请选择一条记录");
+        }
+        //校验商品
+        commodityCheck(commodity, userId);
+        Commodity cm = getCommodity(commodity.getId(), userId);
+        logger.info("修改商品信息-----" + commodity.toString());
+        //判断商品是否在订单中使用
+        List<Commodity> commodityList = orderMapper.getCommodityForOrder(null,commodity.getId(),userId);
+        if(commodityList.size()<1) {
+            commodityMapper.update(commodity, userId);
+            logger.info("商品信息修改成功");
+        } else {
+            //删除商品信息
+            commodityMapper.delete(cm.getId(), userId);
+            logger.info("商品信息删除成功");
+            //设置后台行程编号IN+YYMMddHHmmss
+            /*Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("YYMMddHHmmss");
+            String commodityId = "CM" + sdf.format(date);*/
+            String commodityId = CommonUtils.getUUID();
+            commodity.setId(commodityId);
+            commodity.setIsValid("1");
+            commodityMapper.save(commodity, userId);
+            /*String inventoryId = "IN" + sdf.format(date);*/
+            String inventoryId = CommonUtils.getUUID();
+            Inventory inventory = new Inventory();
+            inventory.setId(inventoryId);
+            inventory.setShopNum(commodity.getShopNum());
+            inventory.setCommodityId(commodity.getId());
+            inventoryMapper.save(inventory);
+            logger.info("库存信息新增成功");
+        }
     }
 
     @Override
@@ -195,6 +174,30 @@ public class CommodityServiceImpl implements CommodityService {
         transfer(list);
         logger.info("导出的商品数据共 " + list.size() + "条");
         return list;
+    }
+
+    /**
+     * 商品非空校验
+     * @param commodity
+     * @param userId
+     * @throws Exception
+     */
+    private void commodityCheck(Commodity commodity, String userId) throws Exception {
+        if (StringUtils.isBlank(userId)) {
+            throw new Exception("当前用户信息不存在");
+        }
+        if (StringUtils.isBlank(commodity.getName())) {
+            throw new Exception("商品名称不能为空");
+        }
+        if (StringUtils.isBlank(commodity.getEnName())) {
+            throw new Exception("商品英文名称不能为空");
+        }
+        if (StringUtils.isBlank(commodity.getCategory())) {
+            throw new Exception("商品类型不能为空");
+        }
+        if (StringUtils.isBlank(commodity.getBrand())) {
+            throw new Exception("商品品牌不能为空");
+        }
     }
 
     /**

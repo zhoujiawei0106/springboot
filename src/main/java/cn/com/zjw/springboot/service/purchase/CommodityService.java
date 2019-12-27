@@ -22,18 +22,10 @@ public interface CommodityService {
     public PageInfo getCommoditys(Commodity commodity, String userId);
 
     /**
-     * 获取客户列表（order）
-     * @param commodity
-     * @param userId
-     * @return
-     */
-    public Map<String, Object> getCommoditysOfOrder(Commodity commodity, String userId);
-
-    /**
      * 新增商品
      * @param commodity
      */
-    public void save(Commodity commodity, String userId);
+    public void save(Commodity commodity, String userId) throws Exception;
 
     /**
      * 修改商品信息

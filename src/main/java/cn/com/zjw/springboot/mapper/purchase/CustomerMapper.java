@@ -48,7 +48,7 @@ public interface CustomerMapper {
     public void delete(@Param("id") String id);
 
     /**
-     *
+     * 查询客户信息
      * @param userId
      */
     public Customer getCustomerd(String userId);

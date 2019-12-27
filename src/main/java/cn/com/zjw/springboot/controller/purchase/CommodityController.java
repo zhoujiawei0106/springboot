@@ -44,22 +44,6 @@ public class CommodityController extends BaseController {
     }
 
     /**
-     * 获取商品列表（order相关）
-     * @author zhoujiawei
-     * @return
-     */
-    @GetMapping("/listOfOrder")
-    public Map<String, Object> listOfOrder(Commodity commodity, HttpServletRequest request) {
-        try {
-            Map<String, Object> map = commodityService.getCommoditysOfOrder(commodity, getUserId(getToken(request)));
-            return map;
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            return fail(e.getMessage());
-        }
-    }
-
-    /**
      * 保存商品信息
      * @author zhoujiawei
      * @param commodity

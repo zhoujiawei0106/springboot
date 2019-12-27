@@ -30,7 +30,8 @@
         LEFT JOIN
         T_CUSTOMER t2
         ON t1.F_USER_ID = t2.F_ID
-        <where>
+        WHERE t1.F_IS_VALID = #{commodity.isValid, jdbcType=VARCHAR}
+        <!--<where>
             t1.F_IS_VALID = #{commodity.isValid, jdbcType=VARCHAR}
             <if test="commodity.name != null and commodity.name != ''">
                 AND t1.F_NAME like '%' ||t1 #{commodity.name, jdbcType=VARCHAR} || '%'
@@ -52,10 +53,11 @@
                     AND t2.F_PARENT_ID = #{userId}
                 </when>
                 <otherwise>
+                    AND t1.F_USER_ID = #{userId}
                     AND 1=1
                 </otherwise>
             </choose>
-        </where>
+        </where>-->
     </select>
 
     <select id="getCommodity" resultMap="commoditys">
